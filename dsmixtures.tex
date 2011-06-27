@@ -15,8 +15,8 @@
 %  as are almost all equations in the journal.  Use a recent version of the
 %  journal as a guide. 
 %  
-\documentclass[useAMS,referee]{biom}
-%\documentclass[useAMS]{biom}
+\documentclass[useAMS,referee, usegraphicx]{biom}
+%\documentclass[useAMS, usegraphicx]{biom}
 %
 %  If your system does not have the AMS fonts version 2.0 installed, then
 %  remove the useAMS option.
@@ -41,9 +41,8 @@
 %  PostScript Type 1 Computer Modern fonts you will need to do this to get
 %  smoother fonts in a PDF file) then uncomment the next line
 %  \usepackage{Times}
-
 \usepackage{amsmath}
-
+\usepackage{graphicx}
 
 %%%%% PLACE YOUR OWN MACROS HERE %%%%%
 
@@ -231,20 +230,15 @@ Distance sampling (Buckland et al. 2001, 2004) is a suite of methods for estimat
 
 Estimating the detection function is therefore the key to distance sampling.  The most common approach, often called ``conventional distance sampling'', is based on methods developed by Buckland (1992). 
 
-\textbf{LEN:} [describe CDS; describe key function and adjustment methods; say implemented in Distance; talk about problem - non-monotonic with adjustment terms; constrained optimization necessary (discuss downsides of this); extended by Marques and Buckland to include covariates; constrained optimization not available there.  Note, some of this (e.g., downsides of need for constrained opt) could go into the discussion]
+\textbf{LEN:}  can you do this bit? [describe CDS; describe key function and adjustment methods; say implemented in Distance; talk about problem - non-monotonic with adjustment terms; constrained optimization necessary (discuss downsides of this); extended by Marques and Buckland to include covariates; constrained optimization not available there.  Note, some of this (e.g., downsides of need for constrained opt) could go into the discussion]
 
 Standard distance sampling methods (Buckland et al. 2001, 2004) use the ``key function plus adjustment series'' formulation for the detection function. As shown above, this can lead to unrealistic functions being fit to data, in particular non-monotone detection functions. The usual way to work around this is to constrain the detection function and penalise based on evaluations of the function at a set number of distances.
-
-
-
-[Mixture models becoming increasingly popular in stat ecology and other fields.  E.g., mark recapture, finite, continuous, unifying framework (Pledger, Royle, Morgan).  Although less important here, as no bias due to unmodelled het.  Here apply mixture methods to detection funcitons -- make them a mixture of simple parametric key functions.  If keys are monotonic nonincreasing then so is the resulting mixture.]
-
-[Introduce motivating datasets here?]
 
 One problem with constraining the detection function to be monotonic is that the constraints can only be applied at a finite number of points. This can lead to constraints missing the non-monotonic points in the function. A typical example of this is shown in figure [[humpback figure from Williams and Thomas TKTKTK]]. Here a half-normal detection function was fit with one second order cosine adjustment term. Given that even with constraints it is not guaranteed that the resulting function can be non-monotone, it would seem preferable to use a formulation that guarantees monotonicity from the outset.
 
 [[TKTKTK humpback figure here cite the W+T paper]]
 
+Mixture models have recently become very popular in the capture-recapture literature following the work of TKTKTK Morgan, Pledger Royle etc. In distance sampling there is not the problem of bias due to unmodelled heterogeneity (TKTKTK cite), however it is interesting to use a flexible model for the detection function that doesn't have the disadvantages of the key function with adjustment terms formulation. If the individual parts of the mixture model (the mixture components) are each monotonic decreasing then a sum of these functions will also be monotonic decreasing. Such an approach is appealing since each function is simple but the combinations yield a great many possible shapes (see [[TKTKTK detection function plot for the simulations).
 
 In this paper, we introduce a new class of detection function models, based on mixtures of simple parametric key functions.  In the next section, we describe the models.  We then illustrate their use by applying them to simulated data, and then to real data from a number of studies.  We compare results of CDS and mixture model detection functions.  We finish with a discussion of the utility of these new methods.
 
@@ -255,7 +249,7 @@ Denoting the detection function as $g$, we consider a sum of $J$ mixture compone
 \begin{equation}
 g(x,\mathbf{Z}; \bm{\theta}, \bm{\phi}) = \sum_{j=1}^J \phi_j g_j(x,\mathbf{Z}; \bm{\theta}_j),
 \end{equation}
-where $\sum_{j=1}^J \phi_j = 1$. The distance is denoted $x$, the $\bm{\theta}_j$s are vectors of parameters for function $g_j$, $\bm{\theta}$ is a vector of all of the $\bm{\theta}_j$s, $\bm{\phi}$ is a vector of all of the $\phi_j$s. $\mathbf{Z}$ is an $n\times K$ matrix of covariates (TKTKTK see later/earlier).
+where $\sum_{j=1}^J \phi_j = 1$. The distance is denoted $x$, the $\bm{\theta}_j$s are vectors of parameters for function $g_j$, $\bm{\theta}$ is a vector of all of the $\bm{\theta}_j$s, $\bm{\phi}$ is a vector of all of the $\phi_j$s. $\mathbf{Z}$ is an $n\times K$ matrix of covariates (TKTKTK see bit in intro about MCDS).
 
 Here we let $g_j$ be half-normals, although other monotonic functions could be chosen (and the $g_j$s need not all have the same form):
 \begin{equation}
@@ -376,7 +370,7 @@ Extensive simulations were carried out to ensure that both parameters could be r
 Four sets of simulations were run:
 \begin{enumerate}
 	\item Non-covariate 2-point detection functions for line transect data: Four different detection functions were tested. They are shown in figure [[TKTKTK figure]]]. the first two functions are deliberately fairly easy to fit. The third should be harder, testing the behaviour of the model when one of the parameters is non-identifiable (it is not clear what the larger parameter would be, it could be very large). Finally, the fourth detection function has a large spike, which is similar to that in some of the data we analyse in section \ref{s:data}.
-	\item Non-covariate 2-point detection functions for point transect data
+	\item Non-covariate 2-point detection functions for point transect data: TKTKTK as above, but using point transects. Show the PDFs in fig, see below.
 	\item Non-covariate 3-point detection functions for line transect data
 	\item Covariate 2-point detection functions for line transect data
 \end{enumerate}
@@ -386,26 +380,62 @@ Four sets of simulations were run:
 1st row detection functions for non-cov line transects
 2nd row pdfs for point transects
 2 3-point plots
-2  
+2  covariate detection functions x2 (composite and quantile plots)
 
 
 \section{Real data}
 \label{s:data}
 
-\textbf{LEN}: can you fill in the intro bits to these?
+[[TKTKTK all of the model selection was by AIC; \texttt{mmds}; ]]
+
+\textbf{LEN}: can you check and/or add to the intro bits to these?
 
 \subsection{Williams and Thomas (2007) cetacean survey}
 
-line transects
+Williams and Thomas (2007) study several species of cetaceans off the coast of British Columbia. In particular look at the data for three species: Dall's porpoise, harbour porpoise and humpback whale. Results are summarised in table \ref{williams-table} and detection functions for the best (in an AIC sense) models are shown in figure \ref{williams-detfcts}.
+
+\begin{table}
+\caption{Comparison of the results for the Williams and Thomas (2007) data. W\&T indicates the results reported in Williams and Thomas (2007), other results are from mixture models where the number of mixture components was selected by AIC. [[TKTKTK AICs for the other W\&T models!!!]]}
+\centering
+\begin{tabular}{c c c c c c c}
+Species & Model & Truncation & AIC & $\hat{P_a}$ & $\% CV \hat{P_a}$ & K-S $p$\\
+\hline
+\hline
+Dall's porpoise & 1-point Hn (W\&T) & 700 &  & 0.535 & 7.74 & 0.19\\
+ & 2-point & 700 & 1296.573 & 0.699 & 24.8 & 0.69\\
+Harbour porpoise & Hr (W\&T) & 500 & 690.66 & 0.212 & 32.0 & 0.99\\
+ & 2-point & 500 & 692.09 & 0.254 & 17.5 & 0.99\\
+Humpback & hn+cos(2) (W\&T) & 2000 & & 0.386 & 12.64 & 0.6716 \\
+ & 2-point & 2000 & 1035.94 & 0.381 & 15.6 & 0.649 \\
+\end{tabular}
+\label{williams-table}
+\end{table}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{analyses/williamsplots.eps}
+\caption{Plots of the detection functions fit to the Williams and Thomas (2007) data.}
+\label{williams-detfcts}
+\end{figure}
+
+
 
 \subsection{Wood ants in the Abernethy forest}
 line transects w. covars + spikes
+
+[[TKTKTK ants paper cite]] analyse data on two species of wood ant (\textit{Formica aquilonia} and \textit{Formica lugubris}) in the Abernethy Forest in Strathspey Scotland over the period of August--September 2003. The number of nests sighted was 150 out to a distance of 72.04m from the track line, although 45\% of the nest sightings lay within 4m of the line. As part of their analysis several different truncation distances were used and larger truncation distances led to large variance in the encounter rate estimates and hence in overall abundance estimates[[TKTKTK ants paper cite]]. This is due to the spike caused by the large number of detections close to the line.
+
+[[TKTKTK probably want to use the same binning here as in the paper]]
 
 \subsection{Long-finned pilot whales}
 line transects w. covars
 
 \subsection{Amakihi}
 point transects w. covars
+
+[[Big results table here comparing the results from the relevant papers and what we got]]
+
+
 
 
 \section{Discussion}
@@ -579,10 +609,12 @@ then simply applying the product rule yields:
 \end{equation*}
 Substituting this into the above expression:
 \begin{equation*}
-\frac{\partial l(\bm{\theta}, \bm{\phi}; \mathbf{r},\mathbf{Z})}{\partial \beta_{0j*}}  = \sum_{i=1}^n \Big( \frac{ \phi_{j*} (r_i/\sigma_{j*})^2 g_{j*}(r_i,\mathbf{Z}; \bm{\theta}_{j*})}{g(r_i,\mathbf{Z}; \bm{\theta}, \bm{\phi})} - \frac{ \phi_{j*} 2 \pi (2 \sigma_{ij} + g_{j*}(w) (w^2/\sigma_{ij*} - 2\sigma_{ij*})) }{ \sum_{j=1}^J \phi_j \nu_{ij}}\Big)
+\frac{\partial l(\bm{\theta}, \bm{\phi}; \mathbf{r},\mathbf{Z})}{\partial \beta_{0j*}}  = \sum_{i=1}^n \Big( \frac{ \phi_{j*} (r_i/\sigma_{j*})^2 g_{j*}(r_i,\mathbf{Z}; \bm{\theta}_{j*})}{g(r_i,\mathbf{Z}; \bm{\theta}, \bm{\phi})} - \frac{ \phi_{j*} 2 \pi (2 \sigma_{ij} + g_{j*}(w,\mathbf{Z}; \bm{\theta}_{j*}) (w^2/\sigma_{ij*} - 2\sigma_{ij*})) }{ \sum_{j=1}^J \phi_j \nu_{ij}}\Big)
 \end{equation*}
 
 \subsection{With respect to $\beta_{k*}$}
+
+TKTKTK
 
 \begin{align*}
 \frac{\partial l(\bm{\theta}, \bm{\phi}; \mathbf{r},\mathbf{Z})}{\partial \beta_{0j*}}  &= \sum_{i=1}^n \Big( \frac{\partial}{\partial \beta_{0j*}} \log \sum_{j=1}^J \phi_j g_j(r_i,\mathbf{Z}; \bm{\theta}_j) - \frac{\partial}{\partial \beta_{0j*}}\log \sum_{j=1}^J \phi_j \nu_{ij}\Big)\\
@@ -592,8 +624,23 @@ Substituting this into the above expression:
 
 \section{Appendix B - rejection sampling for simulation of mixture detection function distance data}
 
+We generate $n$ samples by sampling distances $X\sim \text{Uniform}(0,w)$ distribution. We want $X$ to come from the PDF of the distances, $f$. We know that in the line transect case that the maximum value of $f$ is $1/\mu$ (since $\mu=1/f(0)$ and f(0) is the maximum of $f$). So we can then set
+\begin{equation}
+M \geq \frac{1}{\mu},
+\end{equation}
+so finding $h(x)$,
+\begin{align*}
+h(x) &= \frac{f(x)}{U(x) M}\\
+&= \frac{g(x)/\mu}{(1/w) (1/\mu)}\\
+&= \frac{\sum_{j=1}^J \phi_j g_j(x)/\mu}{(1/w) (1/\mu)}\\
+&= w \sum_{j=1}^J \phi_j g_j(x)
+\end{align*}
 
-Following standard notation we generate $n$ samples by sampling distances $X\sim \text{Uniform}(0,w)$ distribution and accepting each with probability $wg(X,z_i; \bm{\theta}, \bm{\phi})$ where $z_i$ indicates the covariates that are to be used for generated observation $i$.
+then, generating a $U \sim \text{Uniform}(0,1)$ accept $X$ if 
+\begin{equation}
+U \leq wg(X,z_i; \bm{\theta}, \bm{\phi}).
+\end{equation}
+where $z_i$ indicates the covariates that are to be used for generated observation $i$.
 
 MORE HERE
 
@@ -611,15 +658,35 @@ MORE HERE
 %  If you do use BiBTeX, please use the .bst file that comes with 
 %  the distribution.
 
+
+Bibiolography - TKTKTK
+
+Buckland et al 2001
+
+Buckland 1992
+
+ants paper
+
+Pledger
+
+Dorazio and Royle
+
+Morgan and Ridout
+
+
 \begin{thebibliography}{}
 
-\bibitem{ } Cox, D. R. (1972). Regression models and life tables (with
-discussion).  \textit{Journal of the Royal Statistical Society, Series B}
-\textbf{34,} 187--200.
+\bibitem{ }  Buckland, S. T., Anderson, D. R., Burnham, K. P., Laake, J. L., Borchers, D. L., and Thomas, L.  (2004). \textit{Advanced Distance Sampling}. Oxford University Press. Oxford, UK.
 
-\bibitem{ }  Hastie, T., Tibshirani, R., and Friedman, J. (2001). \textit{The 
-Elements of Statistical Learning: Data Mining, Inference, and Prediction}.
-New York: Springer.
+\bibitem{ } Marques, T. A., Thomas, L., Fancy, S. G., Buckland, S. T. (2007). Improving estimates of bird density using multiple-covariate distance sampling. \textit{The Auk} \textbf{124}(9), pp. 1229--1243.
+
+\bibitem{ } Williams, R. and Thomas, L. (2007). Distribution and abundance of marine mammals in the coastal waters of British Columbia, Canada. \textit{Journal of Cetacean Research and Management} \textbf{9}(1), pp. 15--38.
+
+\bibitem{ } Pike, D. G., Gunnlaugsson, T., V\'{i}kingsson, G .A., Desportes, G. and Mikkelson, B.  (2003) An estimate of the abundance of long-finned pilot whales (\textit{globicephala melas}) from the NASS-2001 shipboard survey. Paper SC/11/AE/10 presented to the North Atlantic Marine Mammal Commission (NAMMCO) Scientific Committee Working Group on Abundance Estimates.
+
+
+
+
 
 \end{thebibliography}
 
