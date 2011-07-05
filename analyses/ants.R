@@ -1,6 +1,7 @@
 # analyse the ants data
 
 library(mmds)
+set.seed(31415)
 
 # load some data
 ants<-read.csv(file="woodants.csv")
@@ -52,13 +53,17 @@ ants.fit1.nesthabspecies<-fitmix(ants, mix.terms = 1, width = 25, model.formula 
 ants.nesthabspecies.best<-step.ds.mixture(ants.fit1.nesthabspecies)
 aics<-c(aics,ants.nesthabspecies.best$aic)
 
-cat("min AIC=",min(aics),"at",which.min(aics),"\n")
+#cat("min AIC=",min(aics),"at",which.min(aics),"\n")
 
 
 # two best models are nest+hab and the full model
-plot(ants.nesthab.best,breaks=c(seq(0,5,len=10),seq(6,25,1)))
+plot(ants.nesthab.best,breaks=c(seq(0,5,len=10),seq(6,25,1)),main=c("Detection function","Quantiles of nest size","Levels of habitat"))
 
 plot(ants.nesthabspecies.best,breaks=c(seq(0,5,len=10),seq(6,25,1)))
+
+
+save.image("ants-run.RData")
+
 
 
 

@@ -1,5 +1,8 @@
 # pilot whale analysis
 
+library(mmds)
+
+
 fin<-read.csv(file="danpike.csv")
 
 # start with non-covariates
@@ -29,5 +32,6 @@ aics<-c(aics,fin.BSS3.best$aic)
 
 
 
+# best model is BSS2
 
 
