@@ -407,30 +407,26 @@ Four sets of simulations were run:
 
 \subsection{Williams and Thomas (2007) cetacean survey}
 
-Williams and Thomas (2007) study several species of cetaceans off the coast of British Columbia. In particular look at the data for three species: Dall's porpoise, harbour porpoise and humpback whale. Results are summarised in table \ref{williams-table} and detection functions for the best (in an AIC sense) models are shown in figure \ref{williams-detfcts}.
+Williams and Thomas (2007) study several species of cetaceans off the coast of British Columbia. In particular look at the data for three species: harbour seal (in water), harbour porpoise and humpback whale. Results are summarised in table \ref{williams-table} and detection functions for the best (in an AIC sense) models are shown in figure \ref{williams-detfcts}.
 
 \begin{table}
-\caption{Comparison of the results for the Williams and Thomas (2007) data. W\&T indicates the results reported in Williams and Thomas (2007), other results are from mixture models where the number of mixture components was selected by AIC. [[TKTKTK \textbf{LEN}: can you find the AICs for the other W\&T models?]]}
+\caption{Comparison of the results for the Williams and Thomas (2007) data. W\&T indicates the results reported in Williams and Thomas (2007), other results are from mixture models where the number of mixture components was selected by AIC. cos$(x)$ indicates a Cosine adjustment of order $x$.}
 \centering
 \begin{tabular}{c c c c c c c}
 Species & Model & Truncation & AIC & $\hat{P_a}$ & $\% CV \hat{P_a}$ & K-S $p$\\
 \hline
 \hline
-Dall's porpoise & 1-point Hn (W\&T) & 700 &  & 0.535 & 7.74 & 0.19\\
- & 2-point & 700 & 1296.573 & 0.699 & 24.8 & 0.69\\
+Harbour seal (in water) & 1-point Hn+cos(2) (W\&T) & 500 & 2771.05 & 0.425 & 7.55 & 0.515\\
+ & 2-point & 500 & 2769.86 & 0.335 & 14.8 & 0.945\\
 Harbour porpoise & Hr (W\&T) & 500 & 690.66 & 0.212 & 32.0 & 0.99\\
  & 2-point & 500 & 692.09 & 0.254 & 17.5 & 0.99\\
-Humpback & hn+cos(2) (W\&T) & 2000 & 1033.06 & 0.386 & 12.64 & 0.6716 \\
+Humpback & hn+cos(2) (W\&T) & 2000 & 1033.06 & 0.386 & 12.64 & 0.672 \\
  & 2-point & 2000 & 1035.94 & 0.381 & 15.6 & 0.649 \\
 \end{tabular}
 \label{williams-table}
 \end{table}
 
-[[\textbf{LEN}: need to sort out what to say about the Dall's porpoise... The model in the paper wasn't best? responsive movement, p. 25 Williams and Thomas (2007)]]
-
-In each case a 2-point mixture was selected by AIC to be the best model. The mixture models for the harbour porpoise and the humpback both did not perform as well as the models selected in Williams and Thomas (2007). However, for the harbour porpoise the AIC is only different by 2, the detectability is very similar and the \%CV is lower, so it does not appear that much is lost by using the mixture model. In the case of the humpback, the fitted detection function is monotone, which was not the case in Williams and Thomas (2007); this added to the fact that there is again not a huge difference in results, leads us to believe that mixture models for the detection function can be useful.
-
-[[TKTKTK say something about Dall's, esp. spike.]]
+In each case a 2-point mixture was selected by AIC to be the best model. The mixture models for the harbour porpoise and the humpback both did not perform as well as the models selected in Williams and Thomas (2007). However, for the harbour porpoise the AIC is only different by 2, the detectability is very similar and the \%CV is lower, so it does not appear that much is lost by using the mixture model. In the case of the humpback, the fitted detection function is monotone, which was not the case in Williams and Thomas (2007); this added to the fact that there is again not a huge difference in results, leads us to believe that mixture models for the detection function can be useful. Finally, for the harbour seal data, the mixture model had a better AIC than the half-normal with cosine adjustments of order 2 which was selected in the paper. The goodness-of-fit was also significantly better than the result given in Williams and Thomas (2007).
 
 \begin{figure}
 \centering
@@ -459,7 +455,7 @@ Hn 2-pt & None & 754.61 & 0.183 & 16.2 & 0.96 \\
 Hn 2-pt & habitat & 751.27 & 0.188 & 0.3 & 0.97 \\ 
 Hn 2-pt & species & 756.59 & 0.184 & 0.1 & 0.94 \\  
 Hn 2-pt & nest size & 741.64 & 0.214 & 10.9 & 0.76 \\   
-Hn 2-pt & species+habitat & 749.0516 & 0.0272 & 38.7 & 0.94\\ 
+Hn 2-pt & species+habitat & 749.05 & 0.027 & 38.7 & 0.94\\ 
 Hn 2-pt & nest.size+habitat & \textbf{737.27} & 0.179 & 13.6 & 0.72\\
 Hn 2-pt & nest.size+species & 741.92 & 0.210 & 10.9 & 0.77\\
 Hn 2-pt & nest.size+species+habitat & 739.77 & 0.191 & 12.9 & 0.68 \\
@@ -709,8 +705,6 @@ Putting that together:
 
 
 \section{Appendix B - rejection sampling for simulation of mixture detection function distance data}
-
-\textbf{LEN}: do we need a reference for rejection sampling?
 
 We generate $n$ samples by sampling distances $X\sim \text{Uniform}(0,w)$. We want $X$ to come from the PDF of the distances, $f$. We know that in the line transect case that the maximum value of $f$ is $1/\mu$ (since $\mu=1/f(0)$ and f(0) is the maximum of $f$). So we can then set
 \begin{equation*}

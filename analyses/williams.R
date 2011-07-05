@@ -6,16 +6,16 @@ library(mmds)
 par(mfrow=c(1,3))
 
 ###########################
-# Dall's porpoise
+# Harbour seal
 # load the data
-dp<-read.csv(file="dp.csv")
-# fit a 1-point mixture, truncation at 700m
-dp.fit1<-fitmix(dp,mix.terms=1,width=700)
+hs<-read.csv(file="hs.csv")
+# fit a 1-point mixture, truncation at 500m
+hs.fit1<-fitmix(hs,mix.terms=1,width=500)
 # find best AIC model
-dp.best<-step.ds.mixture(dp.fit1)
+hs.best<-step.ds.mixture(hs.fit1)
 
 # plot that
-plot(dp.best,style="hist", breaks=c(0, 23.5, 47, 70.5, 93, 140, 187, 233, 280, 327, 373, 420, 467, 513, 560, 607, 653, 700),main="Dall's porpoise")
+plot(hs.best,style="hist", breaks=c(0,11,22,33,43,65,87,109,130,152,174,196,217,239,261,283,304,326,348,370,391,413,435,457,478,500),main="Harbour seal (in water)")
 
 
 ###########################
