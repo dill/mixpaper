@@ -234,9 +234,17 @@ Estimating the detection function is therefore the key to distance sampling.  Th
 
 Standard distance sampling methods (Buckland et al. 2001, 2004) use the ``key function plus adjustment series'' formulation for the detection function. As shown above, this can lead to unrealistic functions being fit to data, in particular non-monotone detection functions. The usual way to work around this is to constrain the detection function and penalise based on evaluations of the function at a set number of distances.
 
-One problem with constraining the detection function to be monotonic is that the constraints can only be applied at a finite number of points. This can lead to constraints missing the non-monotonic points in the function. A typical example of this is shown in figure [[humpback figure from Williams and Thomas TKTKTK]]. Here a half-normal detection function was fit with one second order cosine adjustment term. Given that even with constraints it is not guaranteed that the resulting function can be non-monotone, it would seem preferable to use a formulation that guarantees monotonicity from the outset.
+One problem with constraining the detection function to be monotonic is that the constraints can only be applied at a finite number of points. This can lead to constraints missing the non-monotonic points in the function. A typical example of this is shown in figure \ref{fig1}. Here a half-normal detection function was fit with one second order cosine adjustment term. Given that even with constraints it is not guaranteed that the resulting function can be non-monotone, it would seem preferable to use a formulation that guarantees monotonicity from the outset.
 
-[[TKTKTK humpback figure here cite the W+T paper \textbf{LEN}: do you have a high res version of this figure?]]
+[[TKTKTK add something about Dan Pike here]]
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{figs/figure1.eps}
+\caption{TKTKTK some text here!}
+\label{fig1}
+\end{figure}
+
 
 Mixture models have recently become very popular in the capture-recapture literature following the work of Pledger (2000), Dorazio and Royle (), Pledger (2005) and Morgan \& Ridout (2008). In distance sampling there is not the problem of bias due to unmodelled heterogeneity (TKTKTK cite), however it is interesting to use a flexible model for the detection function that doesn't have the disadvantages of the key function with adjustment terms formulation. If the individual parts of the mixture model (the mixture components) are each monotonic decreasing then a sum of these functions will also be monotonic decreasing. Such an approach is appealing since each function is simple but the combinations yield a great many possible shapes (see [[TKTKTK detection function plot for the simulations).
 
@@ -375,10 +383,12 @@ Extensive simulations were carried out to ensure that both parameters could be r
 Four sets of simulations were run:
 \begin{enumerate}
 	\item Non-covariate 2-point detection functions for line transect data: Four different detection functions were tested. They are shown in the first row of figure \ref{sim-detfcts}. the first two functions are deliberately fairly easy to fit. The third should be harder, testing the behaviour of the model when one of the parameters is non-identifiable (it is not clear what the larger parameter would be, it could be very large). Finally, the fourth detection function has a large spike, which is similar to that in some of the data we analyse in section \ref{s:data}.
-	\item Non-covariate 2-point detection functions for point transect data:  the detection functions were as above, with data generated as if it came from point transects. The pdfs are given in the second row of figure \ref{sim-detfcts}.
+	\item Non-covariate 2-point detection functions for point transect data:  the detection functions were as above, with data generated as if it came from point transects. The pdfs are given in the second row of figure \ref{sim-detfcts}. TKTKTK say something about which are hard
 	\item Non-covariate 3-point detection functions for line transect data
 	\item Covariate 2-point detection functions for line transect data
 \end{enumerate}
+
+TKTKTK how did that go?
 
 [[TKTKTK Figure with detection functions]]
 [[ have the rows be the items in the above list
@@ -727,6 +737,22 @@ For point transects the maximum value is unknown, so for each simulation the max
 U \leq \frac{wr}{M\nu}g(R,z; \bm{\theta}, \bm{\phi}).
 \end{equation}
 
+\section{Appendix C - variance of the average detectability}
+
+First note that the average detectability is calculated as:
+\begin{align*}
+\hat{P_{a}} &= \frac{n}{\hat{N}}\\
+&= \frac{n}{\sum_{i=1}^n 1/\hat{p}_i}\\
+\end{align*}
+So then using the sandwich estimator Borchers \textit{et al} (2002):
+\begin{align*}
+\text{Var}[\hat{P_{a}}] &= n^2 \text{Var}\Big[\frac{1}{\sum_{i=1}^n 1/\hat{p}_i}\Big]\\
+&= n^2 \Big[\frac{\partial}{\partial \bm{\theta}}(\sum_{i=1}^n 1/\hat{p}_i)^{-1}\Big\vert_{\bm{\theta}=\bm{\hat{\theta}}}\Big]^\text{T} \bm{i}(\bm{\hat{\theta}})^{-1} \Big[\frac{\partial}{\partial \bm{\theta}}(\sum_{i=1}^n 1/\hat{p}_i)^{-1}\Big\vert_{\bm{\theta}=\bm{\hat{\theta}}}\Big]\\
+\end{align*}
+where $ \bm{i}(\bm{\hat{\theta}})^{-1}$ is the observed information matrix (ie. the negative of the Hessian of the $log$-likelihood evaluated at the MLE). Letting $\theta$ be the vector of all of the parameters and $\bm{\theta}$ be its MLE. Looking at the derivative term, via some rather tedious algebra we obtain the following expression:
+\begin{align*}
+\frac{\partial}{\partial \bm{\theta}}(\sum_{i=1}^n 1/\hat{p}_i)^{-1}\Big\vert_{\bm{\theta}=\bm{\hat{\theta}}} = \frac{\frac{\partial \mu_1}{\partial \bm{\theta}} \mu_2 \mu_3 \cdots \mu_n + \mu_1 \frac{\partial \mu_2}{\partial \bm{\theta}} \mu_3 \mu_4 \cdots \mu_n + \cdots + \mu_1 \mu_2 \cdots \mu_{n-1}\frac{\partial \mu_n}{\partial \bm{\theta}}}{(\mu_2 \mu_3 \cdots \mu_n + \mu_1 \mu_3 \mu_4 \cdots \mu_n + \cdots + \mu_1 \mu_2 \cdots \mu_{n-1})^2}\Big\vert_{\bm{\theta}=\bm{\hat{\theta}}}
+\end{align*}
 
 %  Here, we create the bibliographic entries manually, following the
 %  journal style.  If you use this method or use natbib, PLEASE PAY
@@ -752,6 +778,7 @@ ants paper
 Dorazio and Royle
 
 
+yellow book
 
 \begin{thebibliography}{}
 
