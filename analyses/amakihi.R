@@ -2,14 +2,18 @@
 
 library(mmds)
 
+set.seed(1241)
+
 amakihi<-read.csv(file="amakihi.csv")
 
+amakihi$mas<-(amakihi$mas-mean(amakihi$mas))/sd(amakihi$mas)
+
+aics<-c()
 
 # no covariates
 amakihi.fit1<-fitmix(amakihi,mix.terms=1,width=82.5,pt=TRUE)
 amakihi.best<-step.ds.mixture(amakihi.fit1)
-
-aics<-c()
+aics<-c(aics,amakihi.best$aic)
 
 # covariates
 amakihi.fit1.o<-fitmix(amakihi,mix.terms=1,width=82.5,model.formula="~as.factor(obs)",pt=TRUE)

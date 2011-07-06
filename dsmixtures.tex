@@ -246,7 +246,7 @@ One problem with constraining the detection function to be monotonic is that the
 \end{figure}
 
 
-Mixture models have recently become very popular in the capture-recapture literature following the work of Pledger (2000), Dorazio and Royle (), Pledger (2005) and Morgan \& Ridout (2008). In distance sampling there is not the problem of bias due to unmodelled heterogeneity (TKTKTK cite), however it is interesting to use a flexible model for the detection function that doesn't have the disadvantages of the key function with adjustment terms formulation. If the individual parts of the mixture model (the mixture components) are each monotonic decreasing then a sum of these functions will also be monotonic decreasing. Such an approach is appealing since each function is simple but the combinations yield a great many possible shapes (see [[TKTKTK detection function plot for the simulations).
+Mixture models have recently become very popular in the capture-recapture literature following the work of Pledger (2000), Dorazio and Royle (2003), Pledger (2005) and Morgan \& Ridout (2008). In distance sampling there is not the problem of bias due to unmodelled heterogeneity (TKTKTK cite), however it is interesting to use a flexible model for the detection function that doesn't have the disadvantages of the key function with adjustment terms formulation. If the individual parts of the mixture model (the mixture components) are each monotonic decreasing then a sum of these functions will also be monotonic decreasing. Such an approach is appealing since each function is simple but the combinations yield a great many possible shapes (see figure \ref{sim-detfcts}).
 
 In this paper, we introduce a new class of detection function models, based on mixtures of simple parametric key functions.  In the next section, we describe the models.  We then illustrate their use by applying them to simulated data, and then to real data from a number of studies.  We compare results of CDS and mixture model detection functions.  We finish with a discussion of the utility of these new methods.
 
@@ -254,25 +254,25 @@ In this paper, we introduce a new class of detection function models, based on m
 \label{s:detfcts}
 
 Denoting the detection function as $g$, we consider a sum of $J$ mixture components $g_j$, scaled by some mixture proportions $\phi_j$:
-\begin{equation}
+\begin{equation*}
 g(x,\mathbf{Z}; \bm{\theta}, \bm{\phi}) = \sum_{j=1}^J \phi_j g_j(x,\mathbf{Z}; \bm{\theta}_j),
-\end{equation}
+\end{equation*}
 where $\sum_{j=1}^J \phi_j = 1$. The distance is denoted $x$, the $\bm{\theta}_j$s are vectors of parameters for function $g_j$, $\bm{\theta}$ is a vector of all of the $\bm{\theta}_j$s, $\bm{\phi}$ is a vector of all of the $\phi_j$s. $\mathbf{Z}$ is an $n\times K$ matrix of covariates (TKTKTK see bit in intro about MCDS).
 
 Here we let $g_j$ be half-normals, although other monotonic functions could be chosen (and the $g_j$s need not all have the same form):
-\begin{equation}
+\begin{equation*}
 g(x,\mathbf{Z}; \bm{\theta}, \bm{\phi}) = \sum_{j=1}^J \phi_j \exp \Big( - \frac{x^2}{2\sigma_j} \Big).
-\end{equation}
-When there are covariates, we use the usual formulation per-mixture (see eg. Buckland et al. (2004) pp. TKTKTK), with covariates effecting every mixture in the same way. That is that each mixture has an individual ``intercept'' parameter ($\beta_{0j}$) and a common covariate parameter ($\beta_k$ for $k=1,\cdots,K$, if there are K covariates). Generally speaking, there will be covariates for every observed distance. In this case, giving the observations a subscript $i$ we decompose the (per observation) scale parameter ($\sigma_{ij}$) as: 
-\begin{equation}
+\end{equation*}
+When there are covariates, we use the usual formulation per-mixture (see eg. Buckland et al. (2004) pp. TKTKTK), with covariates effecting every mixture in the same way. That is that each mixture has an individual ``intercept'' parameter ($\beta_{0j}$) and a common covariate parameter ($\beta_k$ for $k=1,\ldots,K$, if there are K covariates). Generally speaking, there will be covariates for every observed distance. In this case, giving the observations a subscript $i$ we decompose the (per observation) scale parameter ($\sigma_{ij}$) as: 
+\begin{equation*}
 \sigma_{ij} = \exp( \beta_{0j} + \sum_{k=1}^K \beta_k z_{ik})
-\end{equation}
+\end{equation*}
 where $z_{ik}$ is the $ik^\text{th}$ element of $\mathbf{Z}$, corresponding to the $k^\text{th}$ covariate of the $i^\text{th}$ observation.
 
 So for a 2-point mixture with 1 covariate, the scale parameters take the form:
-\begin{equation}
+\begin{equation*}
 \sigma_{ij} = \exp( \beta_{0j} + \beta_1 z_{i1})
-\end{equation}
+\end{equation*}
 and then $\bm{\theta}_j = (\beta_{0j}, \beta_1)$. When there are no covariates, $\bm{\theta}_j = (\beta_{0j})$, however we leave the notation as is for consistency.
 
 As usual we can also find the effective strip width for line transects and effective area of detection in point transect cases. We derive these now.
@@ -280,11 +280,11 @@ As usual we can also find the effective strip width for line transects and effec
 \subsection{Line transects}
 \label{s:detfcts-lt}
 Finding the effective strip width is simply a case of integrating the detection function from $0$ to $w$. Staying with the (more general) covariate formulation, the effective strip width for observation $i$ is then:
-\begin{align}
+\begin{align*}
 \mu_i &= \int_0^w g(x,\mathbf{Z}; \bm{\theta}, \bm{\phi}) \text{d}x,\\
 &= \int_0^w \sum_{j=1}^J \phi_j g_j(x,\mathbf{Z}; \bm{\theta}_j) \text{d}x,\\
 &=\sum_{j=1}^J \phi_j \int_0^w  g_j(x,\mathbf{Z}; \bm{\theta}_j) \text{d}x,
-\end{align}
+\end{align*}
 where $w$ is the truncation distance. In the non-covariate case we note that $\mu_i=\mu \quad \forall i$ but again keep to the covariate notation for generality.
 
 Analogously to conventional distance sampling we use a Horvitz-Thompson-type estimator of abundance, which can be found by simply substituting in the appropriate terms:
@@ -307,9 +307,9 @@ and, then a Horvitz-Thompson estimator of the abundance is:
 N = \sum_{i=1}^n \frac{\pi w^2}{\nu_i}.
 \end{equation*}
 
-\subsection{Variance of $\hat{N}$}
-
-We can also find the variance of $\hat{N}$ using the sandwich estimator:
+%\subsection{Variance of $\hat{N}$}
+%
+%We can also find the variance of $\hat{N}$ using the sandwich estimator:
 
 
 
@@ -384,8 +384,8 @@ Four sets of simulations were run:
 \begin{enumerate}
 	\item Non-covariate 2-point detection functions for line transect data: Four different detection functions were tested. They are shown in the first row of figure \ref{sim-detfcts}. the first two functions are deliberately fairly easy to fit. The third should be harder, testing the behaviour of the model when one of the parameters is non-identifiable (it is not clear what the larger parameter would be, it could be very large). Finally, the fourth detection function has a large spike, which is similar to that in some of the data we analyse in section \ref{s:data}.
 	\item Non-covariate 2-point detection functions for point transect data:  the detection functions were as above, with data generated as if it came from point transects. The pdfs are given in the second row of figure \ref{sim-detfcts}. TKTKTK say something about which are hard
-	\item Non-covariate 3-point detection functions for line transect data
-	\item Covariate 2-point detection functions for line transect data
+	\item Non-covariate 3-point detection functions for line transect data: two different detection functions were used. They are shown in the third row of figure \ref{sim-detfcts}. TKTKTK more
+	\item Covariate 2-point detection functions for line transect data: two different models were tested, the first of which has a binary factor covariate, half of the observations had covariate value 1 and half had covariate value 0. The second model had a continuous covariate, whose values were generated from a standard normal distribution function. Detection functions are shown in the fourth row of figure \ref{sim-detfcts}, along with the marginal detection functions for the levels/quantiles of the covariates. TKTKTK more.
 \end{enumerate}
 
 TKTKTK how did that go?
@@ -425,13 +425,12 @@ Williams and Thomas (2007) study several species of cetaceans off the coast of B
 \begin{tabular}{c c c c c c c}
 Species & Model & Truncation & AIC & $\hat{P_a}$ & $\% CV \hat{P_a}$ & K-S $p$\\
 \hline
-\hline
-Harbour seal (in water) & 1-point Hn+cos(2) (W\&T) & 500 & 2771.05 & 0.425 & 7.55 & 0.515\\
- & 2-point & 500 & 2769.86 & 0.335 & 14.8 & 0.945\\
+Harbour seal & Hn+cos(2) (W\&T) & 500 & 2771.05 & 0.425 & 7.55 & 0.515\\
+(in water) & Hn 2-pt & 500 & 2769.86 & 0.335 & 14.8 & 0.945\\
 Harbour porpoise & Hr (W\&T) & 500 & 690.66 & 0.212 & 32.0 & 0.99\\
- & 2-point & 500 & 692.09 & 0.254 & 17.5 & 0.99\\
-Humpback & hn+cos(2) (W\&T) & 2000 & 1033.06 & 0.386 & 12.64 & 0.672 \\
- & 2-point & 2000 & 1035.94 & 0.381 & 15.6 & 0.649 \\
+ & Hn 2-pt & 500 & 692.09 & 0.254 & 17.5 & 0.99\\
+Humpback & Hn+cos(2) (W\&T) & 2000 & 1033.06 & 0.386 & 12.64 & 0.672 \\
+ & Hn 2-pt & 2000 & 1035.94 & 0.381 & 15.6 & 0.649 \\
 \end{tabular}
 \label{williams-table}
 \end{table}
@@ -449,30 +448,38 @@ In each case a 2-point mixture was selected by AIC to be the best model. The mix
 \subsection{Wood ants in the Abernethy forest}
 line transects w. covars + spikes
 
-[[TKTKTK ants paper cite]] analyse data on two species of wood ant (\textit{Formica aquilonia} and \textit{Formica lugubris}) in the Abernethy Forest in Strathspey Scotland over the period of August--September 2003. The number of nests sighted was 150 out to a distance of 72.04m from the track line, although 45\% of the nest sightings lay within 4m of the line. As part of their analysis several different truncation distances were used and larger truncation distances led to large variance in the encounter rate estimates and hence in overall abundance estimates[[TKTKTK ants paper cite]]. This is due to the spike caused by the large number of detections close to the line.
+Borkin \textit{et al.} (\textit{in press}) analyse data on two species of wood ant (\textit{Formica aquilonia} and \textit{Formica lugubris}) in the Abernethy Forest in Strathspey Scotland over the period of August--September 2003. The number of nests sighted was 150 out to a distance of 72.04m from the track line, although 45\% of the nest sightings lay within 4m of the line. As part of their analysis several different truncation distances were used and larger truncation distances led to large variance in the encounter rate estimates and hence in overall abundance estimates (see Borkin \textit{et al.}, \textit{in press}). This is due to the spike caused by the large number of detections close to the line.
 
-[[TKTKTK probably want to use the same binning here as in the paper]]
-[[\textbf{LEN}: can I get a copy of the paper?]]
+As well as distances, three covariates were recorded:
+\begin{itemize}
+	\item \texttt{habitat} - one of four habitat types (factor),
+	\item \texttt{nest.size} - half-width of each nest multiplied by its height (continuous),
+	\item \texttt{species} - whether \textit{Formica aquilonia} or \textit{Formica lugubris} were observed (two level factor).
+\end{itemize}
+In order to avoid numerical problems due to large values of the nest size, the variable was standardised.
 
 \begin{table}
-\caption{ANTS RESULTS. Truncation at 25m. Mixtures selected as best by AIC. [[\textbf{LEN}: can you find the KS $p$-values? Can you also run the missing models? These seem very different, did you use 25m truncation when you ran these? Bold indicates lowest AIC.]]}
+\caption{Results for the wood ant data. The first 8 results are for mixture model detection functions with AIC selection for the number of mixture components. The last results is the best fitting model (by AIC) using Distance. In all cases truncation was at 25m. Bold indicates lowest AIC.}
 \centering
 \begin{tabular}{c c c c c c}
 Model & Covariates & AIC & $\hat{P_a}$ & $\% CV \hat{P_a}$ & K-S $p$\\
 \hline
-\hline
 Hn 2-pt & None & 754.61 & 0.183 & 16.2 & 0.96 \\
-Hn 2-pt & habitat & 751.27 & 0.188 & 0.3 & 0.97 \\ 
-Hn 2-pt & species & 756.59 & 0.184 & 0.1 & 0.94 \\  
-Hn 2-pt & nest size & 741.64 & 0.214 & 10.9 & 0.76 \\   
-Hn 2-pt & species+habitat & 749.05 & 0.027 & 38.7 & 0.94\\ 
-Hn 2-pt & nest.size+habitat & \textbf{737.27} & 0.179 & 13.6 & 0.72\\
-Hn 2-pt & nest.size+species & 741.92 & 0.210 & 10.9 & 0.77\\
-Hn 2-pt & nest.size+species+habitat & 739.77 & 0.191 & 12.9 & 0.68 \\
+Hn 2-pt & \texttt{habitat} & 751.27 & 0.188 & 3 & 0.97 \\ 
+Hn 2-pt & \texttt{species} & 756.59 & 0.184 & 1.4 & 0.94 \\  
+Hn 2-pt & \texttt{nest.size} & 741.64 & 0.214 & 1.3 & 0.76 \\   
+Hn 2-pt & \texttt{species}+\texttt{habitat} & 749.05 & 0.027 & 3.03 & 0.94\\ 
+Hn 2-pt & \texttt{nest.size}+\texttt{habitat} & \textbf{737.27} & 0.179 & 1.87 & 0.72\\
+Hn 2-pt & \texttt{nest.size}+\texttt{species} & 741.92 & 0.210 & 1.50 & 0.77\\
+Hn 2-pt & \texttt{nest.size}+\texttt{species}+\texttt{habitat} & 739.77 & 0.191 & 1.31 & 0.68 \\
+Hr & \texttt{nest.size} + \texttt{habitat} & 745.2 & 0.194 & 10.6 & 0.95\\
 \end{tabular}
 \label{ants-table}
 \end{table}
 
+As can be seen from table \ref{ants-table}, the best model by AIC was a 2-point mixture with nest size and habitat as covariates. This is not that surprising given the best CDS model (selected by AIC) in Distance was a hazard-rate with the same covariates. What is rather surprising is that the best mixture model had a better AIC than the hazard-rate, even though it has 1 more parameter. This is particularly encouraging since one might expect that mixtures would give good fits but would not achieve lower AIC scores due to the number of parameters required.
+
+[[\textbf{LEN}: TKTKTK probably want to use the same binning here as in the paper??]]
 
 \begin{figure}
 \centering
@@ -482,50 +489,83 @@ Hn 2-pt & nest.size+species+habitat & 739.77 & 0.191 & 12.9 & 0.68 \\
 \end{figure}
 
 
-
-
 \subsection{Long-finned pilot whales}
-line transects w. covars
 
-Pike \textit{et al} (2003) analyse data on long-finned pilot whales (\textit{Globicephala melas}). There were 84 pods sighted as part of the NASS-2001 survey (of which the pilot whale was not a target). The Beaufort sea state was recorded as a covariate during the survey and enter the model as either a 4 level factor (\texttt{BSS}), a 3 level factor (\texttt{BSS3}) or a 2 levels factor (\texttt{BSS2}).
+Pike \textit{et al} (2003) analyse data on long-finned pilot whales (\textit{Globicephala melas}). There were 84 pods sighted as part of the NASS-2001 survey (of which the pilot whale was not a target). The Beaufort sea state was recorded as a covariate during the survey and enter the model as either a continuous variable (\texttt{BSS}), 6 level factor (\texttt{BSS}, as a factor), a 2 level factor (\texttt{BSS3}) or a 3 level factor (\texttt{BSS2}).
 
-A model was fit with each of these covariates, as well as a model with no covariates. A summary of the results is given in table \ref{pilot-table} and the detection function for the best model is shown in figure [[TKTKTK whale detfct plot]].
+A model was fit with each of these covariates, as well as a model with no covariates. A summary of the results is given in table \ref{pilot-table} and the detection function for the best model is shown in figure \ref{danpike-detfct}.
+
 \begin{table}
-\caption{PILOT WHALE RESULTS. (P) indicates results from Pike et al. (2003). [[TKTKTK results from Distance.]] Truncation at 3000m. Bold indicates the model with the lowest AIC.}
+\caption{Comparison of the results from fitting mixture model detection functions and the results reported in Pike \textit{et al.} (2003). The first 5 results are from mixture models, with the number of mixture components selected by AIC. The final model is that reported in Pike \textit{et al} (2003) Truncation for all models was at 3000m. Bold indicates the model with the lowest AIC. (cont.) denotes that the covariate was included in the model as continuous, otherwise covariates entered the model as factors. [[\textbf{LEN}: can you fill in the rest of this?]]}
 \centering
 \begin{tabular}{c c c c c c}
 Model & Covariate & AIC & $\hat{P_a}$ & $\% CV \hat{P_a}$ & K-S $p$\\
 \hline
-\hline
-2-point & None & 1298.42 & 0.295 & 23.6 & 0.9471 \\
-2-point & \texttt{BSS} & 1286.6 & 0.209 & 8.54 & 0.8196 \\
-2-point & \texttt{BSS2} & \textbf{1284.99} & 0.211 & 8.5 & 0.9533\\
-2-point & \texttt{BSS3} & 1296.27 & 0.2698 & 4.88 & 0.9864 \\
+Hn 2-pt & None & 1298.42 & 0.295 & 8.6 & 0.95 \\
+Hn 2-pt & \texttt{BSS} & 1286.6 & 0.209 & 19.2 & 0.82 \\
+Hn 2-pt & \texttt{BSS2} & \textbf{1284.99} & 0.211 & 20.6 & 0.95\\
+Hn 2-pt & \texttt{BSS3} & 1296.27 & 0.27 & 24.6 & 0.99 \\
+Hn 2-pt & \texttt{BSS} (cont.) &  1286.26 & 0.152 & 31.08 & 0.84\\
+Hn 1-pt & \texttt{BSS} (cont.) & 1296 & 0.37 &TKTKTK &TKTKTK \\
 \end{tabular}
 \label{pilot-table}
 \end{table}
 
-The best model by AIC score was  the \texttt{BSS2} model. A plot of the average detection function... [[TKTKTK plot]]
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{analyses/danpike-bss2.eps}
+\caption{The (AIC) best model for the long-finned pilot whale data -- a 2-point mixture model detection function with Beaufort sea state. Left: the average detection function, right: the marginal detection function with the levels of \texttt{BSS2}.}
+\label{danpike-detfct}
+\end{figure}
 
+The best model by AIC score was a 2-point mixture with \texttt{BSS2} as a covariate. Figure \ref{danpike-detfct} shows the average detection function and the marginal detection function with the levels of \texttt{BSS2}.
 
 \subsection{Amakihi}
 Marques \textit{et al} (2007) analyse data on the Hawaii Amakihi (\textit{Hemignathus virens}). The data consist of 1485 observations on the bird, collected at 41 point transect from July 1992 to April 1995. Covariate data was also collected:
 \begin{itemize}
 	\item \texttt{obs} - the person who made the observations (three level factor),
 	\item \texttt{mas} - minutes after sunrise (continuous),
-	\item \texttt{has} - hours after sunrise (factor).
+	\item \texttt{has} - hours after sunrise (six level factor).
 \end{itemize}
 Given that this is a large data set, it may well support the incorporation of 2 or more of the covariates above.
 
-[[Big results table here comparing the results from the relevant papers and what we got?? A la Morgan \& Ridout?]]
+\begin{table}
+\caption{Results from the analysis of the amakihi data. The first eight results are for mixture model detection functions with number of mixture components selected by AIC. The final result is the (AIC) best model given in Marques \textit{et al.} (2007). Truncation at 82.5m.}
+\centering
+\begin{tabular}{c c c c c c}
+Model & Covariate & AIC & $\hat{P_a}$ & $\% CV \hat{P_a}$ & K-S $p$\\
+\hline
+Hn 2-pt & None & 10805.48 & 0.28 & 1001.19 & 0.12 \\
+Hn 2-pt & \texttt{obs} & 10778.69 & 0.28 & 0.16 & 0.04\\
+Hn 2-pt & \texttt{has} & 10807.19 &  0.28 & 0.18 & 0.33\\
+Hn 2-pt & \texttt{mas} & 10805.11 &  0.28 & 0.17 & 0.31\\
+Hn 2-pt & \texttt{obs} + \texttt{has} & 10782.53 & 0.28 & 0.19 & 0.23\\
+Hn 2-pt & \texttt{obs} + \texttt{mas} & 10778.07 & 0.28 & 0.17 & 0.14\\
+Hn 2-pt & \texttt{has} + \texttt{mas} & 10809.17 & 0.28 & 0.18 & 0.43 \\
+Hn 2-pt & \texttt{obs} + \texttt{has} + \texttt{mas} & 10784.5 & 0.28 & 0.22 & 0.35\\
+Hr & \texttt{obs} + \texttt{mas} & \textbf{10777.72} & 0.3 & 0.03 & 0.036 \\
+\end{tabular}
+\label{pilot-table}
+\end{table}
 
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{analyses/amakihi-om.eps}\\
+\includegraphics[width=0.5\textwidth]{analyses/amakihi-om-pdf.eps}
+\caption{Plots of the (AIC) best model for the amakihi data. Top row: detection function averaged over covariates (dashed lines are each mixture component averaged over covariates), marginal detection function showing the levels of observer (averaged over the values of minutes after sunrise) and marginal detection function for the quantiles minutes after sunrise (averaged over the levels of observer). Bottom row: pdf of distances averaged over the covariate values.}
+\label{amakihi}
+\end{figure}
 
+Best mixture model according to AIC was a two point mixture with observer and minutes after sunrise as covariates, closely followed by the model with only observer as a covariate. In this case a hazard-rate with observer and minutes after sunrise as covariates beat the mixtures in AIC terms. This is not too surprising given that the mixtures use one more parameter than a hazard-rate in this situation. 
 
 
 \section{Discussion}
 \label{s:discuss}
 
+We only needed 2-point mixtures here. That's nice. Do we ever need more? Probably not in covariate cases.
+
 Package on CRAN
+
 Has usual methods
 
 Will be in next version of Distance?!
@@ -549,18 +589,20 @@ David would like to acknowledge the (financial) support of EPSRC.
 
 Both authors would like to thank David Borchers, who suggested the parametrisation for the mixture proportions.
 
+Thanks to Rob Williams, Dan Pike , the amakihi people and the ant people for the data.
 
-\section{Appendix A - Derivatives}
 
-\subsection{Line transects}
+\section*{Appendix A - Derivatives}
+
+\subsection*{Line transects}
 
 Starting from the likelihood given in (\ref{lt-lik}), we derive the derivatives with respect to the optimisation parameters.
 
-\subsection{With respect to $\beta_{0j*}$}
+\subsection*{With respect to $\beta_{0j*}$}
 For the intercept terms (also considering in the non-covariate case, these are just the parameters), the parameters have no effect outside of their mixture (ie. $\beta_{0j*}$ only has an influence on mixture component $j*$), so we can write:
-\begin{equation}
+\begin{equation*}
 \frac{\partial l(\bm{\theta},\bm{\phi}; \mathbf{x},\mathbf{Z})}{\partial \beta_{0j*}} = \sum_{i=1}^n \frac{1}{g(x_i,\mathbf{Z}; \bm{\theta},\bm{\phi})} \phi_{j*} \frac{\partial}{\partial \beta_{0j*}} g_{j*}(x_i,\mathbf{Z}; \bm{\theta}_{j*})  - \frac{\phi_{j*}}{\mu_i}  \frac{\partial}{\partial \beta_{0j*}} \mu_{ij*}.
-\end{equation}
+\end{equation*}
 Now, to first fine $\frac{\partial}{\partial \beta_{0j*}} g_{j*}(x_i,\mathbf{Z}; \bm{\theta}_{j*})$:
 \begin{equation*}
 \frac{\partial g_{j*}(x_i,\mathbf{Z}; \bm{\theta}_{j*})}{\partial \beta_{0j*}} = \frac{\partial}{\partial \beta_{0j*}} \exp\Big( -\frac{x_i^2}{2\sigma_{j*}^2} \Big)
@@ -598,18 +640,18 @@ Substituting into (\ref{app-mu-erf}):
 \frac{\partial \mu_{ij*}}{\partial \beta_{0j*}} =  \mu_{ij*} - w \exp\Big( -\frac{w^2}{2\sigma_{j*}^2} \Big)
 \end{equation*}
 Finally, the derivative is:
-\begin{equation}
+\begin{equation*}
 \frac{\partial l(\bm{\theta}, \bm{\phi}; \mathbf{x},\mathbf{Z})}{\partial \beta_{0j*}} = \sum_{i=1}^n \Big( \frac{x_i}{\sigma_{j*}}\Big)^2 \phi_{j*} \frac{g_{j*}(x_i,\mathbf{Z}; \bm{\theta}_{j*})}{g(x_i,\mathbf{Z}; \bm{\theta},\bm{\phi})}  - \frac{\phi_{j*}}{\mu_i} (\mu_{ij*} - w g_{j*}(w,\mathbf{Z}; \bm{\theta}_{j*})).
-\end{equation}
+\end{equation*}
 
 
 
-\subsection{With respect to $\beta_{k*}$}
+\subsection*{With respect to $\beta_{k*}$}
 
 Derivatives with respect to the common covariate parameters are found in a similar way to above. The expressions are slightly more complicated since the $\beta_k$s effect all of the mixture components.
-\begin{equation}
+\begin{equation*}
 \frac{\partial l(\bm{\theta},\bm{\phi}; \mathbf{x},\mathbf{Z})}{\partial \beta_{k*}} = \sum_{i=1}^n \Big( \frac{1}{g(x_i,\mathbf{Z}; \bm{\theta},\bm{\phi})} \sum_{j=1}^J \phi_j \frac{\partial}{\partial \beta_{k*}} g_j(x_i,\mathbf{Z}; \bm{\theta}_j) - \frac{1}{\mu_i} \sum_{j=1}^J \phi_j \frac{\partial}{\partial \beta_{k*}}\mu_{ij}\Big)
-\end{equation}
+\end{equation*}
 Every $\sigma_{j}$ is a function of the $\beta_{k}$s, so:
 \begin{align*}
 \frac{\partial \sigma_{j}}{\partial \beta_{k*}} &= \frac{\partial}{\partial \beta_{0j*}} \exp \Big( \beta_{0j} + \sum_{k=1}^K z_{ik} \beta_{k}\Big),\\
@@ -617,10 +659,10 @@ Every $\sigma_{j}$ is a function of the $\beta_{k}$s, so:
 &= z_{ik*}\sigma_{j}.
 \end{align*}
 Hence:
-\begin{equation}
+\begin{equation*}
  \frac{\partial}{\partial \beta_{k*}} \exp\Big( -\frac{x_i^2}{2\sigma_{j}^2} \Big) = z_{k*} \Big( \frac{x_i}{\sigma_{j}}\Big)^2 \exp \Big(-\frac{x_i^2}{2 \sigma_{j}^2}\Big) = z_{k*} \Big( \frac{x_i}{\sigma_{j}}\Big)^2 g_j(x_i,\mathbf{Z}; \bm{\theta}_j).
  \label{detfct-deriv-k}
-\end{equation}
+\end{equation*}
 And so for the $\mu_{ij}$s:
 \begin{equation*}
 \frac{\partial \mu_{ij}}{\partial \beta_{k*}} = z_{ik*} \Big( \mu_{ij} - w \exp\Big( -\frac{w^2}{2\sigma_{j}^2} \Big) \Big)
@@ -632,7 +674,7 @@ The derivative is then:
 
 
 
-\subsubsection{With respect to $\alpha_{j*}$}
+\subsubsection*{With respect to $\alpha_{j*}$}
 
 First note that we can write the likelihood (\ref{lt-lik}) as:
 \begin{align*}
@@ -674,9 +716,9 @@ Substituting these back into (\ref{app-lik-alphad}) and re-arranging gives:
 \end{align*}
 
 
-\subsection{Point transects}
+\subsection*{Point transects}
 
-\subsubsection{With respect to $\beta_{0j}$}
+\subsubsection*{With respect to $\beta_{0j}$}
 
 Starting with the likelihood in (\ref{pt-lik}), one can see that we obtain:
 \begin{align*}
@@ -696,7 +738,7 @@ Substituting this into the above expression:
 \frac{\partial l(\bm{\theta}, \bm{\phi}; \mathbf{r},\mathbf{Z})}{\partial \beta_{0j*}}  = \sum_{i=1}^n \Big( \frac{ \phi_{j*} (r_i/\sigma_{j*})^2 g_{j*}(r_i,\mathbf{Z}; \bm{\theta}_{j*})}{g(r_i,\mathbf{Z}; \bm{\theta}, \bm{\phi})} - \frac{ \phi_{j*} 2 (\nu_{j*} + \pi w g_{j*}(w)) }{ \sum_{j=1}^J \phi_j \nu_{ij}}\Big)
 \end{equation*}
 
-\subsubsection{With respect to $\beta_{k*}$}
+\subsubsection*{With respect to $\beta_{k*}$}
 
 Again working from (\ref{pt-lik}), we obtain:
 \begin{align*}
@@ -714,7 +756,7 @@ Putting that together:
 
 
 
-\section{Appendix B - rejection sampling for simulation of mixture detection function distance data}
+\section*{Appendix B - rejection sampling for simulation of mixture detection function distance data}
 
 We generate $n$ samples by sampling distances $X\sim \text{Uniform}(0,w)$. We want $X$ to come from the PDF of the distances, $f$. We know that in the line transect case that the maximum value of $f$ is $1/\mu$ (since $\mu=1/f(0)$ and f(0) is the maximum of $f$). So we can then set
 \begin{equation*}
@@ -727,32 +769,32 @@ h(x) &= \frac{f(x,z; \bm{\theta}, \bm{\phi})}{U(x) M}\\
 &= w g(x,z; \bm{\theta}, \bm{\phi})
 \end{align*}
 then, generating a $U \sim \text{Uniform}(0,1)$ accept $X$ if 
-\begin{equation}
+\begin{equation*}
 U \leq wg(X,z; \bm{\theta}, \bm{\phi}).
-\end{equation}
+\end{equation*}
 where $z$ indicates the covariates that are to be used for generating the observation.
 
 For point transects the maximum value is unknown, so for each simulation the maximum value of $f$ was found using the \textsf{R} function \texttt{optimize()}. This was then used for the value of $M$. If we generate $R \sim \text{Uniform(0,w)}$, the distance is accepted if:
-\begin{equation}
+\begin{equation*}
 U \leq \frac{wr}{M\nu}g(R,z; \bm{\theta}, \bm{\phi}).
-\end{equation}
+\end{equation*}
 
-\section{Appendix C - variance of the average detectability}
-
-First note that the average detectability is calculated as:
-\begin{align*}
-\hat{P_{a}} &= \frac{n}{\hat{N}}\\
-&= \frac{n}{\sum_{i=1}^n 1/\hat{p}_i}\\
-\end{align*}
-So then using the sandwich estimator Borchers \textit{et al} (2002):
-\begin{align*}
-\text{Var}[\hat{P_{a}}] &= n^2 \text{Var}\Big[\frac{1}{\sum_{i=1}^n 1/\hat{p}_i}\Big]\\
-&= n^2 \Big[\frac{\partial}{\partial \bm{\theta}}(\sum_{i=1}^n 1/\hat{p}_i)^{-1}\Big\vert_{\bm{\theta}=\bm{\hat{\theta}}}\Big]^\text{T} \bm{i}(\bm{\hat{\theta}})^{-1} \Big[\frac{\partial}{\partial \bm{\theta}}(\sum_{i=1}^n 1/\hat{p}_i)^{-1}\Big\vert_{\bm{\theta}=\bm{\hat{\theta}}}\Big]\\
-\end{align*}
-where $ \bm{i}(\bm{\hat{\theta}})^{-1}$ is the observed information matrix (ie. the negative of the Hessian of the $log$-likelihood evaluated at the MLE). Letting $\theta$ be the vector of all of the parameters and $\bm{\theta}$ be its MLE. Looking at the derivative term, via some rather tedious algebra we obtain the following expression:
-\begin{align*}
-\frac{\partial}{\partial \bm{\theta}}(\sum_{i=1}^n 1/\hat{p}_i)^{-1}\Big\vert_{\bm{\theta}=\bm{\hat{\theta}}} = \frac{\frac{\partial \mu_1}{\partial \bm{\theta}} \mu_2 \mu_3 \cdots \mu_n + \mu_1 \frac{\partial \mu_2}{\partial \bm{\theta}} \mu_3 \mu_4 \cdots \mu_n + \cdots + \mu_1 \mu_2 \cdots \mu_{n-1}\frac{\partial \mu_n}{\partial \bm{\theta}}}{(\mu_2 \mu_3 \cdots \mu_n + \mu_1 \mu_3 \mu_4 \cdots \mu_n + \cdots + \mu_1 \mu_2 \cdots \mu_{n-1})^2}\Big\vert_{\bm{\theta}=\bm{\hat{\theta}}}
-\end{align*}
+%\section{Appendix C - variance of the average detectability}
+%
+%First note that the average detectability is calculated as:
+%\begin{align*}
+%\hat{P_{a}} &= \frac{n}{\hat{N}}\\
+%&= \frac{n}{\sum_{i=1}^n 1/\hat{p}_i}\\
+%\end{align*}
+%So then using the sandwich estimator Borchers \textit{et al} (2002):
+%\begin{align*}
+%\text{Var}[\hat{P_{a}}] &= n^2 \text{Var}\Big[\frac{1}{\sum_{i=1}^n 1/\hat{p}_i}\Big]\\
+%&= n^2 \Big[\frac{\partial}{\partial \bm{\theta}}(\sum_{i=1}^n 1/\hat{p}_i)^{-1}\Big\vert_{\bm{\theta}=\bm{\hat{\theta}}}\Big]^\text{T} \bm{i}(\bm{\hat{\theta}})^{-1} \Big[\frac{\partial}{\partial \bm{\theta}}(\sum_{i=1}^n 1/\hat{p}_i)^{-1}\Big\vert_{\bm{\theta}=\bm{\hat{\theta}}}\Big]\\
+%\end{align*}
+%where $ \bm{i}(\bm{\hat{\theta}})^{-1}$ is the observed information matrix (ie. the negative of the Hessian of the $log$-likelihood evaluated at the MLE). Letting $\theta$ be the vector of all of the parameters and $\bm{\theta}$ be its MLE. Looking at the derivative term, via some rather tedious algebra we obtain the following expression:
+%\begin{align*}
+%\frac{\partial}{\partial \bm{\theta}}(\sum_{i=1}^n 1/\hat{p}_i)^{-1}\Big\vert_{\bm{\theta}=\bm{\hat{\theta}}} = \frac{\frac{\partial \mu_1}{\partial \bm{\theta}} \mu_2 \mu_3 \cdots \mu_n + \mu_1 \frac{\partial \mu_2}{\partial \bm{\theta}} \mu_3 \mu_4 \cdots \mu_n + \cdots + \mu_1 \mu_2 \cdots \mu_{n-1}\frac{\partial \mu_n}{\partial \bm{\theta}}}{(\mu_2 \mu_3 \cdots \mu_n + \mu_1 \mu_3 \mu_4 \cdots \mu_n + \cdots + \mu_1 \mu_2 \cdots \mu_{n-1})^2}\Big\vert_{\bm{\theta}=\bm{\hat{\theta}}}
+%\end{align*}
 
 %  Here, we create the bibliographic entries manually, following the
 %  journal style.  If you use this method or use natbib, PLEASE PAY
@@ -768,35 +810,29 @@ where $ \bm{i}(\bm{\hat{\theta}})^{-1}$ is the observed information matrix (ie. 
 %  If you do use BiBTeX, please use the .bst file that comes with 
 %  the distribution.
 
-
-Bibiolography - TKTKTK
-
-Buckland 1992
-
-ants paper
-
-Dorazio and Royle
-
-
-yellow book
-
 \begin{thebibliography}{}
 
-\bibitem{ } Beavers, S. C., and Ramsey, F. L. (1998). Detectability analysis in transect surveys. \textit{Journal of Wildlife Management} \textbf{62}(3), pp. 948Ð957.
+\bibitem{ } Beavers, S. C., and Ramsey, F. L. (1998). Detectability analysis in transect surveys. \textit{Journal of Wildlife Management} \textbf{62}(3), pp. 948--957.
+
+\bibitem{ } Borkin, K., R. Summers, L. Thomas (\textit{in press}). Surveying abundance and stand type associations of wood ant Formica spp.(Hymenoptera: Formicidae) nest mounds over an extensive area: trialing a novel method. European Journal of Entomology.
+
+\bibitem{ } Buckland, S.T. (1992). Fitting density functions using polynomials. \textit{Applied Statistics} \textbf{41}, 63--76. 
 
 \bibitem{ }  Buckland, S. T., Anderson, D. R., Burnham, K. P., Laake, J. L., Borchers, D. L., and Thomas, L.  (2001). \textit{Distance Sampling}. Oxford University Press. Oxford, UK.
 
 \bibitem{ }  Buckland, S. T., Anderson, D. R., Burnham, K. P., Laake, J. L., Borchers, D. L., and Thomas, L.  (2004). \textit{Advanced Distance Sampling}. Oxford University Press. Oxford, UK.
 
+\bibitem{ } Dorazio, R. M. and J. A. Royle (2003) Mixture Models for Estimating the Size of a Closed Population When Capture Rates Vary among Individuals. \textit{Biometrics} \textbf{59}(2), 351--364 
+
 \bibitem{ }  Gelman, A., Carlin, J. B., Stern, H. S., and Rubin, D. B. (2004). \textit{Bayesian Data Analysis}. CRC Press. Boca Ranton, Florida, US.
 
 \bibitem{ } Marques, T. A., Thomas, L., Fancy, S. G., Buckland, S. T. (2007). Improving estimates of bird density using multiple-covariate distance sampling. \textit{The Auk} \textbf{124}(9), pp. 1229--1243.
 
-\bibitem{ } Morgan, B. J. T. and M. Ridout (2008). A new mixture model for capture heterogeneity. \textit{Journal of the Royal Statistical Society: Series C} \textbf{57}(4), 433Ð446. 
+\bibitem{ } Morgan, B. J. T. and M. Ridout (2008). A new mixture model for capture heterogeneity. \textit{Journal of the Royal Statistical Society: Series C} \textbf{57}(4), 433--446. 
 
-\bibitem{ } Pledger, S. (2000). Unified maximum likelihood estimates for closed capture-recapture models using mixtures. \textit{Biometrics} \textbf{56}(2), 434Ð442. 
+\bibitem{ } Pledger, S. (2000). Unified maximum likelihood estimates for closed capture-recapture models using mixtures. \textit{Biometrics} \textbf{56}(2), 434--442. 
 
-\bibitem{ } Pledger, S. (2005). The performance of mixture models in heterogeneous closed population capture-recapture. \textit{Biometrics} \textbf{61}(3), 868Ð873.
+\bibitem{ } Pledger, S. (2005). The performance of mixture models in heterogeneous closed population capture-recapture. \textit{Biometrics} \textbf{61}(3), 868--873.
 
 \bibitem{ } Williams, R. and Thomas, L. (2007). Distribution and abundance of marine mammals in the coastal waters of British Columbia, Canada. \textit{Journal of Cetacean Research and Management} \textbf{9}(1), pp. 15--38.
 

@@ -8,7 +8,7 @@
 
 postscript(file="figure1.eps",width=7.5,height=3,paper="special",horizontal=FALSE)
 
-par(mfrow=c(1,3),mar=c(4,4.2,2,2))
+par(mfrow=c(1,3),mar=c(4,4.2,4,2))
 
 # 1
 # read in the plot data. 3 columns: histogram x coords, hist y coords, detfct
@@ -23,6 +23,7 @@ axis(1,at=c(0,1000,2000))
 lines(x=c(2000,0,0),y=c(0,0,0.39636))
 
 lines(x=hb.plot$V1,y=hb.plot$V3)
+box()
 
 # 2
 dp.df<-read.table("danpike-detfct.txt")
@@ -35,6 +36,7 @@ axis(1,at=c(0,1000,2000,3000))
 lines(x=c(3000,0,0),y=c(0,0,1.1197))
 
 lines(x=dp.df$V1,y=dp.df$V3)
+box()
 
 # 3
 # quantiles at v2, v3, v4  are BSS=1.5,2.0,3.0 
@@ -47,6 +49,7 @@ axis(1,at=c(0,1000,2000,3000))
 
 lines(x=dp.df$V1,y=dp.df$V3,col=grey(0.5))
 lines(x=dp.df$V1,y=dp.df$V4,col=grey(0.75))
+box()
 
 dev.off()
 
