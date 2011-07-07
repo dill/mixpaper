@@ -383,25 +383,19 @@ Extensive simulations were carried out to ensure that both parameters could be r
 Four sets of simulations were run:
 \begin{enumerate}
 	\item Non-covariate 2-point detection functions for line transect data: Four different detection functions were tested. They are shown in the first row of figure \ref{sim-detfcts}. the first two functions are deliberately fairly easy to fit. The third should be harder, testing the behaviour of the model when one of the parameters is non-identifiable (it is not clear what the larger parameter would be, it could be very large). Finally, the fourth detection function has a large spike, which is similar to that in some of the data we analyse in section \ref{s:data}.
-	\item Non-covariate 2-point detection functions for point transect data:  the detection functions were as above, with data generated as if it came from point transects. The pdfs are given in the second row of figure \ref{sim-detfcts}. TKTKTK say something about which are hard
-	\item Non-covariate 3-point detection functions for line transect data: two different detection functions were used. They are shown in the third row of figure \ref{sim-detfcts}. TKTKTK more
+	\item Non-covariate 2-point detection functions for point transect data:  the detection functions were as above, with data generated as if it came from point transects. The pdfs are given in the second row of figure \ref{sim-detfcts}, the dotted lines indicate the component pdfs scaled such that the area under each curve is one.
+	\item Non-covariate 3-point detection functions for line transect data: two different models for the detection functions were used. They are shown in the third row of figure \ref{sim-detfcts}. The first is much like the second line transect detection function, both 2-point and 3-point mixtures were fit to the simulated data to see which model was selected by AIC. The second is a more complex shape that could only be created using a 3-point mixture; it has the added complication (as with the third line transect simulation) that one of the components may be non-identifiable.
 	\item Covariate 2-point detection functions for line transect data: two different models were tested, the first of which has a binary factor covariate, half of the observations had covariate value 1 and half had covariate value 0. The second model had a continuous covariate, whose values were generated from a standard normal distribution function. Detection functions are shown in the fourth row of figure \ref{sim-detfcts}, along with the marginal detection functions for the levels/quantiles of the covariates. TKTKTK more.
 \end{enumerate}
 
-TKTKTK how did that go?
+TKTKTK how did that all go?
 
-[[TKTKTK Figure with detection functions]]
-[[ have the rows be the items in the above list
-1st row detection functions for non-cov line transects
-2nd row pdfs for point transects
-2 3-point plots
-2  covariate detection functions x2 (composite and quantile plots)
+[[ pars etc?]]
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{figs/lt-sim-detfcts.eps}\\
-\includegraphics[width=\textwidth]{figs/pt-sim-detfcts.eps}
-\caption{Plots of the models used in the simulation. Top row: detection functions for the line transect simulations with no covariates. Second row: pdfs for the point transect simulations with no covariates, the detection functions are as in the top row.}
+\includegraphics[width=\textwidth]{figs/sim-detfct.eps}
+\caption{Plots of the models used in the simulation. Top row: detection functions for the line transect simulations with no covariates (solid lines) and their constituent mixture components (dashed lines). Second row: pdfs for the point transect simulations with no covariates (bold lines), with associates component pdfs, rescaled so the area under each curve is one; the detection functions are as in the top row. Third row: two 3-point mixtures for non-covariate line transect data, again with components as dashed lines. Fourth row, two covariate models, the first two panels are for a binary covariate, the second two for a continuous covariate; first panels in each pair show the detection function averaged over the covariates (along with the mixture components, similarly averaged) and the second panels show marginal detection functions with the levels (or quantiles) of the detection function.}
 \label{sim-detfcts}
 \end{figure}
 
@@ -411,7 +405,7 @@ TKTKTK how did that go?
 \section{Real data}
 \label{s:data}
 
-[[TKTKTK all of the model selection was by AIC; \texttt{mmds}; ]]
+Given the performance of the method in simulation, several data sets were analysed using the method. All of the analysis was performed in \texttt{mmds}, an \textsf{R} package written by the authors.
 
 \textbf{LEN}: can you check and/or add to the intro bits of these?
 
@@ -420,16 +414,16 @@ TKTKTK how did that go?
 Williams and Thomas (2007) study several species of cetaceans off the coast of British Columbia. In particular look at the data for three species: harbour seal (in water), harbour porpoise and humpback whale. Results are summarised in table \ref{williams-table} and detection functions for the best (in an AIC sense) models are shown in figure \ref{williams-detfcts}.
 
 \begin{table}
-\caption{Comparison of the results for the Williams and Thomas (2007) data. W\&T indicates the results reported in Williams and Thomas (2007), other results are from mixture models where the number of mixture components was selected by AIC. cos$(x)$ indicates a Cosine adjustment of order $x$.}
+\caption{Comparison of the results for the Williams and Thomas (2007) data. W\&T indicates the results reported in Williams and Thomas (2007), other results are from mixture models where the number of mixture components was selected by AIC. $\cos(x)$ indicates a Cosine adjustment of order $x$.}
 \centering
 \begin{tabular}{c c c c c c c}
 Species & Model & Truncation & AIC & $\hat{P_a}$ & $\% CV \hat{P_a}$ & K-S $p$\\
 \hline
-Harbour seal & Hn+cos(2) (W\&T) & 500 & 2771.05 & 0.425 & 7.55 & 0.515\\
+Harbour seal & Hn+$\cos(2)$ (W\&T) & 500 & 2771.05 & 0.425 & 7.55 & 0.515\\
 (in water) & Hn 2-pt & 500 & 2769.86 & 0.335 & 14.8 & 0.945\\
 Harbour porpoise & Hr (W\&T) & 500 & 690.66 & 0.212 & 32.0 & 0.99\\
  & Hn 2-pt & 500 & 692.09 & 0.254 & 17.5 & 0.99\\
-Humpback & Hn+cos(2) (W\&T) & 2000 & 1033.06 & 0.386 & 12.64 & 0.672 \\
+Humpback & Hn+$\cos(2)$ (W\&T) & 2000 & 1033.06 & 0.386 & 12.64 & 0.672 \\
  & Hn 2-pt & 2000 & 1035.94 & 0.381 & 15.6 & 0.649 \\
 \end{tabular}
 \label{williams-table}
@@ -440,13 +434,12 @@ In each case a 2-point mixture was selected by AIC to be the best model. The mix
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{analyses/williamsplots.eps}
-\caption{Plots of the detection functions fit to the Williams and Thomas (2007) data. In each case the best model by AIC was a 2-point mixture.}
+\caption{Plots of the detection functions fit to the Williams and Thomas (2007) data. In each case the best model by AIC was a 2-point mixture. Dashed lines show the mixture components.}
 \label{williams-detfcts}
 \end{figure}
 
 
 \subsection{Wood ants in the Abernethy forest}
-line transects w. covars + spikes
 
 Borkin \textit{et al.} (\textit{in press}) analyse data on two species of wood ant (\textit{Formica aquilonia} and \textit{Formica lugubris}) in the Abernethy Forest in Strathspey Scotland over the period of August--September 2003. The number of nests sighted was 150 out to a distance of 72.04m from the track line, although 45\% of the nest sightings lay within 4m of the line. As part of their analysis several different truncation distances were used and larger truncation distances led to large variance in the encounter rate estimates and hence in overall abundance estimates (see Borkin \textit{et al.}, \textit{in press}). This is due to the spike caused by the large number of detections close to the line.
 
@@ -561,6 +554,14 @@ Best mixture model according to AIC was a two point mixture with observer and mi
 
 \section{Discussion}
 \label{s:discuss}
+
+works fine
+
+sometimes lower AIC
+
+small samples sizes
+
+
 
 We only needed 2-point mixtures here. That's nice. Do we ever need more? Probably not in covariate cases.
 
