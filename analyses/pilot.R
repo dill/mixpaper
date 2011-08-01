@@ -2,7 +2,6 @@
 
 library(mmds)
 
-
 fin<-read.csv(file="danpike.csv")
 
 aics<-c()
@@ -42,9 +41,5 @@ aics<-c(aics,fin.BSSc.best$aic)
 
 cat("Min at",which.min(aics),"\n")
 
-
-plot(fin.BSS2.best,breaks=c(0,250,500,750,1000,1250,1500,1750,1750,1775,1800,1825,1850,1875,1900,1925,1950,1975,2000,2000,2250,2500,2750,3000))
-
-
-
+plot(fin.BSS2.best,breaks=c(seq(0,1000,len=10),seq(1250,3000,250)),main=c("Average detection function","Levels of Beaufort sea state"),style="comp") 
 

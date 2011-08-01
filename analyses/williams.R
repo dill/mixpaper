@@ -5,6 +5,8 @@ library(mmds)
 
 par(mfrow=c(1,3))
 
+set.seed(123)
+
 ###########################
 # Harbour seal
 # load the data
