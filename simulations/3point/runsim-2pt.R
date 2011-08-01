@@ -1,0 +1,69 @@
+# this file actually runs the simulation
+
+# source in the settings
+source("settings.R") 
+
+# let's do this in parallel
+library(foreach)
+library(doMC)
+options(cores=2)
+registerDoMC()
+
+######################################
+# optimisation options 
+
+# optimisation methods
+opt.methods<-c("BFGS+SANN","EM")
+opt.methods<-"BFGS+SANN"
+# for debug
+showit<-0
+
+######################################
+# actually do the simulation
+
+## loop over optimisation methods
+for(opt.method in opt.methods){
+   ## loop over possible parameters
+   results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
+                      .inorder=FALSE, .init=c()) %dopar% {
+      res<-c()
+   
+      # make sure that the seed is the same on all cores
+      set.seed(123)
+   
+      ## loop over number of samples to take
+      for(n.samp in n.samps){
+         ## loop over number of replicates
+         for(sim in 1:n.sims){
+      
+            # simulate the data
+            sim.data<-sim.mix(parmat[par.ind,],mix.terms,n.samp,width)
+   
+            # because SANN changes the seed, save it first
+            seed <- get(".Random.seed",envir=.GlobalEnv) ## store RNG seed
+   
+            # fit the model
+            fit<-try(fitmix(sim.data,initialvalues=starting.vals,mix.terms=2,
+                        ftype="hn",width=width,model.formula=model.formula,
+                        usegrad=TRUE,opt.method=opt.method,showit=showit))
+         
+            # restore the seed   
+            assign(".Random.seed",seed,envir=.GlobalEnv) 
+
+            true.N<-n.samp*width/mu.calc(parmat[par.ind,],mix.terms,width)
+   
+            # result vector -
+            #  parameter set, # samples, sim #, par est, aic 
+            if(all(!is.na(fit)) & class(fit)!="try-error"){
+               # par index, no. samples, sim no., par est(3),likelihood, aic, pa
+               res<-rbind(res,c(par.ind,n.samp,sim,fit$pars,fit$N,true.N))
+            }else{
+               res<-rbind(res,c(par.ind,n.samp,sim,rep(NA,length(parmat[par.ind,])),rep(NA,2)))
+            }
+         }
+      }
+      # write them out
+      write.csv(res,file=paste(opt.method,"-",par.ind,"-3pt-2pt-results.csv",sep=""))
+      return(1)
+   }
+}

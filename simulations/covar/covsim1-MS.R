@@ -1,0 +1,133 @@
+# covariate sim 1
+# 1 factor
+# mix 1, sigma=exp(beta_00+beta_1*{0,1})
+# mix 2, sigma=exp(beta_01+beta_1*{0,1})
+library(mmds)
+library(msm)
+# let's do this in parallel
+library(foreach)
+library(doMC)
+options(cores=2)
+registerDoMC()
+
+### SETUP
+model.formula<-"~as.factor(cov1)"
+
+### parameters
+mixp<-inv.reparam.pi(0.4)
+true.pars<-c(log(c(0.1,0.75,0.6)),mixp)
+mix.terms<-2
+width<-1
+
+opt.methods<-c("EM","BFGS+SANN")
+opt.methods<-c("BFGS+SANN")
+
+# probably don't touch below here...
+
+# sample sizes
+n.samps<-c(30,60,120,480,960)
+# number of realisations
+n.sims<-200
+# set the seed
+set.seed(102837)
+showit<-0
+starting.vals<-NULL # unknown starting values
+
+for(opt.method in opt.methods){
+   res<-c()
+   # loop over sample sizes
+   for(n.samples in n.samps){
+   
+      # loop over sims
+      #for(sim in 1:n.sims){
+      results<-foreach(sim = 1:n.sims, .combine=rbind,
+                       .inorder=FALSE, .init=c()) %dopar% {
+
+         this.line<-c()
+
+         ### # This changes per simulation parameter setting   
+         # construct the covariate matrix
+         z<-list(matrix(c(rep(1,n.samples), # beta_00
+                        rep(c(0,1),n.samples/2)), # beta_01 {0} and beta_01 {1}
+                        n.samples,2)) # beta_01 {1}
+         zdim<-2
+
+         testdata<-sim.mix(true.pars,mix.terms,n.samples,width,zdim,z)
+         names(testdata)[5]<-"cov1"
+
+
+         # because SANN changes the seed, save it first
+         seed <- get(".Random.seed",envir=.GlobalEnv) ## store RNG seed
+       
+         fit<-try(fitmix(testdata,initialvalues=starting.vals,mix.terms=1,ftype="hn",
+                     showit=showit,width=width,model.formula=model.formula,
+                     usegrad=TRUE,opt.method=opt.method))
+
+         fit<-step.ds.mixture(fit)
+   
+         # restore the seed   
+         assign(".Random.seed",seed,envir=.GlobalEnv)
+
+         if(class(fit)!="try-error"){
+            # calculate the true N
+            gp<-getpars(true.pars,mix.terms,zdim,z)
+            sigma<-gp$key.scale
+            pis<-gp$mix.prop
+            mu<-apply(sigma,1,integrate.hn,width)
+            mus<-mu%*%matrix(pis,length(pis),1)
+            pas<-mus/width
+            true.N<-sum(1/pas)
+
+   
+            if(class(fit)!="try-error"){
+               # results...
+               this.line<-c(n.samples,sim,fit$aic,fit$pa,fit$N,
+                            true.N,fit$mix.terms,"cov")
+            }else{
+               # if it failed...
+               return(rbind(c(n.samples,sim,NA,NA,NA,NA,NA,NA),
+                            c(n.samples,sim,NA,NA,NA,NA,NA,NA)))
+            }
+         }
+
+#### with no covariates
+         # because SANN changes the seed, save it first
+         seed <- get(".Random.seed",envir=.GlobalEnv) ## store RNG seed
+       
+         fit<-try(fitmix(testdata,initialvalues=starting.vals,mix.terms=1,ftype="hn",
+                     showit=showit,width=width,model.formula="~1",
+                     usegrad=TRUE,opt.method=opt.method))
+
+         fit<-step.ds.mixture(fit)
+   
+         # restore the seed   
+         assign(".Random.seed",seed,envir=.GlobalEnv)
+
+         if(class(fit)!="try-error"){
+            # calculate the true N
+            gp<-getpars(true.pars,mix.terms,zdim,z)
+            sigma<-gp$key.scale
+            pis<-gp$mix.prop
+            mu<-apply(sigma,1,integrate.hn,width)
+            mus<-mu%*%matrix(pis,length(pis),1)
+            pas<-mus/width
+            true.N<-sum(1/pas)
+
+   
+            if(class(fit)!="try-error"){
+               # results...
+               this.line<-rbind(this.line,c(n.samples,sim,fit$aic,fit$pa,fit$N,
+                            true.N,fit$mix.terms,"nocov"))
+            }else{
+               # if it failed...
+               return(rbind(c(n.samples,sim,NA,NA,NA,NA,NA,NA),
+                                c(n.samples,sim,NA,NA,NA,NA,NA,NA)))
+            }
+         }
+         return(this.line)
+      }
+   
+      res<-rbind(res,results)
+   }
+   write.csv(res,file=paste("covsim1-",opt.method,".csv",sep=""))
+}

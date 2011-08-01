@@ -1,0 +1,10 @@
+directory with the simulations for the paper...
+
+split into 4 folders:
+
+ * nocov    - noncovariate 2-point line transect
+ * 3point   - noncovariate 3-point line transect
+ * pt       - noncovariate 2-point point transect
+ * covar    - covariate 2 point line transect
+
+
