@@ -335,13 +335,14 @@ for(i in 1:2){
 itm<-itm[-1,]
 
 # reorder the models
-baf$model<-factor(baf$model,levels=c("nocov","pt","covar","3pt"))
-itm$model<-factor(itm$model,levels=c("nocov","pt","covar","3pt"))
-true.p$model<-factor(true.p$model,levels=c("nocov","pt","covar","3pt"))
+baf$model<-factor(baf$model,levels=c("nocov","pt","3pt","covar"))
+itm$model<-factor(itm$model,levels=c("nocov","pt","3pt","covar"))
+true.p$model<-factor(true.p$model,levels=c("nocov","pt","3pt","covar"))
 
 # rename the models
-#levels(baf$model)<-c("No covariates","3-point","Covariate","Point transect")
-#levels(itm$model)<-c("No covariates","3-point","Covariate","Point transect")
+levels(baf$model)<-c("No covariates","Point transect","3-point","Covariate")
+levels(itm$model)<-c("No covariates","Point transect","3-point","Covariate")
+levels(true.p$model)<-c("No covariates","Point transect","3-point","Covariate")
 
 
 # actually do the plotting here
@@ -359,10 +360,13 @@ p<-p+opts(panel.grid.major=theme_blank(),
           legend.key=theme_blank(),
           panel.background=theme_rect())
 
-p<-p+geom_hline(aes(yintercept=t),true.p,col="red",alpha=0.4)
+# transparency not supported by eps!
+#p<-p+geom_hline(aes(yintercept=t),true.p,col="red",alpha=0.4)
+p<-p+geom_hline(aes(yintercept=t),true.p,col="grey")
 p
 
 
+#dev.copy2eps(file="pa-plot.eps")
 
 
 

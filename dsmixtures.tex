@@ -338,13 +338,7 @@ Four sets of simulations were run:
 	\item Non-covariate 2-point detection functions for point transect data.  The detection functions were as above, with data generated as if it came from point transects. The pdfs are given in the second row of Figure \ref{sim-detfcts}; the dotted lines indicate the component pdfs scaled such that the area under each curve is one.
 	\item Non-covariate 3-point detection functions for line transect data. Two different models for the detection functions were used. They are shown in the third row of Figure \ref{sim-detfcts}. The first is much like the second line transect detection function, enabling us to investigate the efficacy of model selection. The second is a more complex shape that could only be created using a 3-point mixture; it has the added complication (as with the third line transect simulation) that one of the components may be non-identifiable.
 	\item Covariate 2-point detection functions for line transect data. Two different models were tested, the first of which has a binary factor covariate: half of the observations had covariate value 1 and half had covariate value 0. The second model had a continuous covariate, whose values were generated from a standard normal distribution function. Detection functions are shown in the fourth row of Figure \ref{sim-detfcts}, along with the marginal detection functions for the levels/quantiles of the covariates. One goal was to test the properties of the estimator in the presence of covariates, and for these runs we included the covariate in all models fit.  However, we additionally wished to evaluate the performance of the mixture model formulation in cases where a covariate affects detectability but the covariate is not available to the surveyor.  We therefore fit the same simulated datasets with mixture models that did not include covariates, and compared the resulting estimates to their with-covariate counterparts.
-
 \end{enumerate}
-
-TKTKTK how did that all go?
-Err... I don't know Dave - how did they go??
-
-[[ pars etc?]]
 
 \begin{figure}
 \centering
@@ -353,7 +347,22 @@ Err... I don't know Dave - how did they go??
 \label{sim-detfcts}
 \end{figure}
 
+\textbf{LEN}: Do you think that we need a table of the parameter values? Maybe in the appendix? Or should we just include all the sim code as an online appendix?
 
+
+COMMENTS:
+	nocov - fine, converge to true p AND to true model
+	pt - fine but in 2,4 they look more like 1 point models, see this a bit in nocov but more so here
+	covar - good! selecting the covariate model even when it could just select the 3 point, but some evidence that this was the case at lower sample sizes (TKTKTK give results for time in each model here?) for 120 samples looks right median but with large IQR
+	3pt - first sim would have been fine as a 2 point model -- see fig 2. Second sim more like a real 3-point model but takes up to a very large sample size to see it. probably the very large sigma component just gets confounded with one of the others.
+	
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{simulations/pa-plot.eps}
+\caption{Simulation results: boxplots of the estimated detection probabilities for the best model (by AIC score). Layout is as in Figure \ref{sim-detfcts}. Grey lines indicate the true value of the average detection probability. Numbers underneath each boxplot give the proportion of AIC best models that were of the same form as the model that the data was simulated from (e.g. in covariate case 1 the proportion of AIC best models that were two point mixtures that included the covariate in the model).}
+\label{sim-boxplots}
+\end{figure}
 
 
 \section{Real data}
