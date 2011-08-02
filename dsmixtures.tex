@@ -349,12 +349,13 @@ Four sets of simulations were run:
 
 \textbf{LEN}: Do you think that we need a table of the parameter values? Maybe in the appendix? Or should we just include all the sim code as an online appendix?
 
+Results from the simulation study are shown in figure \ref{sim-boxplots}. Boxplots are of the estimated average detection probability, $\hat{P_a}$. The number under each boxplot gives the proportion of AIC best models that were of the same form as the true model (i.e. same number of mixture components and covariates). For the first row (line transects with no covariates) we can see that in scenarios 1 and 3, both the true model and true probability of detection were found at even low sample sizes, whereas in scenarios 2 and 4 there was a positive bias in the estimates of the probability of detection as well as a lower proportion of ``correct'' models being selected by AIC. In scenario 2 and 4 most of the weight (0.7 and 0.6, respectively) is given to the larger mixture component, thus the smaller component is swamped; this would make the simulated data look as if it were generated from a 1-point mixture.
 
-COMMENTS:
-	nocov - fine, converge to true p AND to true model
-	pt - fine but in 2,4 they look more like 1 point models, see this a bit in nocov but more so here
-	covar - good! selecting the covariate model even when it could just select the 3 point, but some evidence that this was the case at lower sample sizes (TKTKTK give results for time in each model here?) for 120 samples looks right median but with large IQR
-	3pt - first sim would have been fine as a 2 point model -- see fig 2. Second sim more like a real 3-point model but takes up to a very large sample size to see it. probably the very large sigma component just gets confounded with one of the others.
+This effect can also be seen in the point transect simulations, but even more severely. In this case one can see from the second row of figure \ref{sim-detfcts} that the pdfs of the distances look very much like 1-point mixtures of half-normals. 
+
+The 3-point mixtures show that detection function specified in scenario 1 can be easily represented using a smaller number of mixture terms. At sample sizes of 120 and lower, a 1-point mixture model dominated (around 150 of the AIC selected models were 1-point mixtures) then at the two higher sample sizes, 2-point mixtures dominated. Scenario 2 seemed more like a ``true'' 3-point data set, although only at the two larger sample sizes was a 3-point model selected more than half of the time. Interestingly at the lower sample sizes, a 2-point mixture was selected more often than 1-point (137, 173 and 182 times for the lowest three sample sizes). This effect may be due to the large, potentially non-identifiable, scale parameter being confounded with the other parameters, although this did not appear to be problematic in the scenario 2 of the line transect non-covariate models, above.
+
+The covariate models again show an initial positive bias in the $P_a$s but do still converge to the true value at higher sample sizes. The numbers beneath the boxplots mask rather more than in the other models, since model selection was performed on not only the number of mixtures but also as to whether covariates were included in the model. At the larger two sample sizes we see that the ``true'' model is selected almost all of the time. However,  at smaller sample sizes we see more interesting behaviour. For scenario 1, at the two lowest sample sizes a 1-point non-covariate model dominates, followed by 1-point with covariates, then 2-point covariate and 2-point non-covariate. So, as one would expect, the simplest two models are selected most, but the added information from the covariates means that the 2-point covariate is selected ahead of the 2-point non-covariate. At sample size 120, the 1- and 2-point covariate models are both selected about 70 times, and the non-covariate 1- and 2-point models about 30 times. Contrary to expectations the 3-point mixtures are barely selected at all (with or without covariates) leading us to believe that the covariates cannot simply be substituted by further mixture terms, even in the binary covariate case. Scenario 2 shows a slightly different picture; the non-covariate models are selected less, even at lower sample sizes (the 1-point covariate model was selected 90 times a the lowest sample size) which might be expected given that scenario 2 included a continuous covariate. As was the case for scenario 1, the 3-point models were barely selected at all. In both scenarios there seems to be a bite point between a sample size of 120 and 480 where the correct model is selected almost every time.
 	
 
 \begin{figure}
@@ -451,10 +452,8 @@ Marques et al. (2007) analyse data on the Hawaii Amakihi (\textit{Hemignathus vi
 Best mixture model according to AIC was a two point mixture with observer and minutes after sunrise as covariates (shown in Figure \ref{amakihi}), closely followed by the model with only observer as a covariate. In this case a hazard-rate with observer and minutes after sunrise as covariates beat the mixtures in AIC terms. This is not too surprising given that the mixtures use one more parameter than a hazard-rate in this situation. It is encouraging that there is such a small difference in AIC, and that covariate mixture models were selected despite the large number of parameters that such models entail.
 
 
-RESULTS HERE:
-
 \begin{table}
-\caption{TKTKTK Results for the wood ant data. The first 8 results are for mixture model detection functions with AIC selection for the number of mixture components. The last results is the best fitting model (by AIC) using Distance. In all cases truncation was at 25m. Bold indicates lowest AIC.Comparison of the results from fitting mixture model detection functions and the results reported in Pike et al. (2003). The first 5 results are from mixture models, with the number of mixture components selected by AIC. The final model is that reported in Pike et al. (2003) Truncation for all models was at 3000m. Bold indicates the model with the lowest AIC. (cont.) denotes that the covariate was included in the model as continuous, otherwise covariates entered the model as factors. [[\textbf{LEN}: can you fill in the rest of this?]] Results from the analysis of the amakihi data. The first eight results are for mixture model detection functions with number of mixture components selected by AIC. The final result is the (AIC) best model given in Marques et al. (2007). Truncation at 82.5m.}
+\caption{TKTKTK Results for the wood ant data. The first 8 results are for mixture model detection functions with AIC selection for the number of mixture components. The last results is the best fitting model (by AIC) using Distance. In all cases truncation was at 25m. Bold indicates lowest AIC.Comparison of the results from fitting mixture model detection functions and the results reported in Pike et al. (2003). The first 5 results are from mixture models, with the number of mixture components selected by AIC. The final model is that reported in Pike et al. (2003) Truncation for all models was at 3000m. Bold indicates the model with the lowest AIC. (cont.) denotes that the covariate was included in the model as continuous, otherwise covariates entered the model as factors. [[\textbf{LEN}: can you fill in the rest of this? In particular the CV and KS for the Dan Pike data.]] Results from the analysis of the amakihi data. The first eight results are for mixture model detection functions with number of mixture components selected by AIC. The final result is the (AIC) best model given in Marques et al. (2007). Truncation at 82.5m.}
 \centering
 \begin{tabular}{c l c c c c}
 \hline \hline
@@ -470,7 +469,7 @@ Hn 2-pt & \texttt{habitat} + \texttt{nest.size} & \textbf{737.27} & 0.179 & 22.4
 Hn 2-pt & \texttt{nest.size} + \texttt{species} & 741.92 & 0.210 & 18.09 & 0.77\\
 Hn 2-pt & \texttt{nest.size} + \texttt{species} + \texttt{habitat} & 739.77 & 0.178 & 18.9 & 0.68 \\
 Hr & \texttt{nest.size} + \texttt{habitat} & 745.2 & 0.194 & 10.6 & 0.95\\
- &  \textit{Dan pike} & & & & \\
+ &  \textit{Long-finned pilot whales} & & & & \\
 Hn 2-pt & None & 1298.42 & 0.295 & 8.6 & 0.95 \\
 Hn 2-pt & \texttt{BSS} & 1286.6 & 0.209 & 19.2 & 0.82 \\
 Hn 2-pt & \texttt{BSS2} & \textbf{1284.99} & 0.211 & 20.6 & 0.95\\
@@ -478,7 +477,7 @@ Hn 2-pt & \texttt{BSS3} & 1296.27 & 0.27 & 24.6 & 0.99 \\
 Hn 2-pt & \texttt{BSS} (cont.) &  1286.26 & 0.152 & 31.08 & 0.84\\
 Hn 1-pt + $\cos(2)$& \texttt{BSS} (cont.) & 1296 & 0.37 &TKTKTK &TKTKTK \\
  &  \textit{Amakihi} & & & & \\
-Hn 2-pt & None & 10805.48 & 0.28 & 1001.19 & 0.12 \\
+Hn 2-pt & None & 10805.48 & 0.28 & 0.019 & 0.12 \\
 Hn 2-pt & \texttt{obs} & 10778.69 & 0.28 & 0.16 & 0.04\\
 Hn 2-pt & \texttt{has} & 10807.19 &  0.28 & 0.18 & 0.33\\
 Hn 2-pt & \texttt{mas} & 10805.11 &  0.28 & 0.17 & 0.31\\
@@ -492,12 +491,6 @@ Hr & \texttt{obs} + \texttt{mas} & \textbf{10777.72} & 0.3 & 0.03 & 0.036 \\
 \end{tabular}
 \label{pilot-table}
 \end{table}
-
-
-
-
-
-
 
 \section{Discussion}
 \label{s:discuss}

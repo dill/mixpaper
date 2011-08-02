@@ -1,4 +1,11 @@
 # Pa boxplots
+# makes a table of boxplots for all of the simulations with the 
+# proportion of time that the true model was selected by AIC printed
+# below each box.
+
+# also of interest are table(aic.winners) and table(cov.aic.winners)
+# which give the breakdown of the AIC best models according to model
+# type.
 
 library(ggplot2)
 
@@ -158,6 +165,10 @@ true.p<-rbind(true.p,data.frame(t=rep(unique(round(true.ps,6)),4),
 true.ps<-c()
 true.pp<-c()
 
+# separate cov table stuff to see what's going on
+cov.aic.winners<-data.frame(mix.terms=0,n=0,model=NA,id=0)
+
+
 for(par.ind in 1:2){
    for(n.samps in samp.sizes){
    
@@ -187,6 +198,22 @@ for(par.ind in 1:2){
 
             aic.res<-cbind(dat.nocov$AIC,dat.cov$AIC)
             aic.pick<-apply(aic.res,1,which.min)
+
+mixs<-cbind(dat.nocov$mix.terms,dat.cov$mix.terms)
+mixs2<-rep(0,nrow(mixs))
+mixs2[aic.pick==1]<-dat.nocov$mix.terms[aic.pick==1]
+mixs2[aic.pick==2]<-dat.cov$mix.terms[aic.pick==2]
+aic.pick2<-aic.pick
+aic.pick2[aic.pick2==1]<-paste("nocov",mixs2[aic.pick2==1])
+aic.pick2[aic.pick2==2]<-paste("covar",mixs2[aic.pick2==2])
+
+cov.aic.winners<-rbind(cov.aic.winners,
+               data.frame(mix.terms=aic.pick2,
+                          n=rep(n.samps,length(aic.pick)),
+                          model=rep(1,length(mixs2)),
+                          id=rep(par.ind,length(aic.pick))))
+
+
 
             # make aic.winners be right vs wrong model...
             # recode cov model when the number of mix terms != 2 
@@ -283,6 +310,7 @@ baf$model<-as.factor(baf$model)
 # make the annotations of the proportion of results that had
 # the true number of mixture terms
 aic.winners<-aic.winners[-1,]
+cov.aic.winners<-cov.aic.winners[-1,]
 
 #(in true model)
 itm<-data.frame(n=0,prop=0,model=NA,id=0)
