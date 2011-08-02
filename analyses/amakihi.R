@@ -50,3 +50,14 @@ amakihi.fit1.omh<-fitmix(amakihi,mix.terms=1,width=82.5,model.formula="~mas+as.f
 amakihi.omh.best<-step.ds.mixture(amakihi.fit1.omh)
 aics<-c(aics,amakihi.omh.best$aic)
 
+
+
+cat(round(100*summary(amakihi.best)$average.p.cv,2),"\n")
+cat(round(100*summary(amakihi.o.best)$average.p.c,2),"\n")
+cat(round(100*summary(amakihi.h.best)$average.p.c,2),"\n")
+cat(round(100*summary(amakihi.m.best)$average.p.c,2),"\n")
+cat(round(100*summary(amakihi.oh.best)$average.p.c,2),"\n")
+cat(round(100*summary(amakihi.om.best)$average.p.c,2),"\n")
+cat(round(100*summary(amakihi.mh.best)$average.p.c,2),"\n")
+cat(round(100*summary(amakihi.omh.best)$average.p.c,2),"\n")
+

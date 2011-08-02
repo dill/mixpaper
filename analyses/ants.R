@@ -9,7 +9,7 @@ ants<-read.csv(file="woodants.csv")
 # non-covariate fit
 ants.fit1<-fitmix(ants,mix.terms=1,width=25)
 ants.best<-step.ds.mixture(ants.fit1)
-plot(ants.best,style="comp")
+#plot(ants.best,style="comp")
 
 
 ### covariates
@@ -57,14 +57,19 @@ aics<-c(aics,ants.nesthabspecies.best$aic)
 
 
 # two best models are nest+hab and the full model
-plot(ants.nesthab.best,breaks=c(seq(0,5,len=10),seq(6,25,1)),main=c("Detection function","Quantiles of nest size","Levels of habitat"))
+#plot(ants.nesthab.best,breaks=c(seq(0,5,len=10),seq(6,25,1)),main=c("Detection function","Quantiles of nest size","Levels of habitat"))
 
-plot(ants.nesthabspecies.best,breaks=c(seq(0,5,len=10),seq(6,25,1)))
-
-
-save.image("ants-run.RData")
+#plot(ants.nesthabspecies.best,breaks=c(seq(0,5,len=10),seq(6,25,1)))
 
 
+#save.image("ants-run.RData")
 
 
-
+cat(round(100*summary(ants.best)$average.p.cv,2),"\n")
+cat(round(100*summary(ants.habitat.best)$average.p.cv,2),"\n")
+cat(round(100*summary(ants.species.best)$average.p.cv,2),"\n")
+cat(round(100*summary(ants.nest.best)$average.p.cv,2),"\n")
+cat(round(100*summary(ants.nesthab.best)$average.p.cv,2),"\n")
+cat(round(100*summary(ants.habspecies.best)$average.p.cv,2),"\n")
+cat(round(100*summary(ants.nestspecies.best)$average.p.cv,2),"\n")
+cat(round(100*summary(ants.nesthabspecies.best)$average.p.cv,2),"\n")
