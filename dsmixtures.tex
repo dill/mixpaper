@@ -453,13 +453,13 @@ Best mixture model according to AIC was a two point mixture with observer and mi
 
 
 \begin{table}
-\caption{TKTKTK Results for the wood ant data. The first 8 results are for mixture model detection functions with AIC selection for the number of mixture components. The last results is the best fitting model (by AIC) using Distance. In all cases truncation was at 25m. Bold indicates lowest AIC.Comparison of the results from fitting mixture model detection functions and the results reported in Pike et al. (2003). The first 5 results are from mixture models, with the number of mixture components selected by AIC. The final model is that reported in Pike et al. (2003) Truncation for all models was at 3000m. Bold indicates the model with the lowest AIC. (cont.) denotes that the covariate was included in the model as continuous, otherwise covariates entered the model as factors. [[\textbf{LEN}: can you fill in the rest of this? In particular the CV and KS for the Dan Pike data.]] Results from the analysis of the amakihi data. The first eight results are for mixture model detection functions with number of mixture components selected by AIC. The final result is the (AIC) best model given in Marques et al. (2007). Truncation at 82.5m.}
+\caption{Results for the three data sets with covariates. Bold indicates lowest AIC for each set. In each set the final model is the lowest AIC model reported in the original analysis (in Distance). Results are from ($i$) the wood ant data from Borkin \textit{et al.} with truncation at 25m; ($ii$) the long-finned pilot whales Pike et al. (2003) with truncation at 3000m, (cont.) denotes that the covariate was included in the model as continuous, otherwise covariates entered the model as factors; ($iii$) the amakihi data from Marques et al. (2007) with truncation at 82.5m.}
 \centering
 \begin{tabular}{c l c c c c}
 \hline \hline
 Model & Covariates & AIC & $\hat{P_a}$ & $\% CV \hat{P_a}$ & K-S $p$\\
 \hline
- & \textit{Ants} & & & & \\
+ & ($i$) \textit{Ants} & & & & \\
 Hn 2-pt & None & 754.61 & 0.183 & 16.2 & 0.96 \\
 Hn 2-pt & \texttt{habitat} & 751.27 & 0.150 & 20.2 & 0.97 \\ 
 Hn 2-pt & \texttt{species} & 756.59 & 0.184 & 16.35 & 0.94 \\  
@@ -469,38 +469,30 @@ Hn 2-pt & \texttt{habitat} + \texttt{nest.size} & \textbf{737.27} & 0.179 & 22.4
 Hn 2-pt & \texttt{nest.size} + \texttt{species} & 741.92 & 0.210 & 18.09 & 0.77\\
 Hn 2-pt & \texttt{nest.size} + \texttt{species} + \texttt{habitat} & 739.77 & 0.178 & 18.9 & 0.68 \\
 Hr & \texttt{nest.size} + \texttt{habitat} & 745.2 & 0.194 & 10.6 & 0.95\\
- &  \textit{Long-finned pilot whales} & & & & \\
+ & ($ii$) \textit{Long-finned pilot whales} & & & & \\
 Hn 2-pt & None & 1298.42 & 0.295 & 8.6 & 0.95 \\
 Hn 2-pt & \texttt{BSS} & 1286.6 & 0.209 & 19.2 & 0.82 \\
 Hn 2-pt & \texttt{BSS2} & \textbf{1284.99} & 0.211 & 20.6 & 0.95\\
 Hn 2-pt & \texttt{BSS3} & 1296.27 & 0.27 & 24.6 & 0.99 \\
 Hn 2-pt & \texttt{BSS} (cont.) &  1286.26 & 0.152 & 31.08 & 0.84\\
-Hn 1-pt + $\cos(2)$& \texttt{BSS} (cont.) & 1296 & 0.37 &TKTKTK &TKTKTK \\
- &  \textit{Amakihi} & & & & \\
-Hn 2-pt & None & 10805.48 & 0.28 & 0.019 & 0.12 \\
-Hn 2-pt & \texttt{obs} & 10778.69 & 0.28 & 0.16 & 0.04\\
-Hn 2-pt & \texttt{has} & 10807.19 &  0.28 & 0.18 & 0.33\\
-Hn 2-pt & \texttt{mas} & 10805.11 &  0.28 & 0.17 & 0.31\\
-Hn 2-pt & \texttt{obs} + \texttt{has} & 10782.53 & 0.28 & 0.19 & 0.23\\
-Hn 2-pt & \texttt{obs} + \texttt{mas} & 10778.07 & 0.28 & 0.17 & 0.14\\
-Hn 2-pt & \texttt{has} + \texttt{mas} & 10809.17 & 0.28 & 0.18 & 0.43 \\
-Hn 2-pt & \texttt{obs} + \texttt{has} + \texttt{mas} & 10784.5 & 0.28 & 0.22 & 0.35\\
-Hr & \texttt{obs} + \texttt{mas} & \textbf{10777.72} & 0.3 & 0.03 & 0.036 \\
+Hn 1-pt + $\cos(2)$& \texttt{BSS} (cont.) & 1296 & 0.37 & 9.56 & 0.319 \\
+ & ($iii$) \textit{Amakihi} & & & & \\
+Hn 2-pt & None & 10805.48 & 0.28 & 1.43 & 0.12 \\
+Hn 2-pt & \texttt{obs} & 10778.69 & 0.28 & 1.81 & 0.04\\
+Hn 2-pt & \texttt{has} & 10807.19 &  0.28 & 1.83 & 0.33\\
+Hn 2-pt & \texttt{mas} & 10805.11 &  0.28 & 1.67 & 0.31\\
+Hn 2-pt & \texttt{obs} + \texttt{has} & 10782.53 & 0.28 & 2.09 & 0.23\\
+Hn 2-pt & \texttt{obs} + \texttt{mas} & 10778.07 & 0.28 & 1.84 & 0.14\\
+Hn 2-pt & \texttt{has} + \texttt{mas} & 10809.17 & 0.28 & 1.85 & 0.43 \\
+Hn 2-pt & \texttt{obs} + \texttt{has} + \texttt{mas} & 10784.5 & 0.28 & 2.28 & 0.35\\
+Hr & \texttt{obs} + \texttt{mas} & \textbf{10777.72} & 0.3 & 2.65 & 0.036 \\
 \hline
 \hline
 \end{tabular}
 \label{pilot-table}
 \end{table}
 
-% now get but check what Distance reports!
-%1.43 
-%1.81 
-%1.83 
-%10.74 
-%2.09 
-%1.84 
-%1.85 
-%2.28 
+%amakihi are DONE and CHECKED.
 
 \section{Discussion}
 \label{s:discuss}

@@ -51,7 +51,7 @@ amakihi.omh.best<-step.ds.mixture(amakihi.fit1.omh)
 aics<-c(aics,amakihi.omh.best$aic)
 
 
-
+cat("%CV pa\n")
 cat(round(100*summary(amakihi.best)$average.p.cv,2),"\n")
 cat(round(100*summary(amakihi.o.best)$average.p.c,2),"\n")
 cat(round(100*summary(amakihi.h.best)$average.p.c,2),"\n")
@@ -61,3 +61,12 @@ cat(round(100*summary(amakihi.om.best)$average.p.c,2),"\n")
 cat(round(100*summary(amakihi.mh.best)$average.p.c,2),"\n")
 cat(round(100*summary(amakihi.omh.best)$average.p.c,2),"\n")
 
+cat("KS p\n")
+cat(round(amakihi.best$ks$p,2),"\n")
+cat(round(amakihi.o.best$ks$p,2),"\n")
+cat(round(amakihi.h.best$ks$p,2),"\n")
+cat(round(amakihi.m.best$ks$p,2),"\n")
+cat(round(amakihi.oh.best$ks$p,2),"\n")
+cat(round(amakihi.om.best$ks$p,2),"\n")
+cat(round(amakihi.mh.best$ks$p,2),"\n")
+cat(round(amakihi.omh.best$ks$p,2),"\n")
