@@ -64,7 +64,7 @@ aics<-c(aics,ants.nesthabspecies.best$aic)
 
 #save.image("ants-run.RData")
 
-
+cat("%CV p\n")
 cat(round(100*summary(ants.best)$average.p.cv,2),"\n")
 cat(round(100*summary(ants.habitat.best)$average.p.cv,2),"\n")
 cat(round(100*summary(ants.species.best)$average.p.cv,2),"\n")
@@ -73,3 +73,13 @@ cat(round(100*summary(ants.nesthab.best)$average.p.cv,2),"\n")
 cat(round(100*summary(ants.habspecies.best)$average.p.cv,2),"\n")
 cat(round(100*summary(ants.nestspecies.best)$average.p.cv,2),"\n")
 cat(round(100*summary(ants.nesthabspecies.best)$average.p.cv,2),"\n")
+
+cat("\nKS p\n")
+cat(round(ants.best$ks$p,2),"\n")
+cat(round(ants.habitat.best$ks$p,2),"\n")
+cat(round(ants.species.best$ks$p,2),"\n")
+cat(round(ants.nest.best$ks$p,2),"\n")
+cat(round(ants.nesthab.best$ks$p,2),"\n")
+cat(round(ants.habspecies.best$ks$p,2),"\n")
+cat(round(ants.nestspecies.best$ks$p,2),"\n")
+cat(round(ants.nesthabspecies.best$ks$p,2),"\n")

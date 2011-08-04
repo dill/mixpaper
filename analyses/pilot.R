@@ -2,6 +2,8 @@
 
 library(mmds)
 
+set.seed(12544)
+
 fin<-read.csv(file="danpike.csv")
 
 aics<-c()
@@ -41,5 +43,21 @@ aics<-c(aics,fin.BSSc.best$aic)
 
 cat("Min at",which.min(aics),"\n")
 
-plot(fin.BSS2.best,breaks=c(seq(0,1000,len=10),seq(1250,3000,250)),main=c("Average detection function","Levels of Beaufort sea state"),style="comp") 
+#plot(fin.BSS2.best,breaks=c(seq(0,1000,len=10),seq(1250,3000,250)),main=c("Average detection function","Levels of Beaufort sea state"),style="comp") 
 
+
+# % CV of Pa
+cat("%CV\n")
+cat(round(100*summary(fin.best)$average.p.cv,2),"\n")
+cat(round(100*summary(fin.BSS.best)$average.p.cv,2),"\n")
+cat(round(100*summary(fin.BSS2.best)$average.p.cv,2),"\n")
+cat(round(100*summary(fin.BSS3.best)$average.p.cv,2),"\n")
+cat(round(100*summary(fin.BSSc.best)$average.p.cv,2),"\n")
+
+# KS
+cat("\nKS\n")
+cat(round(fin.best$ks$p,2),"\n")
+cat(round(fin.BSS.best$ks$p,2),"\n")
+cat(round(fin.BSS2.best$ks$p,2),"\n")
+cat(round(fin.BSS3.best$ks$p,2),"\n")
+cat(round(fin.BSSc.best$ks$p,2),"\n")
