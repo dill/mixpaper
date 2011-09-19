@@ -43,6 +43,7 @@
 %  \usepackage{Times}
 \usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage{url}
 
 %%%%% PLACE YOUR OWN MACROS HERE %%%%%
 
@@ -228,13 +229,30 @@ Continuous mixture; Finite mixture; Line transect sampling; Monotonicity constra
 
 Distance sampling (Buckland et al. 2001, 2004) is a suite of methods for estimating the size and/or density of biological populations.  There are two main flavours: line transects and point transects.  In both, the basic idea is the same: an observer visits a randomly-located set of of transect lines or points and records the distance from the transect to all objects of interest (i.e., animals or plants of the target species) that are detected within some truncation distance $w$.  Not all objects within $w$ are assumed to be detected; instead the distribution of observed distances is used to estimate the parameters of a detection function model, which describes how the probability of detection declines with increasing distance.  This fitted model is then used to estimate the average probability of detecting an object within distance $w$ of the transects, and the number of objects present given the number detected. From this estimating total population size and density are straightforward.
 
-Estimating the detection function is therefore the key to distance sampling.  The most common approach, often called ``conventional distance sampling'', is based on methods developed by Buckland (1992). 
+Estimating the detection function is therefore the key to distance sampling.  The most common approach, often called ``conventional distance sampling'', is based on methods developed by Buckland (1992). In distance sampling, population size can be found from a Horvitz-Thompson-like estimator ([[TKTKTK cite Thompson blue book]])
+\begin{equation}
+N = \sum_{i=1}^n \frac{1}{c_i p_i},
+\label{HT}
+\end{equation}
+where $c_i$ is probability of the $i^\text{th}$ observation being within the sampled area, and $p_i$ is the probability of the $i\text{th}$ observation being detected given it is within the sampled area (Buckland et al. 2004, Chapter 3).  For line transects, $p_i$ is given by
+\begin{equation*}
+p_i = \frac{1}{w} \int_0^w  g(x,\mathbf{Z}; \bm{\theta}) \text{d}x,
+\end{equation*}
+and for point transects by
+\begin{equation*}
+p_i = \frac{2\pi}{w^2} \int_0^w  r g(r,\mathbf{Z}; \bm{\theta}) \text{d}r.
+\end{equation*}
+the $g$s are detection function.
 
-[[\textbf{LEN:}  can you do this bit? [describe and define CDS; describe key function and adjustment methods; say implemented in Distance; talk about problem - non-monotonic with adjustment terms; constrained optimization necessary (discuss downsides of this); extended by Marques and Buckland to include covariates [[ref to Auk paper rather than ADS?]] define MCDS; constrained optimization not available there.  Note, some of this (e.g., downsides of need for constrained opt) could go into the discussion. Distance software.]]]
+In the formulation of  Buckland (1992) and Buckland et al. 2001, 2004, the detection function consists of a parametric key function $k$ and series expansion $s$ (known as adjustment terms) with some parameters $\bm{\theta}$. $g$ is then written as:
+\begin{equation*}
+g(x; \bm{\theta}) = \frac{k(x, \mathbf{z}; \bm{\theta}) \{1+s(x, \mathbf{z}; \bm{\theta})\}}{k(0, \mathbf{z}; \bm{\theta}) \{1+s(0, \mathbf{z}; \bm{\theta})\}},
+\end{equation*}
+where $k$ may be a half-normal, hazard-rate or uniform function and $s$ may be zero (i.e. there are no adjustment terms), cosine, simple even polynomial or Hermite polynomial series (usually with no more than 3 terms). The distance at which the observation was made is denoted $x$and $\mathbf{z}$ is a set of covariates that effect detectability. The denominator ensures that detection at zero distance is certain (i.e. $g(0)=1$). Other formulations for $g$ have also been proposed. See for example, Quang and Becker (TKTKTK ref), TKTKTK more here. The above methods are widely used (TKTKTK CITE) and are implemented in the free (as in beer) software package Distance (TKTKTK CITE), available at [[TKTKTK website]].
 
-Standard distance sampling methods (Buckland et al. 2001, 2004) use the ``key function plus adjustment series'' formulation for the detection function. This can lead to unrealistic functions being fit to data, in particular non-monotone detection functions. The usual way to work around this is to constrain the detection function [[CONSTRAINTS]]
+This ``key function plus adjustment series'' formulation for the detection function can lead to unrealistic functions being fit to data, in particular non-monotone detection functions. The usual way to work around this is to constrain the detection function to be monotonic. This is done by taking 10 equally spaced distances from $0$ to $w$ and checking that when the detection function is evaluated at each of these points they are less than the last ($g(x_i)\geq g(x_{i+1})$ for distances $x_1 \dots x_{10}$ where $x_1=0$). This is referred to as \textit{strong monotonicity}. Alternatively, \textit{weak monotonicity} may be enforced, where each point is checked only against the value of $g$ at the origin ($g(0)\geq g(x_i)$). Although constrained optimization is appealing, it is obviously always preferable to perform unconstrained optimization if possible. Using a class of functions to model the detection function which were both flexible and did not exhibit the undesirable property of non-monotonicity could offer a more physically realistic and convincing alternative to the conventional way of performing distance analyses.
 
-One problem with constraining the detection function to be monotonic is that the constraints can only be applied at a finite number of points. This can lead to constraints missing the non-monotonic points in the function. An example from the recent literature (Williams and Thomas, 2007) is shown in the first panel of figure \ref{fig1}. Here a half-normal detection function was fit with one second order cosine adjustment term to humpback whale sightings. The second and third panels in figure \ref{fig1} show a detection function when covariate data was included in the model. [[no constraints on the covariates in distance, levels]] In this case for long-finned pilot whales (Pike et al., 2003) the Beaufort sea state was added as a covariate, the first plot shows that the detection function, when averaged over the covariate values, shows some non-monotonic behaviour. However, in the third panel the marginal detection function at 25\%, 50\% and 75\% quantiles of the covariate are shown and here the non-monotonicity is particularly pronounced. Given the above, it would seem preferable to use a formulation that guarantees monotonicity from the outset.
+One problem with constraining the detection function to be monotonic is that the constraints can only be applied at a finite number of points. This can lead to constraints missing the non-monotonic points in the function. An example from the recent literature (Williams and Thomas, 2007) is shown in the first panel of figure \ref{fig1}. Here a half-normal detection function was fit with one second order cosine adjustment term to humpback whale sightings. Presently, there are no constraints on the shape of the detection function when both covariates and adjustment terms are used, so checking for non-monotonic detection functions must be performed visually at levels or quantiles of the detection function, clearly this is not a desirable situation. The second and third panels in figure \ref{fig1} show a detection function when covariate data was included in the model and adjustments were also used. In this case for long-finned pilot whales (Pike et al., 2003) the Beaufort sea state was added as a covariate, the first plot shows that the detection function, when averaged over the covariate values, shows some non-monotonic behaviour. However, in the third panel the marginal detection function at 25\%, 50\% and 75\% quantiles of the covariate are shown and here the non-monotonicity is particularly pronounced. Given the above, it would seem preferable to use a formulation that guarantees monotonicity from the outset.
 
 \begin{figure}
 \centering
@@ -301,18 +319,13 @@ where the effective area of detection, $\nu_i$ is defined as:
 Parameters are estimated using maximum likelihood. In practice maximization is performed on the $\log$-likelihood (see Appendix [BLAH]). 
 
 
-
 \subsection{Estimating population size}
 
-In distance sampling, population size can be found from a Horvitz-Thompson-like estimator
-\begin{equation*}
-N = \sum_{i=1}^n \frac{1}{c_i p_i},
-\end{equation*}
-where $c_i$ is probability of the $i^\text{th}$ observation being within the sampled area, and $p_i$ is the probability of the $i\text{th}$ observation being detected given it is within the sampled area (Buckland et al. 2004, Chapter 3).  For line transects, $p_i$ is given by
+As mentioned above, population size can be found using the Horvitz-Thompson-like estimator given in (\ref{HT}). In the mixture model case $p_i$  (the probability of the $i\text{th}$ observation being detected given it is within the sampled area) is given by:
 \begin{equation*}
 p_i = \frac{1}{w} \sum_{j=1}^J \phi_j \int_0^w  g_j(x,\mathbf{Z}; \bm{\theta}_j) \text{d}x,
 \end{equation*}
-and for point transects by
+for line transects and for point transects by
 \begin{equation*}
 p_i = \frac{2\pi}{w^2} \sum_{j=1}^J \phi_j \int_0^w  r g_j(r,\mathbf{Z}; \bm{\theta}_j) \text{d}r.
 \end{equation*}
@@ -321,7 +334,7 @@ A standard summary statistic is the average detection probability for an animal 
 P_a = n/N.
 \end{equation*}
 
-Variances in both $N$ and $P_a$ were found for both non-covariate models (Borchers, Buckland and Zucchini, 2002 pp. TKTKTK page) and covariate models (Buckland et al., 2004 pp. 42--44) using standard methods set out in the literature.
+Variances in both $N$ and $P_a$ were found for both non-covariate models (Borchers, Buckland and Zucchini, 2002 Appendix C) and covariate models (Buckland et al., 2004 Section 3.3.3) using standard methods set out in the literature.
 
 \section{Simulations}
 
@@ -448,7 +461,7 @@ Best mixture model according to AIC was a two point mixture with observer and mi
 
 
 \begin{table}
-\caption{Results for the three data sets with covariates. Bold indicates lowest AIC for each set. In each set the final model is the lowest AIC model reported in the original analysis (in Distance). Kolmogorov-Smirnov test $p$-values (KS $p$) are also given as in Chapter 11 of Buckland \textit{et al.} (2004). Results are from ($i$) the wood ant data from Borkin \textit{et al.} with truncation at 25m; ($ii$) the long-finned pilot whales Pike et al. (2003) with truncation at 3000m, (cont.) denotes that the covariate was included in the model as continuous, otherwise covariates entered the model as factors; ($iii$) the amakihi data from Marques et al. (2007) with truncation at 82.5m.}
+\caption{Results for the three data sets with covariates. Bold indicates lowest AIC for each set. In each set the final model is the lowest AIC model reported in the original analysis (in Distance). Kolmogorov-Smirnov test $p$-values (KS $p$) are also given as in Section 11.11 of Buckland \textit{et al.} (2004). Results are from ($i$) the wood ant data from Borkin \textit{et al.} with truncation at 25m; ($ii$) the long-finned pilot whales Pike et al. (2003) with truncation at 3000m, (cont.) denotes that the covariate was included in the model as continuous, otherwise covariates entered the model as factors; ($iii$) the amakihi data from Marques et al. (2007) with truncation at 82.5m.}
 \centering
 \begin{tabular}{c l c c c c}
 \hline \hline
@@ -498,7 +511,7 @@ We have shown that the method performs well on both simulated and real data. In 
 
 In simulation we observed that using a 3-point mixture was not a good surrogate for missing covariate structure in the model. We also saw that 2-point mixtures were generally chosen by AIC as good models and that the construction of a true 3-point mixture is quite tricky. In the examples in section \ref{s:data}, 2-point mixtures consistently provided the best fit, even in the case of the amakihi which was a very large data set ($n=1243$). Only examination of further data will show whether 3-point and higher mixtures can be supported in real data, however we note that in CDS when the key function with adjustment series formulation is used, detection functions with $5$ or more parameters are rarely selected by AIC and a 3-point mixture with no covariates requires $5$ parameters.
 
-All the models discussed in this article are available as an \textsf{R} package, \texttt{mmds} which is available from [[TKTKTK somewhere!]].
+All the models discussed in this article are available as an \textsf{R} package, \texttt{mmds} which is available from \url{http://www.github.com/dill/mmds/}.
 
 [[\textbf{LEN}: Will be in next version of Distance?!]]
 
