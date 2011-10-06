@@ -34,6 +34,8 @@ aics<-c(aics,fin.BSS3.best$aic)
 
 
 # BSS - continuous
+levels(fin$BSS)[5]<-"3.5"
+fin$BSS<-as.numeric(as.character(fin$BSS))
 fin.fit1.BSSc<-fitmix(fin,mix.terms=1,width=3000,model.formula="~BSS",opt.method="BFGS+SANN")
 fin.BSSc.best<-step.ds.mixture(fin.fit1.BSSc)
 aics<-c(aics,fin.BSSc.best$aic)
