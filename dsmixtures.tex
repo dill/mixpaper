@@ -229,7 +229,7 @@ Continuous mixture; Finite mixture; Line transect sampling; Monotonicity constra
 
 Distance sampling (Buckland et al. 2001, 2004) is a suite of methods for estimating the size and/or density of biological populations.  There are two main flavours: line transects and point transects.  In both, the basic idea is the same: an observer visits a randomly-located set of of transect lines or points and records the distance from the transect to all objects of interest (i.e., animals or plants of the target species) that are detected within some truncation distance $w$.  Not all objects within $w$ are assumed to be detected; instead the distribution of observed distances is used to estimate the parameters of a detection function model, which describes how the probability of detection declines with increasing distance.  This fitted model is then used to estimate the average probability of detecting an object within distance $w$ of the transects, and the number of objects present given the number detected. From this estimating total population size and density are straightforward.
 
-Estimating the detection function is therefore the key to distance sampling.  The most common approach, often called ``conventional distance sampling'', is based on methods developed by Buckland (1992). In distance sampling, population size can be found from a Horvitz-Thompson-like estimator ([[TKTKTK cite Thompson blue book]])
+Estimating the detection function is therefore the key to distance sampling.  The most common approach, often called ``conventional distance sampling'', is based on methods developed by Buckland (1992). In distance sampling, population size can be found from a Horvitz-Thompson-like estimator (Thompson 2002, Chapter 6)
 \begin{equation}
 N = \sum_{i=1}^n \frac{1}{c_i p_i},
 \label{HT}
@@ -244,11 +244,11 @@ p_i = \frac{2\pi}{w^2} \int_0^w  r g(r,\mathbf{Z}; \bm{\theta}) \text{d}r.
 \end{equation*}
 the $g$s are detection function.
 
-In the formulation of  Buckland (1992) and Buckland et al. 2001, 2004, the detection function consists of a parametric key function $k$ and series expansion $s$ (known as adjustment terms) with some parameters $\bm{\theta}$. $g$ is then written as:
+In the formulation of  Buckland (1992) and Buckland et al. (2001, 2004), the detection function consists of a parametric key function $k$ and series expansion $s$ (known as adjustment terms) with some parameters $\bm{\theta}$. $g$ is then written as:
 \begin{equation*}
 g(x; \bm{\theta}) = \frac{k(x, \mathbf{z}; \bm{\theta}) \{1+s(x, \mathbf{z}; \bm{\theta})\}}{k(0, \mathbf{z}; \bm{\theta}) \{1+s(0, \mathbf{z}; \bm{\theta})\}},
 \end{equation*}
-where $k$ may be a half-normal, hazard-rate or uniform function and $s$ may be zero (i.e. there are no adjustment terms), cosine, simple even polynomial or Hermite polynomial series (usually with no more than 3 terms). The distance at which the observation was made is denoted $x$and $\mathbf{z}$ is a set of covariates that effect detectability. The denominator ensures that detection at zero distance is certain (i.e. $g(0)=1$). Other formulations for $g$ have also been proposed. See for example, Quang and Becker (TKTKTK ref), TKTKTK more here. The above methods are widely used (TKTKTK CITE) and are implemented in the free (as in beer) software package Distance (TKTKTK CITE), available at [[TKTKTK website]].
+where $k$ may be a half-normal, hazard-rate or uniform function and $s$ may be zero (i.e. there are no adjustment terms), cosine, simple even polynomial or Hermite polynomial series (usually with no more than 3 terms). The distance at which the observation was made is denoted $x$ and $\mathbf{z}$ is a set of covariates that effect detectability. The denominator ensures that detection at zero distance is certain (i.e. $g(0)=1$). Other formulations for $g$ have also been proposed. See for example, Quang and Becker (2009), Mack and Quang (1998). The above methods are widely used and are implemented in the free (as in beer) software package Distance (Thomas et al, 2010), available at \url{http://www.ruwpa.st-and.ac.uk/distance/}.
 
 This ``key function plus adjustment series'' formulation for the detection function can lead to unrealistic functions being fit to data, in particular non-monotone detection functions. The usual way to work around this is to constrain the detection function to be monotonic. This is done by taking 10 equally spaced distances from $0$ to $w$ and checking that when the detection function is evaluated at each of these points they are less than the last ($g(x_i)\geq g(x_{i+1})$ for distances $x_1 \dots x_{10}$ where $x_1=0$). This is referred to as \textit{strong monotonicity}. Alternatively, \textit{weak monotonicity} may be enforced, where each point is checked only against the value of $g$ at the origin ($g(0)\geq g(x_i)$). Although constrained optimization is appealing, it is obviously always preferable to perform unconstrained optimization if possible. Using a class of functions to model the detection function which were both flexible and did not exhibit the undesirable property of non-monotonicity could offer a more physically realistic and convincing alternative to the conventional way of performing distance analyses.
 
@@ -261,7 +261,7 @@ One problem with constraining the detection function to be monotonic is that the
 \label{fig1}
 \end{figure}
 
-Mixture models have recently been applied in the capture-recapture literature following the work of Pledger (2000), Dorazio and Royle (2003), Pledger (2005) and Morgan \& Ridout (2008). Their main utility is in better accounting for between-individual heterogeneity which can cause severe bias if unmodelled (Link, 2003). In distance sampling this problem does not arise provided that the detection at zero distance is certain and a flexible detection function model is used (Buckland, 2004, section 11.12). MIxture models offer the potential for flexible modelling since, if the individual parts of the mixture model (the mixture components) are each monotonic decreasing then a sum of these functions will also be monotonic decreasing. Such an approach is appealing since each function is simple but the combinations yield a great many possible shapes (see figure \ref{sim-detfcts}).
+Mixture models have recently been applied in the capture-recapture literature following the work of Pledger (2000), Dorazio and Royle (2003), Pledger (2005) and Morgan \& Ridout (2008). Their main utility is in better accounting for between-individual heterogeneity which can cause severe bias if unmodelled (Link, 2003). In distance sampling this problem does not arise provided that the detection at zero distance is certain and a flexible detection function model is used (Buckland, 2004, section 11.12). Mixture models offer the potential for flexible modelling since, if the individual parts of the mixture model (the mixture components) are each monotonic decreasing then a sum of these functions will also be monotonic decreasing. Such an approach is appealing since each function is simple but the combinations yield a great many possible shapes (see figure \ref{sim-detfcts}).
 
 In this paper, we introduce a new class of distance sampling detection function models, based on mixtures of simple parametric key functions.  In the next section, we describe the models.  We then illustrate their use by applying them to simulated data, and then to real data from a number of studies.  We compare results of CDS and mixture model detection functions.  We finish with a discussion of the utility of these new methods.
 
@@ -379,6 +379,9 @@ The covariate models again show an initial positive bias in the $P_a$s but do st
 
 Given the performance of the method in simulation, several data sets were analysed using the method. All of the analyses were performed in \texttt{mmds}, an \textsf{R} package written by the authors.
 
+[[ Say something about mrds being used, Innes et al variances]]
+
+
 [[\textbf{LEN}: is further detail needed for any of these?]]
 
 \subsection{Williams and Thomas (2007) cetacean survey}
@@ -476,14 +479,16 @@ Hn 2-pt & \texttt{habitat} + \texttt{species} & 749.05 & 0.152 & 19.85 & 0.94\\
 Hn 2-pt & \texttt{habitat} + \texttt{nest.size} & \textbf{737.27} & 0.179 & 22.47 & 0.72\\
 Hn 2-pt & \texttt{nest.size} + \texttt{species} & 741.92 & 0.210 & 18.09 & 0.77\\
 Hn 2-pt & \texttt{nest.size} + \texttt{species} + \texttt{habitat} & 739.77 & 0.178 & 18.9 & 0.68 \\
-Hr & \texttt{nest.size} + \texttt{habitat} & 745.2 & 0.194 & 10.6 & 0.95\\
+% Hr & \texttt{nest.size} + \texttt{habitat} & 745.2 & 0.194 & 10.6 & 0.95\\  % Distance result 
+Hr & \texttt{nest.size} + \texttt{habitat} & 743.56 & 0.195  & 21.72 & 0.89\\ % mrds result
  & ($ii$) \textit{Long-finned pilot whales} & & & & \\
 Hn 2-pt & None & 1298.42 & 0.295 & 23.6 & 0.95 \\
 Hn 2-pt & \texttt{BSS} & 1286.6 & 0.209 & 22.06 & 0.82 \\
 Hn 2-pt & \texttt{BSS2} & \textbf{1284.99} & 0.211 &  22.05 & 0.95\\
 Hn 2-pt & \texttt{BSS3} & 1296.27 & 0.27 & 24.8 & 0.99 \\
 Hn 2-pt & \texttt{BSS} (cont.) &  1286.26 & 0.152 & 44.1 & 0.84\\
-Hn 1-pt + $\cos(2)$& \texttt{BSS} (cont.) & 1296 & 0.37 & 9.56 & 0.319 \\
+% Hn 1-pt + $\cos(2)$& \texttt{BSS} (cont.) & 1296 & 0.37 & 9.56 & 0.319 \\ % Distance result 
+Hn 1-pt + $\cos(2)$& \texttt{BSS} (cont.) & 1286.5 & 0.452 & 8.69 & \\ % mrds
  & ($iii$) \textit{Amakihi} & & & & \\
 Hn 2-pt & None & 10805.48 & 0.28 & 5.14 & 0.12 \\
 Hn 2-pt & \texttt{obs} & 10778.69 & 0.28 & 5.8 & 0.04\\
@@ -493,12 +498,26 @@ Hn 2-pt & \texttt{obs} + \texttt{has} & 10782.53 & 0.28 & 6.88 & 0.23\\
 Hn 2-pt & \texttt{obs} + \texttt{mas} & 10778.07 & 0.28 & 5.93 & 0.14\\
 Hn 2-pt & \texttt{has} + \texttt{mas} & 10809.17 & 0.28 & 6.53 & 0.43 \\
 Hn 2-pt & \texttt{obs} + \texttt{has} + \texttt{mas} & 10784.5 & 0.28 & 7.62 & 0.35\\
-Hr & \texttt{obs} + \texttt{mas} & \textbf{10777.72} & 0.3 & 2.65 & 0.036 \\
+% Hr & \texttt{obs} + \texttt{mas} & \textbf{10777.72} & 0.3 & 2.65 & 0.036 \\ % Distance result 
+Hr & \texttt{obs} + \texttt{mas} & \textbf{10777.38} &  0.319 & 5.11 & 0.076\\ % mrds
 \hline
 \hline
 \end{tabular}
 \label{big-results-table}
 \end{table}
+
+%Amakihi
+%6.2 
+%5.85 
+%6.95 
+%6.52 
+%6.21 
+%6.1 
+%6.97 
+%6.33 
+
+
+
 
 \section{Discussion}
 \label{s:discuss}
@@ -562,6 +581,8 @@ Rob Williams, Dan Pike , the amakihi people and the ant people for the data. [[\
 
 \bibitem{ } Beavers, S. C., and Ramsey, F. L. (1998). Detectability analysis in transect surveys. \textit{Journal of Wildlife Management} \textbf{62}(3), pp. 948--957.
 
+\bibitem{ } Becker, E. F. and Quang, P. X. (2009). A gamma-shaped detection function for line-transect surveys with mark-recapture and covariate data. \textit{Journal of Agricultural, Biological, and Environmental Statistics} \textbf{14}(2), 207--223.
+
 \bibitem{ } Borkin, K., Summers, R. and Thomas, L. (\textit{in press}). Surveying abundance and stand type associations of wood ant Formica spp.(Hymenoptera: Formicidae) nest mounds over an extensive area: trialing a novel method. European Journal of Entomology.
 
 \bibitem{ } Buckland, S.T. (1992). Fitting density functions using polynomials. \textit{Applied Statistics} \textbf{41}, 63--76. 
@@ -576,6 +597,8 @@ Rob Williams, Dan Pike , the amakihi people and the ant people for the data. [[\
 
 \bibitem{ }  Gelman, A., Carlin, J. B., Stern, H. S., and Rubin, D. B. (2004). \textit{Bayesian Data Analysis}. CRC Press. Boca Ranton, Florida, US.
 
+\bibitem{ } Mack, Y. P. and Quang, P. (1998). Kernel methods in line and point transect sampling. \textit{Biometrics} \textbf{54}(2), 606--619. 
+
 \bibitem{ } Marin, J. M., Mengersen, K. and Robert, C. P. (2005). Bayesian modelling and inference on mixtures of distributions. \textit{Handbook of Statistics 25} D. Dey and C.R. Rao (eds). Elsevier-Sciences.
 
 \bibitem{ } Marques, T. A., Thomas, L., Fancy, S. G., Buckland, S. T. (2007). Improving estimates of bird density using multiple-covariate distance sampling. \textit{The Auk} \textbf{124}(9), 1229--1243.
@@ -587,6 +610,10 @@ Rob Williams, Dan Pike , the amakihi people and the ant people for the data. [[\
 \bibitem{ } Pledger, S. (2000). Unified maximum likelihood estimates for closed capture-recapture models using mixtures. \textit{Biometrics} \textbf{56}(2), 434--442. 
 
 \bibitem{ } Pledger, S. (2005). The performance of mixture models in heterogeneous closed population capture-recapture. \textit{Biometrics} \textbf{61}(3), 868--873.
+
+\bibitem{ } Thomas, L., Buckland, S. T., Rexstad, E. A., Laake, J. L., Strindberg, S., Hedley, S. L., Bishop, J. R. B., Marques, T. A. and Burnham, K. P. (2010). Distance software: design and analysis of distance sampling surveys for estimating population size. \textit{Journal of Applied Ecology} \textit{47}, 5--14.
+
+\bibitem{ } Thompson, S. K. (2002). \textit{Sampling}. Wiley, New York, US.
 
 \bibitem{ } Williams, R. and Thomas, L. (2007). Distribution and abundance of marine mammals in the coastal waters of British Columbia, Canada. \textit{Journal of Cetacean Research and Management} \textbf{9}(1), pp. 15--38.
 
@@ -788,29 +815,6 @@ The derivatives of $g_j$ are as in (\ref{detfct-deriv-k}). For $\nu_{ij}$:
 Putting that together:
 \begin{equation*}
 \frac{\partial l(\bm{\theta}, \bm{\phi}; \mathbf{r},\mathbf{Z})}{\partial \beta_{k*}}  = \sum_{i=1}^n \Big( \frac{ \sum_{j=1}^J \phi_{j} z_{k*} \Big( \frac{x_i}{\sigma_{j}}\Big)^2 g_j(x_i,\mathbf{Z}; \bm{\theta}_j)}{g(r_i,\mathbf{Z}; \bm{\theta}, \bm{\phi})} - \frac{ \sum_{j=1}^J \phi_{j}2z_{ik*}(\nu_{ij} - \pi w^2 g_j(w)) }{ \sum_{j=1}^J \phi_j \nu_{ij}}\Big)
-\end{equation*}
-
-\section*{Appendix C - rejection sampling for simulation of mixture detection function distance data}
-
-We generate $n$ samples by sampling distances $X\sim \text{Uniform}(0,w)$. We want $X$ to come from the PDF of the distances, $f$. We know that in the line transect case that the maximum value of $f$ is $1/\mu$ (since $\mu=1/f(0)$ and f(0) is the maximum of $f$). So we can then set
-\begin{equation*}
-M \geq \frac{1}{\mu},
-\end{equation*}
-so finding $h(x)$, and letting $U(x)$ denote a $\text{Uniform}(0,w)$ pdf:
-\begin{align*}
-h(x) &= \frac{f(x,z; \bm{\theta}, \bm{\phi})}{U(x) M}\\
-&= \frac{g(x,z; \bm{\theta}, \bm{\phi})/\mu}{(1/w) (1/\mu)}\\
-&= w g(x,z; \bm{\theta}, \bm{\phi})
-\end{align*}
-then, generating a $U \sim \text{Uniform}(0,1)$ accept $X$ if 
-\begin{equation*}
-U \leq wg(X,z; \bm{\theta}, \bm{\phi}).
-\end{equation*}
-where $z$ indicates the covariates that are to be used for generating the observation.
-
-For point transects the maximum value is unknown, so for each simulation the maximum value of $f$ was found using the \textsf{R} function \texttt{optimize()}. This was then used for the value of $M$. If we generate $R \sim \text{Uniform(0,w)}$, the distance is accepted if:
-\begin{equation*}
-U \leq \frac{wr}{M\nu}g(R,z; \bm{\theta}, \bm{\phi}).
 \end{equation*}
 
 \label{lastpage}

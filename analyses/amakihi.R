@@ -2,7 +2,7 @@
 
 library(mmds)
 
-set.seed(1241)
+set.seed(1291)
 
 amakihi<-read.csv(file="amakihi.csv")
 

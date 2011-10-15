@@ -1,7 +1,7 @@
 # analyse the ants data
 
 library(mmds)
-set.seed(1415)
+set.seed(145)
 
 # load some data
 ants<-read.csv(file="woodants.csv")
