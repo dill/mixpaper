@@ -1,7 +1,7 @@
 # analyse the ants data
 
 library(mmds)
-set.seed(145)
+set.seed(1451)
 
 # load some data
 ants<-read.csv(file="woodants.csv")
@@ -58,28 +58,53 @@ aics<-c(aics,ants.nesthabspecies.best$aic)
 
 # two best models are nest+hab and the full model
 #plot(ants.nesthab.best,breaks=c(seq(0,5,len=10),seq(6,25,1)),main=c("Detection function","Quantiles of nest size","Levels of habitat"))
-
-#plot(ants.nesthabspecies.best,breaks=c(seq(0,5,len=10),seq(6,25,1)))
+#dev.copy2eps(file="ants-nesthab.eps",width=8.6,height=3.4)
 
 
 #save.image("ants-run.RData")
 
-cat("%CV p\n")
-cat(round(100*summary(ants.best)$average.p.cv,2),"\n")
-cat(round(100*summary(ants.habitat.best)$average.p.cv,2),"\n")
-cat(round(100*summary(ants.species.best)$average.p.cv,2),"\n")
-cat(round(100*summary(ants.nest.best)$average.p.cv,2),"\n")
-cat(round(100*summary(ants.nesthab.best)$average.p.cv,2),"\n")
-cat(round(100*summary(ants.habspecies.best)$average.p.cv,2),"\n")
-cat(round(100*summary(ants.nestspecies.best)$average.p.cv,2),"\n")
-cat(round(100*summary(ants.nesthabspecies.best)$average.p.cv,2),"\n")
+## Model & Covariates & AIC & $\hat{P_a}$ & $\% CV \hat{P_a}$ & K-S $p$\\
+#grab_results<-function(model){
+#
+#   mod<-paste("Hn ",model$mix.terms,"-point",sep="")
+#   covars<-model$formula   
+#
+#   cv.p<-100*summary(model)$average.p.cv
+#
+#cat(mod," & ",covars," & ",round(model$aic,2)," & ",round(model$pa,3),
+#    " & ",round(cv.p,2)," & ",round(model$ks$p,2),"\\\\n")
+#
+#}
 
-cat("\nKS p\n")
-cat(round(ants.best$ks$p,2),"\n")
-cat(round(ants.habitat.best$ks$p,2),"\n")
-cat(round(ants.species.best$ks$p,2),"\n")
-cat(round(ants.nest.best$ks$p,2),"\n")
-cat(round(ants.nesthab.best$ks$p,2),"\n")
-cat(round(ants.habspecies.best$ks$p,2),"\n")
-cat(round(ants.nestspecies.best$ks$p,2),"\n")
-cat(round(ants.nesthabspecies.best$ks$p,2),"\n")
+source("grabresults.R")
+
+
+grab_results(ants.best)
+grab_results(ants.habitat.best)
+grab_results(ants.species.best)
+grab_results(ants.nest.best)
+grab_results(ants.habspecies.best)
+grab_results(ants.nesthab.best)
+grab_results(ants.nestspecies.best)
+grab_results(ants.nesthabspecies.best)
+
+
+#cat("%CV p\n")
+#cat(round(100*summary(ants.best)$average.p.cv,2),"\n")
+#cat(round(100*summary(ants.habitat.best)$average.p.cv,2),"\n")
+#cat(round(100*summary(ants.species.best)$average.p.cv,2),"\n")
+#cat(round(100*summary(ants.nest.best)$average.p.cv,2),"\n")
+#cat(round(100*summary(ants.habspecies.best)$average.p.cv,2),"\n")
+#cat(round(100*summary(ants.nesthab.best)$average.p.cv,2),"\n")
+#cat(round(100*summary(ants.nestspecies.best)$average.p.cv,2),"\n")
+#cat(round(100*summary(ants.nesthabspecies.best)$average.p.cv,2),"\n")
+#
+#cat("\nKS p\n")
+#cat(round(ants.best$ks$p,2),"\n")
+#cat(round(ants.habitat.best$ks$p,2),"\n")
+#cat(round(ants.species.best$ks$p,2),"\n")
+#cat(round(ants.nest.best$ks$p,2),"\n")
+#cat(round(ants.nesthab.best$ks$p,2),"\n")
+#cat(round(ants.habspecies.best$ks$p,2),"\n")
+#cat(round(ants.nestspecies.best$ks$p,2),"\n")
+#cat(round(ants.nesthabspecies.best$ks$p,2),"\n")

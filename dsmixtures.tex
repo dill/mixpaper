@@ -188,7 +188,7 @@ CREEM, University of St Andrews, The Observatory, Buchanan Gardens, St Andrews K
 This version: \today %Remove this before submitting!
 
 
-We present a new class of models for the detection function in distance sampling surveys of wildlife populations, based on finite and continuous mixtures of simple parametric key functions such as the half-normal.  The models share many of the features of the widely-used key function plus series expansion formulation: they are flexible, produce plausible shapes with a small number of parameters, and can be fit using maximum likelihood.  One advantage over current methods is the mixture models are automatically monotonic non-increasing, so constrained optimization is not required.  We fit both new and current models to simulated and real data sets.  The mixture models produced slightly more parsimonious fits in some cases. [Need to be more specific once results are in!]
+We present a new class of models for the detection function in distance sampling surveys of wildlife populations, based on finite mixtures of simple parametric key functions such as the half-normal. The proposed models also allow for the inclusion of covariates in a familiar way. The models share many of the features of the widely-used key function plus series expansion formulation: they are flexible, produce plausible shapes with a small number of parameters, and can be fit using maximum likelihood. One advantage over current methods is the mixture models are automatically monotonic non-increasing, so constrained optimization is not required. We fit both new and current models to simulated and real data sets.  The mixture models produced slightly more parsimonious fits in some cases. [Need to be more specific once results are in!]
 \end{abstract}
 
 %  Please place your key words in alphabetical order, separated
@@ -229,12 +229,12 @@ Continuous mixture; Finite mixture; Line transect sampling; Monotonicity constra
 
 Distance sampling (Buckland et al. 2001, 2004) is a suite of methods for estimating the size and/or density of biological populations.  There are two main flavours: line transects and point transects.  In both, the basic idea is the same: an observer visits a randomly-located set of of transect lines or points and records the distance from the transect to all objects of interest (i.e., animals or plants of the target species) that are detected within some truncation distance $w$.  Not all objects within $w$ are assumed to be detected; instead the distribution of observed distances is used to estimate the parameters of a detection function model, which describes how the probability of detection declines with increasing distance.  This fitted model is then used to estimate the average probability of detecting an object within distance $w$ of the transects, and the number of objects present given the number detected. From this estimating total population size and density are straightforward.
 
-Estimating the detection function is therefore the key to distance sampling.  The most common approach, often called ``conventional distance sampling'', is based on methods developed by Buckland (1992). In distance sampling, population size can be found from a Horvitz-Thompson-like estimator (Thompson 2002, Chapter 6)
+Estimating the detection function is therefore the key to distance sampling.  The most common approach, often called ``conventional distance sampling'', is based on methods developed by Buckland (1992). In distance sampling, population size can be found from a Horvitz-Thompson-like estimator (Thompson, 2002, Chapter 6)
 \begin{equation}
 N = \sum_{i=1}^n \frac{1}{c_i p_i},
 \label{HT}
 \end{equation}
-where $c_i$ is probability of the $i^\text{th}$ observation being within the sampled area, and $p_i$ is the probability of the $i\text{th}$ observation being detected given it is within the sampled area (Buckland et al. 2004, Chapter 3).  For line transects, $p_i$ is given by
+where $c_i$ is probability of the $i^\text{th}$ observation being within the sampled area, and $p_i$ is the probability of the $i\text{th}$ observation being detected given it is within the sampled area (Buckland et al., 2004, Chapter 3).  For line transects, $p_i$ is given by
 \begin{equation*}
 p_i = \frac{1}{w} \int_0^w  g(x,\mathbf{Z}; \bm{\theta}) \text{d}x,
 \end{equation*}
@@ -248,11 +248,11 @@ In the formulation of  Buckland (1992) and Buckland et al. (2001, 2004), the det
 \begin{equation*}
 g(x; \bm{\theta}) = \frac{k(x, \mathbf{z}; \bm{\theta}) \{1+s(x, \mathbf{z}; \bm{\theta})\}}{k(0, \mathbf{z}; \bm{\theta}) \{1+s(0, \mathbf{z}; \bm{\theta})\}},
 \end{equation*}
-where $k$ may be a half-normal, hazard-rate or uniform function and $s$ may be zero (i.e. there are no adjustment terms), cosine, simple even polynomial or Hermite polynomial series (usually with no more than 3 terms). The distance at which the observation was made is denoted $x$ and $\mathbf{z}$ is a set of covariates that effect detectability. The denominator ensures that detection at zero distance is certain (i.e. $g(0)=1$). Other formulations for $g$ have also been proposed. See for example, Quang and Becker (2009), Mack and Quang (1998). The above methods are widely used and are implemented in the free (as in beer) software package Distance (Thomas et al, 2010), available at \url{http://www.ruwpa.st-and.ac.uk/distance/}.
+where $k$ may be a half-normal, hazard-rate or uniform function and $s$ may be zero (i.e. there are no adjustment terms), cosine, simple even polynomial or Hermite polynomial series (usually with no more than 3 terms). The distance at which the observation was made is denoted $x$ and $\mathbf{z}$ is a set of covariates that effect detectability. The denominator ensures that detection at zero distance is certain (i.e. $g(0)=1$). Other formulations for $g$ have also been proposed. See for example, Quang and Becker (2009), Mack and Quang (1998). The above methods are widely used and are implemented in the free (as in beer) software package Distance (Thomas et al., 2010), available at \url{http://www.ruwpa.st-and.ac.uk/distance/}.
 
-This ``key function plus adjustment series'' formulation for the detection function can lead to unrealistic functions being fit to data, in particular non-monotone detection functions. The usual way to work around this is to constrain the detection function to be monotonic. This is done by taking 10 equally spaced distances from $0$ to $w$ and checking that when the detection function is evaluated at each of these points they are less than the last ($g(x_i)\geq g(x_{i+1})$ for distances $x_1 \dots x_{10}$ where $x_1=0$). This is referred to as \textit{strong monotonicity}. Alternatively, \textit{weak monotonicity} may be enforced, where each point is checked only against the value of $g$ at the origin ($g(0)\geq g(x_i)$). Although constrained optimization is appealing, it is obviously always preferable to perform unconstrained optimization if possible. Using a class of functions to model the detection function which were both flexible and did not exhibit the undesirable property of non-monotonicity could offer a more physically realistic and convincing alternative to the conventional way of performing distance analyses.
+This ``key function plus adjustment series'' formulation for the detection function can lead to unrealistic functions being fit to data, in particular non-monotone detection functions. The usual way to work around this is to constrain the detection function to be monotonic. This is done by taking 10 (say) equally spaced distances from $0$ to $w$ and checking that when the detection function is evaluated at each of these points they are less than the last ($g(x_i)\geq g(x_{i+1})$ for distances $x_1,\dots, x_{10}$ where $x_1=0$). This is referred to as \textit{strong monotonicity}. Alternatively, \textit{weak monotonicity} may be enforced, where each point is checked only against the value of $g$ at the origin ($g(0)\geq g(x_i)$). Although this kind of constrained optimization is appealing, it is obviously always preferable to perform unconstrained optimization if possible. Using a class of functions to model the detection function which were both flexible and did not exhibit the undesirable property of non-monotonicity could offer a more physically realistic and convincing alternative to the conventional way of performing distance analyses.
 
-One problem with constraining the detection function to be monotonic is that the constraints can only be applied at a finite number of points. This can lead to constraints missing the non-monotonic points in the function. An example from the recent literature (Williams and Thomas, 2007) is shown in the first panel of figure \ref{fig1}. Here a half-normal detection function was fit with one second order cosine adjustment term to humpback whale sightings. Presently, there are no constraints on the shape of the detection function when both covariates and adjustment terms are used, so checking for non-monotonic detection functions must be performed visually at levels or quantiles of the detection function, clearly this is not a desirable situation. The second and third panels in figure \ref{fig1} show a detection function when covariate data was included in the model and adjustments were also used. In this case for long-finned pilot whales (Pike et al., 2003) the Beaufort sea state was added as a covariate, the first plot shows that the detection function, when averaged over the covariate values, shows some non-monotonic behaviour. However, in the third panel the marginal detection function at 25\%, 50\% and 75\% quantiles of the covariate are shown and here the non-monotonicity is particularly pronounced. Given the above, it would seem preferable to use a formulation that guarantees monotonicity from the outset.
+One problem with the constraint-based optimisation detailed above, is that the constraints can only be applied at a finite number of points. This can lead to constraints missing the non-monotonic points in the function. An example from the recent literature (Williams and Thomas, 2007) is shown in the first panel of Figure \ref{fig1}. Here a half-normal detection function was fit with one second order cosine adjustment term to humpback whale sightings. Presently, monotonicity cannot be enforced via constraints on the shape of the detection function when adjustment terms are used in conjunction with covariates. Checking for non-monotonic detection functions must be performed visually at levels or quantiles of the detection function, clearly this is not a desirable situation. The second and third panels in Figure \ref{fig1} show a detection function when covariate data was included in the model and adjustments were also used. In this case for long-finned pilot whales (Pike et al., 2003) the Beaufort sea state was included in the model as a continuous covariate. The detection function, when averaged over the covariate values, shows some, mild, non-monotonic behaviour in the second panel of Figure \ref{fig1}. However, in the third panel the marginal detection function at 25\%, 50\% and 75\% quantiles of the covariate are shown and here the non-monotonicity is particularly pronounced. Given the above, it would seem preferable to use a formulation that guarantees monotonicity from the outset.
 
 \begin{figure}
 \centering
@@ -261,7 +261,7 @@ One problem with constraining the detection function to be monotonic is that the
 \label{fig1}
 \end{figure}
 
-Mixture models have recently been applied in the capture-recapture literature following the work of Pledger (2000), Dorazio and Royle (2003), Pledger (2005) and Morgan \& Ridout (2008). Their main utility is in better accounting for between-individual heterogeneity which can cause severe bias if unmodelled (Link, 2003). In distance sampling this problem does not arise provided that the detection at zero distance is certain and a flexible detection function model is used (Buckland, 2004, section 11.12). Mixture models offer the potential for flexible modelling since, if the individual parts of the mixture model (the mixture components) are each monotonic decreasing then a sum of these functions will also be monotonic decreasing. Such an approach is appealing since each function is simple but the combinations yield a great many possible shapes (see figure \ref{sim-detfcts}).
+Mixture models have recently been applied in the capture-recapture literature following the work of Pledger (2000), Dorazio and Royle (2003), Pledger (2005) and Morgan \& Ridout (2008). Their main utility is in better accounting for between-individual heterogeneity which can cause severe bias if unmodelled (Link, 2003). In distance sampling this problem does not arise provided that the detection at zero distance is certain and a flexible detection function model is used (Buckland, 2004, Section 11.12). Mixture models offer the potential for flexible modelling since, if the individual parts of the mixture model (the mixture components) are each monotonic decreasing then a sum of these functions will also be monotonic decreasing. Such an approach is appealing since each function is simple but the combinations yield a great many possible shapes (see Figure \ref{sim-detfcts}).
 
 In this paper, we introduce a new class of distance sampling detection function models, based on mixtures of simple parametric key functions.  In the next section, we describe the models.  We then illustrate their use by applying them to simulated data, and then to real data from a number of studies.  We compare results of CDS and mixture model detection functions.  We finish with a discussion of the utility of these new methods.
 
@@ -280,7 +280,7 @@ Here we let $g_j$ be half-normal functions, although other monotonic functions s
 \begin{equation*}
 g(x,\mathbf{Z}; \bm{\theta}, \bm{\phi}) = \sum_{j=1}^J \phi_j \exp \Big( - \frac{x^2}{2\sigma_j^2} \Big).
 \end{equation*}
-Covariates can be included in a similar way to Buckland et al., 2004 (Chapter 3), where the covariates affect the scale parameter $\sigma$. We assume that each mixture component has a different scale but that the covariates affect the scale parameters in the same way. Other more complex models may be possible.
+Covariates can be included in a similar way to Buckland et al. (2004, Chapter 3), where the covariates affect the scale parameter $\sigma$. We assume that each mixture component has a different scale but that the covariates affect the scale parameters in the same way. Other more complex models may be possible.
 
 Using $i$ to subscript each observation, our formulation for the scale parameter $\sigma_{ij}$, is therefore:
 \begin{equation*}
@@ -316,7 +316,7 @@ where the effective area of detection, $\nu_i$ is defined as:
 \begin{equation*}
 \nu_i = 2\pi \sum_{j=1}^J \phi_j \int_0^w  r g_j(r,\bm{z}_i; \bm{\theta}_j) \text{d}r.
 \end{equation*}
-Parameters are estimated using maximum likelihood. In practice maximization is performed on the $\log$-likelihood (see Appendix [BLAH]). 
+Parameters are estimated using maximum likelihood. In practice maximization is performed on the $\log$-likelihood.
 
 
 \subsection{Estimating population size}
@@ -334,7 +334,7 @@ A standard summary statistic is the average detection probability for an animal 
 P_a = n/N.
 \end{equation*}
 
-Variances in both $N$ and $P_a$ were found for both non-covariate models (Borchers, Buckland and Zucchini, 2002 Appendix C) and covariate models (Buckland et al., 2004 Section 3.3.3) using standard methods set out in the literature.
+Variances in both $N$ and $P_a$ were found for both non-covariate models and covariate models using standard methods set out in the literature (Borchers, Buckland and Zucchini, 2002, Appendix C; Buckland et al., 2004 Section 3.3.3; Innes, ) .
 
 \section{Simulations}
 
@@ -357,9 +357,9 @@ Four sets of simulations were run:
 
 [[\textbf{LEN}: Do you think that we need a table of the parameter values? Maybe in the appendix? Or should we just include all the sim code as an online appendix?]]
 
-Results from the simulation study are shown in figure \ref{sim-boxplots}. Boxplots are of the estimated average detection probability, $\hat{P_a}$. The number under each boxplot gives the proportion of AIC best models that were of the same form as the true model (i.e. same number of mixture components and covariates). For the first row (line transects with no covariates) we can see that in scenarios 1 and 3, both the true model and true probability of detection were found at even low sample sizes, whereas in scenarios 2 and 4 there was a positive bias in the estimates of the probability of detection as well as a lower proportion of ``correct'' models being selected by AIC. In scenario 2 and 4 most of the weight (0.7 and 0.6, respectively) is given to the larger mixture component, thus the smaller component is swamped; this would make the simulated data look as if it were generated from a 1-point mixture.
+Results from the simulation study are shown in Figure \ref{sim-boxplots}. Boxplots are of the estimated average detection probability, $\hat{P_a}$. The number under each boxplot gives the proportion of AIC best models that were of the same form as the true model (i.e. same number of mixture components and covariates). For the first row (line transects with no covariates) we can see that in scenarios 1 and 3, both the true model and true probability of detection were found at even low sample sizes, whereas in scenarios 2 and 4 there was a positive bias in the estimates of the probability of detection as well as a lower proportion of ``correct'' models being selected by AIC. In scenario 2 and 4 most of the weight (0.7 and 0.6, respectively) is given to the larger mixture component, thus the smaller component is swamped; this would make the simulated data look as if it were generated from a 1-point mixture.
 
-This effect can also be seen in the point transect simulations, but more severely. In this case one can see from the second row of figure \ref{sim-detfcts} that the pdfs of the distances look very much like only one of the components of the mixture. Fitting only a 1-point mixture to data from a 2-point mixture has lead to a positive bias in the detection probabilities, however this is only to expected given that data generated from such models would look like a 1-point mixture.
+This effect can also be seen in the point transect simulations, but more severely. In this case one can see from the second row of Figure \ref{sim-detfcts} that the pdfs of the distances look very much like only one of the components of the mixture. Fitting only a 1-point mixture to data from a 2-point mixture has lead to a positive bias in the detection probabilities, however this is only to expected given that data generated from such models would look like a 1-point mixture.
 
 The 3-point mixtures show that detection function specified in scenario 1 can be easily represented using a smaller number of mixture terms. At sample sizes of 120 and lower, a 1-point mixture model dominated (around 150 of the AIC selected models were 1-point mixtures) then at the two higher sample sizes, 2-point mixtures dominated. Scenario 2 seemed more like a ``true'' 3-point data set, although only at the two larger sample sizes was a 3-point model selected more than half of the time. Interestingly at the lower sample sizes, a 2-point mixture was selected more often than 1-point (137, 173 and 182 times for the lowest three sample sizes). This effect may be due to the large, potentially non-identifiable, scale parameter being confounded with the other parameters, although this did not appear to be problematic in the scenario 2 of the line transect non-covariate models, above.
 
@@ -396,11 +396,11 @@ Williams and Thomas (2007) study several species of cetaceans off the coast of B
 Species & Model & AIC & $\hat{P_a}$ & $\% CV \hat{P_a}$ & K-S $p$\\
 \hline
 Harbour seal & Hn+$\cos(2)$ (W\&T) & 2771.05 & 0.425 & 7.55 & 0.515\\
-(in water) & Hn 2-pt  & 2769.86 & 0.335 & 14.8 & 0.945\\
+(in water) & Hn 2-pt  & 2769.86 & 0.335 & 15.38 & 0.945\\
 Harbour porpoise & Hr (W\&T) & 690.66 & 0.212 & 32.0 & 0.99\\
- & Hn 2-pt & 692.09 & 0.254 & 17.5 & 0.99\\
+ & Hn 2-pt & 692.09 & 0.254 & 18.18 & 0.99\\
 Humpback & Hn+$\cos(2)$ (W\&T) & 1033.06 & 0.386 & 12.64 & 0.672 \\
- & Hn 2-pt & 1035.94 & 0.381 & 15.6 & 0.649 \\
+ & Hn 2-pt & 1035.94 & 0.381 & 18.48 & 0.649 \\
 \hline
 \end{tabular}
 \label{williams-table}
@@ -440,12 +440,21 @@ Pike et al. (2003) analyse data on long-finned pilot whales (\textit{Globicephal
 
 A model was fit with each of these covariates, as well as a model with no covariates. A summary of the results is given in Table \ref{big-results-table} and the detection function for the best model is shown in Figure \ref{danpike-detfct}.
 
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.75\textwidth]{analyses/danpike-bss2.eps}
+%\caption{The (AIC) best model for the long-finned pilot whale data -- a 2-point mixture model detection function with Beaufort sea state. Left: the average detection function, right: the marginal detection function with the levels of \texttt{BSS2}.}
+%\label{danpike-detfct}
+%\end{figure}
+
 \begin{figure}
 \centering
-\includegraphics[width=0.75\textwidth]{analyses/danpike-bss2.eps}
-\caption{The (AIC) best model for the long-finned pilot whale data -- a 2-point mixture model detection function with Beaufort sea state. Left: the average detection function, right: the marginal detection function with the levels of \texttt{BSS2}.}
+\includegraphics[width=0.75\textwidth]{analyses/danpike-bssc.eps}
+\caption{The (AIC) best model for the long-finned pilot whale data -- a 2-point mixture model detection function with Beaufort sea state as a continuous covariate. Left: the average detection function, right: the marginal detection function with the quantiles (25\%, 50\% and 75\%) of \texttt{BSS}.}
 \label{danpike-detfct}
 \end{figure}
+
+
 
 The best model by AIC score was a 2-point mixture with \texttt{BSS2} as a covariate. Figure \ref{danpike-detfct} shows the average detection function and the marginal detection function with the levels of \texttt{BSS2}.
 
@@ -471,33 +480,54 @@ Best mixture model according to AIC was a two point mixture with observer and mi
 Model & Covariates & AIC & $\hat{P_a}$ & $\% CV \hat{P_a}$ & K-S $p$\\
 \hline
  & ($i$) \textit{Ants} & & & & \\
-Hn 2-pt & None & 754.61 & 0.183 & 16.2 & 0.96 \\
-Hn 2-pt & \texttt{habitat} & 751.27 & 0.150 & 20.2 & 0.97 \\ 
-Hn 2-pt & \texttt{species} & 756.59 & 0.184 & 16.35 & 0.94 \\  
-Hn 2-pt & \texttt{nest.size} & 741.64 & 0.214 & 15.71 & 0.76 \\   
-Hn 2-pt & \texttt{habitat} + \texttt{species} & 749.05 & 0.152 & 19.85 & 0.94\\ 
-Hn 2-pt & \texttt{habitat} + \texttt{nest.size} & \textbf{737.27} & 0.179 & 22.47 & 0.72\\
-Hn 2-pt & \texttt{nest.size} + \texttt{species} & 741.92 & 0.210 & 18.09 & 0.77\\
-Hn 2-pt & \texttt{nest.size} + \texttt{species} + \texttt{habitat} & 739.77 & 0.178 & 18.9 & 0.68 \\
+Hn 2-pt  &  None  &  754.61  &  0.184  &  15.46  &  0.96 \\
+Hn 2-pt  &   \texttt{habitat} &  751.27  &  0.188  &  14.85  &  0.97 \\
+Hn 2-pt  &   \texttt{species} &  756.59  &  0.184  &  15.48  &  0.94 \\
+Hn 2-pt  &  \texttt{nest.size} &  741.64  &  0.214  &  15.19  &  0.76 \\
+Hn 2-pt  &  \texttt{habitat} + \texttt{species} &  753.23  &  0.186  &  14.94  &  0.99 \\
+Hn 2-pt  &  \texttt{habitat} + \texttt{nest.size}  &  \textbf{737.27}  &  0.179  &  17.55  &  0.72 \\
+Hn 2-pt  & \texttt{nest.size} + \texttt{species}   &  741.92  &  0.21  &  15.84  &  0.77 \\
+Hn 2-pt  &  \texttt{nest.size} + \texttt{species} + \texttt{habitat}  &  739.08  &  0.178  &  18.09  &  0.83 \\
+%Hn 2-pt & None & 754.61 & 0.183 & 16.2 & 0.96 \\
+%Hn 2-pt & \texttt{habitat} & 751.27 & 0.150 & 20.2 & 0.97 \\ 
+%Hn 2-pt & \texttt{species} & 756.59 & 0.184 & 16.35 & 0.94 \\  
+%Hn 2-pt & \texttt{nest.size} & 741.64 & 0.214 & 15.71 & 0.76 \\   
+%Hn 2-pt & \texttt{habitat} + \texttt{species} & 749.05 & 0.152 & 19.85 & 0.94\\ 
+%Hn 2-pt & \texttt{habitat} + \texttt{nest.size} & \textbf{737.27} & 0.179 & 22.47 & 0.72\\
+%Hn 2-pt & \texttt{nest.size} + \texttt{species} & 741.92 & 0.210 & 18.09 & 0.77\\
+%Hn 2-pt & \texttt{nest.size} + \texttt{species} + \texttt{habitat} & 739.77 & 0.178 & 18.9 & 0.68 \\
 % Hr & \texttt{nest.size} + \texttt{habitat} & 745.2 & 0.194 & 10.6 & 0.95\\  % Distance result 
 Hr & \texttt{nest.size} + \texttt{habitat} & 743.56 & 0.195  & 21.72 & 0.89\\ % mrds result
  & ($ii$) \textit{Long-finned pilot whales} & & & & \\
-Hn 2-pt & None & 1298.42 & 0.295 & 23.6 & 0.95 \\
-Hn 2-pt & \texttt{BSS} & 1286.6 & 0.209 & 22.06 & 0.82 \\
-Hn 2-pt & \texttt{BSS2} & \textbf{1284.99} & 0.211 &  22.05 & 0.95\\
-Hn 2-pt & \texttt{BSS3} & 1296.27 & 0.27 & 24.8 & 0.99 \\
-Hn 2-pt & \texttt{BSS} (cont.) &  1286.26 & 0.152 & 44.1 & 0.84\\
+Hn 2-pt  &  None  &  1298.42  &  0.295  &  17.17  &  0.95 \\
+Hn 2-pt  &  \texttt{BSS}  &  1286.59  &  0.209  &  125794.8  &  0.82 \\
+Hn 2-pt  &  \texttt{BSS2}  &  1284.99  &  0.211  &  23.39  &  0.95 \\
+Hn 2-pt  &  \texttt{BSS3}  &  1296.27  &  0.27  &  17.46  &  0.99 \\
+Hn 2-pt  &  \texttt{BSS}  &  \textbf{1284.56}  &  0.216  &  24.17  &  0.67 \\
+%Hn 2-pt & None & 1298.42 & 0.295 & 23.6 & 0.95 \\
+%Hn 2-pt & \texttt{BSS} & 1286.6 & 0.209 & 22.06 & 0.82 \\
+%Hn 2-pt & \texttt{BSS2} & \textbf{1284.99} & 0.211 &  22.05 & 0.95\\
+%Hn 2-pt & \texttt{BSS3} & 1296.27 & 0.27 & 24.8 & 0.99 \\
+%Hn 2-pt & \texttt{BSS} (cont.) &  1286.26 & 0.152 & 44.1 & 0.84\\
 % Hn 1-pt + $\cos(2)$& \texttt{BSS} (cont.) & 1296 & 0.37 & 9.56 & 0.319 \\ % Distance result 
-Hn 1-pt + $\cos(2)$& \texttt{BSS} (cont.) & 1286.5 & 0.452 & 8.69 & \\ % mrds
+Hn 1-pt + $\cos(2)$& \texttt{BSS} (cont.) & 1286.5 & 0.452 & 8.69 & 0.48\\ % mrds
  & ($iii$) \textit{Amakihi} & & & & \\
-Hn 2-pt & None & 10805.48 & 0.28 & 5.14 & 0.12 \\
-Hn 2-pt & \texttt{obs} & 10778.69 & 0.28 & 5.8 & 0.04\\
-Hn 2-pt & \texttt{has} & 10807.19 &  0.28 & 6.48 & 0.33\\
-Hn 2-pt & \texttt{mas} & 10805.11 &  0.28 & 5.96 & 0.31\\
-Hn 2-pt & \texttt{obs} + \texttt{has} & 10782.53 & 0.28 & 6.88 & 0.23\\
-Hn 2-pt & \texttt{obs} + \texttt{mas} & 10778.07 & 0.28 & 5.93 & 0.14\\
-Hn 2-pt & \texttt{has} + \texttt{mas} & 10809.17 & 0.28 & 6.53 & 0.43 \\
-Hn 2-pt & \texttt{obs} + \texttt{has} + \texttt{mas} & 10784.5 & 0.28 & 7.62 & 0.35\\
+Hn 2-pt  &  None  &  10805.48  &  0.283  &  6.21  &  0.12 \\
+Hn 2-pt  & \texttt{obs} &  10778.69  &  0.279  &  5.86  &  0.04 \\
+Hn 2-pt  &  \texttt{has}  &  10807.19  &  0.282  &  6.95  &  0.33 \\
+Hn 2-pt  &  \texttt{mas}  &  10805.11  &  0.284  &  6.52  &  0.31 \\
+Hn 2-pt  &  \texttt{obs} +\texttt{has}  &  10782.53  &  0.283  &  6.21  &  0.23 \\
+Hn 2-pt  &  \texttt{obs} +\texttt{mas}  &  \textbf{10778.07}  &  0.279  &  6.1  &  0.14 \\
+Hn 2-pt  &  \texttt{mas} +\texttt{has}  &  10809.17  &  0.282  &  6.97  &  0.43 \\
+Hn 2-pt  &  \texttt{mas} +\texttt{has}+\texttt{obs}  &  10784.5  &  0.282  &  6.33  &  0.35 \\
+%Hn 2-pt & None & 10805.48 & 0.28 & 5.14 & 0.12 \\
+%Hn 2-pt & \texttt{obs} & 10778.69 & 0.28 & 5.8 & 0.04\\
+%Hn 2-pt & \texttt{has} & 10807.19 &  0.28 & 6.48 & 0.33\\
+%Hn 2-pt & \texttt{mas} & 10805.11 &  0.28 & 5.96 & 0.31\\
+%Hn 2-pt & \texttt{obs} + \texttt{has} & 10782.53 & 0.28 & 6.88 & 0.23\\
+%Hn 2-pt & \texttt{obs} + \texttt{mas} & 10778.07 & 0.28 & 5.93 & 0.14\\
+%Hn 2-pt & \texttt{has} + \texttt{mas} & 10809.17 & 0.28 & 6.53 & 0.43 \\
+%Hn 2-pt & \texttt{obs} + \texttt{has} + \texttt{mas} & 10784.5 & 0.28 & 7.62 & 0.35\\
 % Hr & \texttt{obs} + \texttt{mas} & \textbf{10777.72} & 0.3 & 2.65 & 0.036 \\ % Distance result 
 Hr & \texttt{obs} + \texttt{mas} & \textbf{10777.38} &  0.319 & 5.11 & 0.076\\ % mrds
 \hline
@@ -596,6 +626,8 @@ Rob Williams, Dan Pike , the amakihi people and the ant people for the data. [[\
 \bibitem{ } Dorazio, R. M. and Royle, J. A. (2003) Mixture Models for Estimating the Size of a Closed Population When Capture Rates Vary among Individuals. \textit{Biometrics} \textbf{59}(2), 351--364 
 
 \bibitem{ }  Gelman, A., Carlin, J. B., Stern, H. S., and Rubin, D. B. (2004). \textit{Bayesian Data Analysis}. CRC Press. Boca Ranton, Florida, US.
+
+\bibitem{ } Innes, S., Heide-J\o rgensen, M. P., Laake, J. L., Laidre, K. L., Cleator, H. J., Richard, P. and Stewart, R. E. A. (2002). Surveys of belugas and narwhals in the {C}anadian {H}igh {A}rctic in 1996. \textit{NAMMCO Scientific Publications} \textbf{4}, 169--190.
 
 \bibitem{ } Mack, Y. P. and Quang, P. (1998). Kernel methods in line and point transect sampling. \textit{Biometrics} \textbf{54}(2), 606--619. 
 

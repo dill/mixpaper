@@ -2,7 +2,7 @@
 
 library(mmds)
 
-set.seed(1291)
+set.seed(12499)
 
 amakihi<-read.csv(file="amakihi.csv")
 
@@ -50,32 +50,24 @@ amakihi.fit1.omh<-fitmix(amakihi,mix.terms=1,width=82.5,model.formula="~mas+as.f
 amakihi.omh.best<-step.ds.mixture(amakihi.fit1.omh)
 aics<-c(aics,amakihi.omh.best$aic)
 
-cat("Pa p\n")
-cat(round(amakihi.best$pa,3),"\n")
-cat(round(amakihi.o.best$pa,3),"\n")
-cat(round(amakihi.h.best$pa,3),"\n")
-cat(round(amakihi.m.best$pa,3),"\n")
-cat(round(amakihi.oh.best$pa,3),"\n")
-cat(round(amakihi.om.best$pa,3),"\n")
-cat(round(amakihi.mh.best$pa,3),"\n")
-cat(round(amakihi.omh.best$pa,3),"\n")
+#############
 
-cat("%CV pa\n")
-cat(round(100*summary(amakihi.best)$average.p.cv,2),"\n")
-cat(round(100*summary(amakihi.o.best)$average.p.c,2),"\n")
-cat(round(100*summary(amakihi.h.best)$average.p.c,2),"\n")
-cat(round(100*summary(amakihi.m.best)$average.p.c,2),"\n")
-cat(round(100*summary(amakihi.oh.best)$average.p.c,2),"\n")
-cat(round(100*summary(amakihi.om.best)$average.p.c,2),"\n")
-cat(round(100*summary(amakihi.mh.best)$average.p.c,2),"\n")
-cat(round(100*summary(amakihi.omh.best)$average.p.c,2),"\n")
+#plot(amakihi.om.best,breaks=c(seq(0,82.5,len=20)),main=c("Detection function","Levels of observer","Quantiles of minutes after sunrise"),style="comp")
+#dev.copy2eps(file="amakihi-om.eps",width=10.7,height=4.7)
+#plot(amakihi.om.best,breaks=c(seq(0,82.5,len=20)),main="PDF of distances",style="comp",pdf=TRUE)
+#dev.copy2eps(file="amakihi-om-pdf.eps",width=4.2,height=3.9)
 
-cat("KS p\n")
-cat(round(amakihi.best$ks$p,2),"\n")
-cat(round(amakihi.o.best$ks$p,2),"\n")
-cat(round(amakihi.h.best$ks$p,2),"\n")
-cat(round(amakihi.m.best$ks$p,2),"\n")
-cat(round(amakihi.oh.best$ks$p,2),"\n")
-cat(round(amakihi.om.best$ks$p,2),"\n")
-cat(round(amakihi.mh.best$ks$p,2),"\n")
-cat(round(amakihi.omh.best$ks$p,2),"\n")
+
+
+
+source("grabresults.R")
+
+grab_results(amakihi.best)
+grab_results(amakihi.o.best)
+grab_results(amakihi.h.best)
+grab_results(amakihi.m.best)
+grab_results(amakihi.oh.best)
+grab_results(amakihi.om.best)
+grab_results(amakihi.mh.best)
+grab_results(amakihi.omh.best)
+
