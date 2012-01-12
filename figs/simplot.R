@@ -52,8 +52,8 @@ plotcomp<-function(pars,mix.terms,pt=FALSE,asp=1){
 }
 
 
-postscript(file="sim-detfct.eps",width=9,height=9,
-            paper="special",horizontal=FALSE)
+#postscript(file="sim-detfct.eps",width=9,height=9,
+#            paper="special",horizontal=FALSE)
 
 par(mfrow=c(4,4),mar=c(2,2.2,1.8,1.5),las=1)
 
@@ -123,4 +123,4 @@ fit<-try(fitmix(testdata,mix.terms=2,ftype="hn",width=width,
 plot(fit,nomf=T,hide.hist=T,style="comp",,main=c(" "," "),x.axis=c(0,0.5,1))
 
 
-dev.off()
+#dev.off()
