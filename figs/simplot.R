@@ -1,6 +1,7 @@
 # new sampling function
 
 library(mmds)
+
 plotcomp<-function(pars,mix.terms,pt=FALSE,asp=1){
    gp<-getpars(pars,mix.terms)
    sigmas<-gp$key.scale
@@ -47,23 +48,15 @@ plotcomp<-function(pars,mix.terms,pt=FALSE,asp=1){
    for(i in 1:mix.terms){
       lines(x,pv[i,],lty=2)
    }
-   # reference line for 15%
-#   abline(h=0.15,col="red")
 }
 
 
-#postscript(file="sim-detfct.eps",width=9,height=9,
-#            paper="special",horizontal=FALSE)
-
-par(mfrow=c(4,4),mar=c(2,2.2,1.8,1.5),las=1)
-
-
+postscript(file="sim-detfct.eps",width=9,height=9,
+            paper="special",horizontal=FALSE)
+par(mfrow=c(4,4),mar=c(2,2.2,1.8,1.5),las=1,oma=c(2,2,0,0))
 
 ### plot for lt and pt
-
 width<-1
-#mix.terms<-1
-#pars<-c(0.5)
 mix.terms<-2
 parmat<-matrix(NA,4,3)
 parmat[1,]<-c(log(0.8),log(0.15), inv.reparam.pi(0.3))
@@ -79,7 +72,6 @@ for(pt in c(FALSE,TRUE)){
    }
 }
    
-
 ### plot for 3-point
 parmat<-matrix(NA,2,5)
 parmat[1,]<-c(log(0.8),log(0.5),log(0.1),inv.reparam.pi(rep(1/3,3))[1:2])
@@ -123,4 +115,14 @@ fit<-try(fitmix(testdata,mix.terms=2,ftype="hn",width=width,
 plot(fit,nomf=T,hide.hist=T,style="comp",,main=c(" "," "),x.axis=c(0,0.5,1))
 
 
-#dev.off()
+
+
+mtext("Detection probability",side=2,outer=TRUE,at=c(0.13),las=3,cex=0.7)
+mtext("Detection probability",side=2,outer=TRUE,at=c(0.38),las=3,cex=0.7)
+mtext("Probability density",side=2,outer=TRUE,at=c(0.63),las=3,cex=0.7)
+mtext("Detection probability",side=2,outer=TRUE,at=c(0.88),las=3,cex=0.7)
+
+mtext("Distance",side=1,outer=TRUE,at=c(0.5),cex=0.7)
+
+
+dev.off()

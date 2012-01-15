@@ -236,9 +236,9 @@ Distance sampling (Buckland et al., 2001, 2004) is a suite of methods for estima
 
 Under these methods, a set of transects... The methods are based on laying out a set of transects at random, visiting them and recording the distance.  There are two main variants: line transects, in which the transects are lines and the distance is the perpendicular distnace from line to object; point transects in which they are points and the relevant distnace is the radial distance from the point to the object [use this as an opportunity to define y as x or r].  Not all objects assumed to be detected; instead distribution of observed distances is used ot estimate detection function, g(y), describes how prob of detection declines with increasing distance.   Under standard method g(0) assumed to be 1 and det prob only modelled as a function of covars.  A slight extension is to model detection prob as a function of covariates: MCDS.  Given estimates of detection function, 
 
-There are two main variants, line and point transects. The basic idea is the same in both: an observer visits a randomly-located set of transect lines or points and records the distance, $y$, from the transect to all objects of interest (i.e., animals or plants of the target species) that are detected within some truncation distance $w$.  Not all objects within $w$ are assumed to be detected; instead the distribution of observed distances is used to estimate the parameters, $\theta$, of a detection function model, $g(y;\bm{\theta})$ which describes how the probability of detection declines with increasing distance, where $\bm{\theta}$ are parameters to be estimated. ``Conventional distance sampling'' (or CDS) refers to the case in which the detection function is a function of only the distance from the transect. It is also reasonable to think that the probability of detection varies with other covariates along with distance such as weather conditions, sex, size or observer; we refer to this case as ``multiple covariate distance sampling'' (or MCDS; TKTKTK REF). The covariate vector for the $i^\text{th}$ observation is $\mathbf{z}_i$ and the detection function is then denoted $g(y, \mathbf{z}_i;\bm{\theta})$. For simplicity we use this covariate detection function throughout.
+There are two main variants, line and point transects. The basic idea is the same in both: an observer visits a randomly-located set of transect lines or points and records the distance, $y$, from the transect to all objects of interest (i.e., animals or plants of the target species) that are detected within some truncation distance $w$.  Not all objects within $w$ are assumed to be detected; instead the distribution of observed distances is used to estimate the parameters, $\theta$, of a detection function model, $g(y;\bm{\theta})$ which describes how the probability of detection declines with increasing distance, where $\bm{\theta}$ are parameters to be estimated. ``Conventional distance sampling'' (or CDS) refers to the case in which the detection function is a function of only the distance from the transect. It is also reasonable to think that the probability of detection varies with other covariates along with distance such as weather conditions, sex, size or observer; we refer to this case as ``multiple covariate distance sampling'' (or MCDS; Marques and Buckland, 2004). The covariate vector for a particular observation is $\mathbf{z}$ and the detection function is then denoted $g(y, \mathbf{z};\bm{\theta})$. For simplicity we refer to this covariate detection function throughout.
 
-Using the detection function, it is then possible to calculate the average probability of detecting an object within distance $w$ of the transects (for a given combination of covariate values). For line transects, the average detection probability for the (unique) covariate combination $i$, $p_i$ is given by
+Using the detection function, it is then possible to calculate the average probability of detecting an object within distance $w$ of the transects (for a given combination of covariate values). For line transects, the average detection probability ($p_i$) for the observation with (unique) covariate combination $i$, is given by
 \begin{equation*}
 p_i = \frac{1}{w} \int_0^w  g(y, \mathbf{z_i}; \bm{\theta}) \text{d}y,
 \end{equation*}
@@ -251,17 +251,17 @@ A Horvitz-Thompson-like estimator (Thompson, 2002, Chapter 6) can then be employ
 N = \sum_{i=1}^n \frac{1}{c_i p_i},
 \label{HT}
 \end{equation}
-where $c_i$ is probability of the $i^\text{th}$ object being within the sampled region, and $p_i$ is the probability of the $i\text{th}$ of $n$ observations being detected given it is within the sampled region (Buckland et al., 2004, Chapter 3 TKTKTK REF ). 
+where $c_i$ is probability of the $i^\text{th}$ object being within the sampled region, and $p_i$ is the probability of the $i\text{th}$ of $n$ observations being detected given it is within the sampled region (Marques and Buckland, 2004). 
 
 [Need to make sure we use consistent terminology re series expansion, adjustment terms, adjustment series]
 
-In the formulation of  Buckland (1992) and Buckland et al. (2001, 2004), the detection function consists of a parametric key function $k$ and series expansion $s$ of even functions (known as adjustment terms) with some parameters $\bm{\theta}$. [Theta already used so need to define earlier.] $g$ is then written as:
+In the formulation of  Buckland (1992) and Buckland et al. (2001, 2004), the detection function consists of a parametric key function $k$ and series expansion $s$ of even functions (known as adjustment terms) with some parameters $\bm{\theta}$. $g$ is then written as:
 \begin{equation*}
-g(y; \bm{\theta}) = \frac{k(y, \mathbf{z}; \bm{\theta}) \{1+s(y, \mathbf{z}; \bm{\theta})\}}{k(0, \mathbf{z}; \bm{\theta}) \{1+s(0, \mathbf{z}; \bm{\theta})\}},
+g(y, \mathbf{z}; \bm{\theta}) = \frac{k(y, \mathbf{z}; \bm{\theta}) \{1+s(y, \mathbf{z}; \bm{\theta})\}}{k(0, \mathbf{z}; \bm{\theta}) \{1+s(0, \mathbf{z}; \bm{\theta})\}},
 \end{equation*}
-where $k$ may be a half-normal, hazard-rate or uniform function and $s$ may be zero (i.e., there are no adjustment terms), cosine, simple even polynomial or Hermite polynomial series (usually with no more than 3 terms). The distance at which the observation was made is denoted $y$ and $\mathbf{z}$ is a set of covariates that effect detectability. The denominator ensures that detection at zero distance is certain (i.e., $g(0)=1$). Other formulations for $g$ have also been proposed -- see for example, Quang and Becker (2009), Mack and Quang (1998). The above methods are widely used and are implemented in the free software Distance (Thomas et al., 2010).
+where $k$ may be a half-normal, hazard-rate or uniform function and $s$ may be zero (i.e., there are no adjustment terms), cosine, simple even polynomial or Hermite polynomial series (usually with no more than 3 terms). The distance at which the observation was made is denoted $y$ and $\mathbf{z}$ is a set of covariates that effect detectability. The denominator ensures that detection at zero distance is certain (i.e., $g(0)=1$). The above methods are widely used and are implemented in the free software Distance (Thomas et al., 2010). Other formulations for $g$ have also been proposed -- see for example, Quang and Becker (2009), Mack and Quang (1998).
 
-This ``key function plus adjustment series'' (K$+$A) formulation for the detection function can lead to unrealistic functions being fit to data. In particular, we expect probability of detection to be a non-increasing function of distance and that the probability of detection be a valid probability (i.e. lie in $(0,1)$), however the K$+$A formulation neither ensures that the functions are monotone decreasing nor that the probability of detection must lie in $(0,1)$. The usual way to work around this is to constrain the detection function to be monotonic non-increasing and greater than zero. This is achieved in the Distance software by taking 10 (say) equally spaced distances from $0$ to $w$ and checking that when the detection function is evaluated at each of these points they are less than the last ($g(y_i)\geq g(y_{i+1})$ for distances $y_1,\dots, y_{10}$ where $y_1=0$ and $y_{10}=w$). This is referred to as \textit{strong monotonicity}. Alternatively, \textit{weak monotonicity} may be enforced, where each point is checked only against the value of $g$ at the origin ($g(0)\geq g(y_i)$).  In both cases, checks are also made that the function is non-negative at these points, i.e., $g(y_i)\geq 0$.  Although this kind of constrained optimization is appealing, it is clearly preferable to perform unconstrained optimization if possible. Using a class of functions to model the detection function which were both flexible and did not exhibit the undesirable property of non-monotonicity could offer a more physically realistic and convincing alternative to the conventional way of performing distance analyses.
+This ``key function plus adjustment series'' (K$+$A) formulation for the detection function can lead to unrealistic functions being fit to data. In particular, we expect probability of detection to be a non-increasing function of distance and that the probability of detection at a given distance be a valid probability (i.e. lie in $(0,1)$), however the K$+$A formulation does not ensure that either of these are conditions are true. The usual way to work around this is to constrain the detection function to be monotonic non-increasing and greater than zero. This is achieved in the Distance software by taking 10 (say) equally spaced distances from $0$ to $w$ and checking that when the detection function is evaluated at each of these points they are less than the last ($g(y_i)\geq g(y_{i+1})$ for distances $y_1,\dots, y_{10}$ where $y_1=0$ and $y_{10}=w$). This is referred to as \textit{strong monotonicity}. Alternatively, \textit{weak monotonicity} may be enforced, where each point is checked only against the value of $g$ at the origin ($g(0)\geq g(y_i)$).  In both cases, checks are also made that the function is non-negative at these points, i.e., $g(y_i)\geq 0$.  Although this kind of constrained optimization is appealing, it is clearly preferable to perform unconstrained optimization if possible. Using a class of functions to model the detection function which were both flexible and did not exhibit the undesirable property of non-monotonicity could offer a more physically realistic and convincing alternative to the conventional way of performing distance analyses.
 
 One problem with the constraint-based optimisation detailed above, is that the constraints can only be applied at a finite number of points. This can lead to constraints missing the non-monotonic points in the function. An example from the recent literature (Williams and Thomas, 2007) is shown in the first panel of Figure \ref{fig1}. Here a half-normal detection function was fit with one second order cosine adjustment term to humpback whale sightings. Presently, monotonicity cannot be enforced in the Distance software via constraints on the shape of the detection function when adjustment terms are used in conjunction with covariates. Checking for non-monotonic detection functions must be performed visually at levels or quantiles of the detection function; clearly this is not a desirable situation. The second and third panels in Figure \ref{fig1} show a detection function when covariate data was included in the model and adjustments were also used. In this case for long-finned pilot whales (Pike et al., 2003) the Beaufort sea state was included in the model as a continuous covariate. The detection function, when averaged over the covariate values, shows some, mild, non-monotonic behaviour in the second panel of Figure \ref{fig1}. However, in the third panel the marginal detection function at 25\%, 50\% and 75\% quantiles of the covariate are shown and here the non-monotonicity is particularly pronounced. Given the above, it is preferable to use a formulation that guarantees monotonicity from the outset.  [Could also consider showing an example where estimated detection prob is $\leq 0$?  Possibly not worth it??]
 
@@ -283,17 +283,17 @@ In this paper, we introduce a new class of distance sampling detection function 
 
 Denoting the detection function as $g$, we consider a sum of $J$ mixture components $g_j$, scaled by some mixture proportions $\phi_j$:
 \begin{equation*}
-g(y,\mathbf{Z}; \bm{\theta}, \bm{\phi}) = \sum_{j=1}^J \phi_j g_j(y,\mathbf{Z}; \bm{\theta}_j),
+g(y,\mathbf{z}; \bm{\theta}, \bm{\phi}) = \sum_{j=1}^J \phi_j g_j(y,\mathbf{z}; \bm{\theta}_j),
 \end{equation*}
-where $\sum_{j=1}^J \phi_j = 1$. The (radial or perpendicular) distance is denoted $y$, the $\bm{\theta}_j$s are vectors of parameters for function $g_j$, $\bm{\theta}$ is a vector of all of the $\bm{\theta}_j$s, $\bm{\phi}$ is a vector of all of the $\phi_j$s. $\mathbf{Z}$ is an $n\times K$ matrix of covariates.
+where $\sum_{j=1}^J \phi_j = 1$. The (radial or perpendicular) distance is denoted $y$, the $\bm{\theta}_j$s are vectors of parameters for function $g_j$, $\bm{\theta}$ is a vector containing of all of the $\bm{\theta}_j$s, $\bm{\phi}$ is a vector of all of the $\phi_j$s. $\mathbf{z}$ is an a $K$-vector of the associated covariates.
 
-Here we let $g_j$ be half-normal functions, although other monotonic functions such as hazard-rate could be chosen (and the $g_j$s need not all have the same form):
+Here we let $g_j$ be half-normal functions (although other monotonic functions such as hazard-rate could be chosen and the $g_j$s need not all have the same form):
 \begin{equation*}
-g(y,\mathbf{Z}; \bm{\theta}, \bm{\phi}) = \sum_{j=1}^J \phi_j \exp \Big( - \frac{y^2}{2\sigma_j^2} \Big).
+g(y,\mathbf{z}; \bm{\theta}, \bm{\phi}) = \sum_{j=1}^J \phi_j \exp \Big( - \frac{y^2}{2\sigma_j^2} \Big).
 \end{equation*}
-Covariates can be included in a similar way to Buckland et al. (2004, Chapter 3) [TKTKTK better to cite as a paper here, and perhaps add a reference to the Auk paper also -- Marques and Buckland (2004, see also Marques et al.)]., where the covariates affect the scale parameter $\sigma$. We assume that each mixture component has a different scale but that the covariates affect the scale parameters in the same way. Other more complex models may be possible.
+Covariates can be included in a similar way to Marques and Buckland (2004) (see also Marques et al., 2007), where the covariates affect the scale parameter $\sigma$. We assume that each mixture component has a different scale but that the covariates affect the scale parameters in the same way. Other more complex models may be possible.
 
-Following the notation in Buckland et al. (2004, Chapter 3) and using $i$ to subscript each observation, our formulation for the scale parameter $\sigma_{ij}$, is therefore:
+Following the notation in Marques and Buckland (2004) and using $i$ to subscript each observation, our formulation for the scale parameter $\sigma_{ij}$, is therefore:
 \begin{equation*}
 \sigma_{ij} = \exp( \beta_{0j} + \sum_{k=1}^K \beta_k z_{ik}),
 \end{equation*}
@@ -305,6 +305,7 @@ and then $\bm{\theta}_j = (\beta_{0j}, \beta_1)$.
 
 
 \subsection{Likelihood}
+\label{s:likelihood}
 
 Maximum likelihood estimation is used to estimate the parameters of the detection function. Before we can perform the optimization, we must first formulate a likelihood. Following from Buckland et al (2001, 2004), we can write the pdf of the observed distances ($f(y,\bm{z}; \bm{\theta}) $) as the ratio of the detection function and its integral:
 \begin{equation}
@@ -312,7 +313,7 @@ f(y,\bm{z}; \bm{\theta}) = \frac{g(y,\bm{z}; \bm{\theta})}{\int_0^w g(y,\bm{z}; 
 \end{equation}
 The likelihood can then be formed by taking product of these pdfs over the $n$ observations, as usual. [[TKTKTK Just for ``exact'' distances, and doesn't cover distances in intervals.  We should state this, and say that the equivalent likelihood for interval data follows in the obvious way or some such.  Or perhaps have a short appendix with the interval likelihood in it.]]
 
-For line transects, given a set of perpendicular distances $\{x_i; i=1,\ldots,n\}$ and associated covariate vectors $\bm{z}_i$, the likelihood is given by:
+For line transects, given a set of perpendicular distances $\{x_i; i=1,\ldots,n\}$ and associated covariate vectors $\bm{z}_i$ (which are the rows of the $n \times K$ matrix $\mathbf{Z}$), the likelihood is given by:
 \begin{align*}
 \mathcal{L}(\bm{\theta},\bm{\phi}; \mathbf{x},\mathbf{Z}) &= \prod_{i=1}^n f(x_i,\bm{z}_i; \bm{\theta},\bm{\phi})\\
 &= \prod_{i=1}^n \frac{g(x_i,\bm{z}_i; \bm{\theta},\bm{\phi})}{\mu_i}\\
@@ -323,7 +324,7 @@ where $\mu_i$, the effective strip width, is given by:
 \mu_{i} = \sum_{j=1}^J \phi_j \int_0^w  g_j(x,\bm{z}_i; \bm{\theta}_j) \text{d}x.
 \end{equation*}
 
-For point transects, with radial distances $\{r_i; i=1,\ldots,n\}$ and associated covariate vectors $\bm{z}_i$, the likelihood is:
+For point transects, with radial distances $\{r_i; i=1,\ldots,n\}$ and associated covariate vectors $\bm{z}_i$ (which again form the rows of the $n\times K$ matrix $\mathbf{Z}$), the likelihood is:
 \begin{align*}
 \mathcal{L}(\bm{\theta},\bm{\phi}; \mathbf{r},\mathbf{Z}) &= \prod_{i=1}^n f(r_i,\bm{z}_i; \bm{\theta},\bm{\phi})\\
 &= \prod_{i=1}^n \frac{2 \pi r_i g(r_i,\bm{z}_i; \bm{\theta},\bm{\phi})}{\nu_i}\\
@@ -333,7 +334,7 @@ where the effective area of detection, $\nu_i$ is defined as:
 \begin{equation*}
 \nu_i = 2\pi \sum_{j=1}^J \phi_j \int_0^w  r g_j(r,\bm{z}_i; \bm{\theta}_j) \text{d}r.
 \end{equation*}
-Parameters are estimated using maximum likelihood. Practicalities associated with this maximization are described in Web Appendices A and B.
+Parameters are estimated using maximum likelihood. Practicalities associated with this maximization, along with analytic derivatives of the likelihood are described in Web Appendices A and B.
 
 
 \subsection{Estimating population size}
@@ -351,7 +352,7 @@ A standard summary statistic is the average detection probability for an animal 
 P_a = n/N.
 \end{equation*}
 
-Variances of both $N$ and $P_a$ were found for both non-covariate models and covariate models using standard methods (Borchers, Buckland and Zucchini, 2002, Appendix C; Buckland et al., 2004, Section 3.3.3 [cite as a paper here]; Innes et al, 1996).  [Consider putting into Web Appendix A and saying so here, or putting into a new Web Appendix C.]
+Variances of both $N$ and $P_a$ were found for both non-covariate models and covariate models using standard methods (Borchers, Buckland and Zucchini, 2002, Appendix C; Marques and Buckland, 2004, Section 3.3.3; Innes et al., 1996).  [[ TKTKTK Consider putting into Web Appendix A and saying so here, or putting into a new Web Appendix C.]]
 
 \section{Simulations}
 
@@ -393,7 +394,7 @@ The covariate models again show an initial positive bias in the $P_a$ estimates 
 \section{Case studies}
 \label{s:data}
 
-Given the performance of the method in simulation, several data sets were analysed using the method. All of the mixture model analyses were performed in \texttt{mmds}, an \textsf{R} package written by the authors [and available on CRAN]. Results are compared with those from the original articles. Coefficients of variation were calculated using the method of Innes et al. (1996) for all models. [[TKTKTK This can maybe go if it was covered earlier]]
+Given the performance of the method in simulation, several data sets were analysed using the method. Analyses were performed in \texttt{mmds} (Mixture Model Distance Sampling), an \textsf{R} package written by the authors and available on CRAN. Results from using mixture model detection functions are compared with those from the original articles.
 
 [[\textbf{LEN}: is further detail needed for any of these?]]
 
@@ -536,11 +537,13 @@ Hr & \texttt{obs} + \texttt{mas} & \textbf{10777.38} &  0.319 & 5.11 & 0.076\\ %
 [[Something here about how you can work out how many there are in each class? See Takis e-mail...]]
 
 
-We have investigated and demonstrated the utility of detection functions constructed from mixtures of half-normals in both line and point transect distance sampling. We also show that covariates can be included in such models easily. These mixture detection functions can be simply ``dropped in'' to the existing theory. This means mark-recapture distance sampling methods (Laake et al., 2011), spatial models for distance sampling data (Buckland et al., 2004, Chapter 4), methods for incomplete detection at zero distance (Buckland et al., Chapter 6) and other advanced distance sampling methods can exploit this formulation.
+We have investigated and demonstrated the utility of detection functions constructed from mixtures of half-normals in both line and point transect distance sampling. We also show that covariates can be included in such models easily. These mixture detection functions can be simply ``dropped in'' to the existing theory. This means mark-recapture distance sampling methods (Laake et al., 2011), spatial models for distance sampling data (Hedley, Buckland and Borchers, 2004), methods for incomplete detection at zero distance (Laake and Borchers, 2004) and other advanced distance sampling methods can exploit this formulation.
 
-We have shown that the method performs well on both simulated and real data. In many cases the proposed model outperforms the existing CDS models, which is surprising given that the mixture models in question often had more parameters than the CDS models. It should be noted however, that in simulation at small sample sizes models will not fit data generated from them particularly well. We avoid this problem by using AIC forward selection for the number of mixtures, ensuring model parsimony.
+We have shown that the method performs well on both simulated and case studies where traditional methods produce unrealistic results. In many cases the proposed model outperformed (M)CDS models in AIC terms, which is surprising given that the mixture models in question often had more parameters. 
 
-In simulation we observed that 3-point mixture did not act as good surrogates for missing covariate structure in the model. We also saw that 2-point mixtures were generally chosen by AIC as good models and that the construction of a true 3-point mixture is quite tricky. In the examples in Section \ref{s:data}, 2-point mixtures consistently provided the best fit, even in the case of the amakihi which was a very large data set ($n=1243$). Only examination of further data will show whether 3-point and higher mixtures can be supported in real data, however we note that in CDS when the key function with adjustment series formulation is used, detection functions with $5$ or more parameters are rarely selected by AIC and a 3-point mixture with no covariates requires $5$ parameters.
+Simulations show that small sample sizes do not support the use of mixture models with high number of components, even when the data were generated from such a model. We avoid poorly fitting models of this sort by using AIC forward selection for the number of mixtures, ensuring model parsimony.
+
+In simulation we observed that 3-point mixture did not act as good surrogates for missing covariate structure in the model; 2-point mixtures were generally chosen by AIC as good models. We also note that the construction of a true 3-point mixture is quite tricky. In the examples in Section \ref{s:data}, 2-point mixtures consistently provided the best fit, even in the case of the amakihi data which had many observations ($n=1243$). Only examination of further data will show whether 3-point and higher mixtures can be supported, however we note that when the K$+$A series formulation is used, detection functions with 5 or more parameters are rarely selected by AIC (a 3-point mixture with no covariates requires 5 parameters).
 
 All the models discussed in this article are available as an \textsf{R} package, \texttt{mmds} which is available from \url{http://www.github.com/dill/mmds/}. Mixture model detection functions will be available in the next version of the Distance software.
 
@@ -548,8 +551,9 @@ Further work will include extending these models further to include continuous m
 \begin{equation*}
 g(x) = \int_\mathbf{R} \varphi(\kappa) g_\kappa(x,\mathbf{Z}; \theta, \kappa) \text{d}\kappa
 \end{equation*}
-where $\varphi(\kappa)$ is some function which controls the mixing of $g_\kappa$. Such an approach may present significant computation issues, however the benefits of a significantly more flexible detection function with fewer parameters may be considerable. Provided that an appropriate function can be chosen for $\varphi$, more flexible models could be used whilst keeping the number of parameters low. In addition, a combination of both finite and continuous mixtures could be used, echoing the work of Morgan and Ridout (2008) in capture-recapture.
+where $\varphi(\kappa)$ is some function which controls the mixing of $g_\kappa$. Such an approach may present significant computation issues, however the benefits of a significantly more flexible detection function may be considerable. Provided that an appropriate function can be chosen for $\varphi$, more flexible models could be used whilst keeping the number of parameters low. In addition, a combination of both finite and continuous mixtures could be used, echoing the work of Morgan and Ridout (2008) in capture-recapture.
 
+[[TKTKTK maybe need to round things up here...]]
 
 %  The \backmatter command formats the subsequent headings so that they
 %  are in the journal style.  Please keep this command in your document
@@ -564,7 +568,7 @@ where $\varphi(\kappa)$ is some function which controls the mixing of $g_\kappa$
 
 \section*{Supplementary material}
 
-Web Appendices, Tables, and Figures (limit to the types of material actually in question) referenced in Sections (give section numbers) are available with this paper at the Biometrics website on Wiley Online Library.
+Web Appendices referenced in Section \ref{s:likelihood} [[TKTKTK add variance stuff if necessary]] are available with this paper at the Biometrics website on Wiley Online Library.
 
 \section*{Acknowledgements}
 
@@ -607,13 +611,19 @@ Both authors would like to thank David Borchers, who suggested the parametrisati
 
 \bibitem{ }  Gelman, A., Carlin, J. B., Stern, H. S., and Rubin, D. B. (2004). \textit{Bayesian Data Analysis}. CRC Press. Boca Ranton, Florida, US.
 
+\bibitem{ } Hedley, S. L., Buckland, S. T. and Borchers, D. L. (2004). Spatial distance sampling models. In \textit{Advanced Distance Sampling}, pp. 48--70. S. T. Buckland, D. R. Anderson, K. P. Burnham, J. L. Laake, D. L. Borchers and L. Thomas (eds). Oxford University Press, Oxford.
+
 \bibitem{ } Innes, S., Heide-J\o rgensen, M. P., Laake, J. L., Laidre, K. L., Cleator, H. J., Richard, P. and Stewart, R. E. A. (2002). Surveys of belugas and narwhals in the {C}anadian {H}igh {A}rctic in 1996. \textit{NAMMCO Scientific Publications} \textbf{4}, 169--190.
 
-\bibitem{ } Laake, J. L., B. A. Collier, B. A., Morrison, M. L. and Wilkins, R. N. (2011). Point-Based Mark-Recapture Distance Sampling. \textit{Journal of Agricultural, Biological, and Environmental Statistics}, \textbf{16}(3), 389--408.
+\bibitem{ } Laake, J. L. and Borchers, D. L. (2004). Methods for incomplete detection at distance zero. In \textit{Advanced Distance Sampling}, pp. 108--189. S. T. Buckland, D. R. Anderson, K. P. Burnham, J. L. Laake, D. L. Borchers and L. Thomas (eds). Oxford University Press, Oxford.
+
+\bibitem{ } Laake, J. L., Collier, B. A., Morrison, M. L. and Wilkins, R. N. (2011). Point-Based Mark-Recapture Distance Sampling. \textit{Journal of Agricultural, Biological, and Environmental Statistics}, \textbf{16}(3), 389--408.
 
 \bibitem{ } Mack, Y. P. and Quang, P. (1998). Kernel methods in line and point transect sampling. \textit{Biometrics} \textbf{54}(2), 606--619. 
 
 \bibitem{ } Marin, J. M., Mengersen, K. and Robert, C. P. (2005). Bayesian modelling and inference on mixtures of distributions. \textit{Handbook of Statistics 25} D. Dey and C.R. Rao (eds). Elsevier-Sciences.
+
+\bibitem{ } Marques, F. F. C. and Buckland, S. T. (2004). Covariate models for the detection function. In \textit{Advanced Distance Sampling}, pp. 31--47. S. T. Buckland, D. R. Anderson, K. P. Burnham, J. L. Laake, D. L. Borchers and L. Thomas (eds). Oxford University Press, Oxford.
 
 \bibitem{ } Marques, T. A., Thomas, L., Fancy, S. G., Buckland, S. T. (2007). Improving estimates of bird density using multiple-covariate distance sampling. \textit{The Auk} \textbf{124}(9), 1229--1243.
 
@@ -632,14 +642,6 @@ Both authors would like to thank David Borchers, who suggested the parametrisati
 \bibitem{ } Williams, R. and Thomas, L. (2007). Distribution and abundance of marine mammals in the coastal waters of British Columbia, Canada. \textit{Journal of Cetacean Research and Management} \textbf{9}(1), pp. 15--38.
 
 \end{thebibliography}
-
-
-\section*{Supplementary materials}
-
-Dave - we need to put the appendix stuff into a separate file.  Here's some of the instructions from the Supplementary Materials section of \\
-http://www.biometrics.tibs.org/directions.html
-
-``As discussed in detail below, supplementary web material may include some or all of: additional written exposition, tables, and figures. All such supplementary material should be placed in a single document entitled “Web-based Supplementary Materials for (title of manuscript) by (authors).” This document should then have sections entitled “Web Appendix A,” “Web Appendix B,” and so on for written appendix material (e.g., technical derivations and proofs, see below); followed by “Web Table 1,” “Web Table 2,” etc. for supplementary tables; and “Web Figure 1,” etc., for supplementary figures. Web Tables and Figures should have descriptive captions in the same style as those for tables and figures included in a main manuscript. Web Appendices, Tables, and Figures may be referenced in the main manuscript as, for example, “See Web Appendix A for the derivation of Equation (1)” or “Web Tables 1-4 present results of additional simulations.”''
 
 \label{lastpage}
 
