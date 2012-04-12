@@ -25,9 +25,9 @@ opt.method<-"BFGS+SANN"
 # probably don't touch below here...
 
 # sample sizes
-n.samps<-c(30)#,60,120,480,960)
+n.samps<-c(30,60,120,480,960)
 # number of realisations
-n.sims<-2#00
+n.sims<-200
 # set the seed
 set.seed(102837)
 showit<-0
