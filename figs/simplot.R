@@ -8,9 +8,9 @@ plotcomp<-function(pars,mix.terms,pt=FALSE,asp=1){
    pis<-gp$mix.prop
 
    if(pt){
-      intfcn<-integrate.hn.pt
+      intfcn<-mmds:::integrate.hn.pt
    }else{
-      intfcn<-integrate.hn
+      intfcn<-mmds:::integrate.hn
    }
 
    x<-seq(0,1,len=1000)
@@ -18,11 +18,11 @@ plotcomp<-function(pars,mix.terms,pt=FALSE,asp=1){
    mu<-c()
 
    for(i in 1:mix.terms){
-      pv[i,]<-keyfct.hn(x,sigmas[i])
+      pv[i,]<-mmds:::keyfct.hn(x,sigmas[i])
       mu<-c(mu,intfcn(sigmas[i],width))
    }
-   ptotal<-detfct(x,pars,mix.terms)
-   mutotal<-mu.calc(pars,mix.terms,width,pt=pt)
+   ptotal<-mmds:::detfct(x,pars,mix.terms)
+   mutotal<-mmds:::mu.calc(pars,mix.terms,width,pt=pt)
 
    if(pt){
       ptotal<-2*pi*x*ptotal/mutotal
