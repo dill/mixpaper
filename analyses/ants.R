@@ -11,6 +11,8 @@ ants.fit1<-fitmix(ants,mix.terms=1,width=25)
 ants.best<-step.ds.mixture(ants.fit1)
 #plot(ants.best,style="comp")
 
+# standardize nest size first
+ants$ns<-(ants$nest.size-mean(ants$nest.size))/sd(ants$nest.size)
 
 ### covariates
 
@@ -27,8 +29,6 @@ ants.species.best<-step.ds.mixture(ants.fit1.species)
 aics<-c(aics,ants.species.best$aic)
 
 # 3 - nest size
-# standardize nest size first
-ants$ns<-(ants$nest.size-mean(ants$nest.size))/sd(ants$nest.size)
 ants.fit1.nest<-fitmix(ants,mix.terms=1,width=25,model.formula="~ns")
 ants.nest.best<-step.ds.mixture(ants.fit1.nest)
 aics<-c(aics,ants.nest.best$aic)
@@ -56,10 +56,12 @@ aics<-c(aics,ants.nesthabspecies.best$aic)
 #cat("min AIC=",min(aics),"at",which.min(aics),"\n")
 
 
-# two best models are nest+hab and the full model
+# plot nest+hab model
 #plot(ants.nesthab.best,breaks=c(seq(0,5,len=10),seq(6,25,1)),main=c("Detection function","Quantiles of nest size","Levels of habitat"))
+# again without the histograms
+#plot(ants.nesthab.best,breaks=c(seq(0,5,len=10),seq(6,25,1)),main=c("Detection function","Quantiles of nest size","Levels of habitat"),hide.hist=TRUE)
 #dev.copy2eps(file="ants-nesthab.eps",width=8.6,height=3.4)
-
+### can stitch these together later
 
 #save.image("ants-run.RData")
 

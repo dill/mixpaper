@@ -50,6 +50,9 @@ cat("Min at",which.min(aics),"\n")
 # best model was continuous BSS
 #plot(fin.BSSc.best,breaks=c(seq(0,1000,len=10),seq(1250,3000,250)),main=c("Average detection function","Quantiles of Beaufort sea state"),style="comp") 
 #dev.copy2eps(file="danpike-bssc.eps",width=7.6, height=4.1)
+## plot without histograms too, stitch together in tex...
+#plot(fin.BSSc.best,breaks=c(seq(0,1000,len=10),seq(1250,3000,250)),main=c("Average detection function","Quantiles of Beaufort sea state"),style="comp",hide.hist=TRUE) 
+#dev.copy2eps(file="danpike-bssc-hh.eps",width=7.6, height=4.1)
 #####
 source("grabresults.R")
 

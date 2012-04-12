@@ -6,6 +6,7 @@ set.seed(12499)
 
 amakihi<-read.csv(file="amakihi.csv")
 
+amakihi$mas2<-amakihi$mas
 amakihi$mas<-(amakihi$mas-mean(amakihi$mas))/sd(amakihi$mas)
 
 aics<-c()
@@ -54,12 +55,31 @@ aics<-c(aics,amakihi.omh.best$aic)
 
 #plot(amakihi.om.best,breaks=c(seq(0,82.5,len=20)),main=c("Detection function","Levels of observer","Quantiles of minutes after sunrise"),style="comp")
 #dev.copy2eps(file="amakihi-om.eps",width=10.7,height=4.7)
+#plot(amakihi.om.best,breaks=c(seq(0,82.5,len=20)),main=c("Detection function","Levels of observer","Quantiles of minutes after sunrise"),style="comp",hide.hist=TRUE)
+#dev.copy2eps(file="amakihi-om-hh.eps",width=10.7,height=4.7)
 #plot(amakihi.om.best,breaks=c(seq(0,82.5,len=20)),main="PDF of distances",style="comp",pdf=TRUE)
 #dev.copy2eps(file="amakihi-om-pdf.eps",width=4.2,height=3.9)
 
+# to plot the last bit need to edit the code and then run this
+# change line 300 plot.ds.mixture.R to read
+# this.col.levels<-unique(this.col)
 
-
-
+# replace the data and z matrix
+#dat<-data.frame(object=1:6,
+#                distance=c(1,21,30,60,70,80)
+#                obs="TJS",
+#                mas=(seq(0,300,len=6)-mean(amakihi$mas2))/sd(amakihi$mas2),
+#                observed=rep(1,6))
+#amakihi.om.best$data<-dat
+#z<-amakihi.om.best$z[[1]][1:6,]
+#z[,4]<-(seq(0,300,len=6)-mean(amakihi$mas2))/sd(amakihi$mas2)
+#amakihi.om.best$z[[1]]<-z
+#source("~/current/mmds/R/plot.ds.mixture.R")
+#plot(amakihi.om.best,main=c("Detection function","","Minutes after sunrise"),style="comp",hide.hist=TRUE)
+#text(0.92,0.56,"mas=0")
+#text(0.84,0.48,"mas=300")
+#dev.copy2eps(file="amakihi-om-pdf-again.eps",width=4.2,height=3.9)
+#
 source("grabresults.R")
 
 grab_results(amakihi.best)

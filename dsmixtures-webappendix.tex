@@ -16,7 +16,7 @@
 %  journal as a guide. 
 %  
 \documentclass[useAMS,referee, usegraphicx]{biom}
-%\documentclass[useAMS, usegraphicx]{biom}
+%\documentclass[useAMS, onecolumn, usegraphicx]{biom}
 %
 %  If your system does not have the AMS fonts version 2.0 installed, then
 %  remove the useAMS option.
@@ -82,21 +82,21 @@ University of St Andrews, The Observatory, Buchanan Gardens, St Andrews KY16 9LZ
 
 \section*{Outline}
 
+[[\textbf{DAVE}: I notice that none of the other supp materials on the biometrics web site uses the biometrics class, referee style, for their web appendices.  I think they use the standard article class or some such.  We should do taht too, as it seems strange to have the BIOMETRICS 00:000 header, and it's annoying to have the figures and tables far from where they are cited.  I'll sort this out at some point, unless you get boared and get there first...]]
+
 This Web Appendix contains technical details of for the paper ``Mixture models for distance sampling detection functions'' by D. L. Miller and L. Thomas.
 
 \section*{Web Appendix A - Optimization}
 \label{s:optimization}
 
-[Somewhere in here: In practice maximization is performed on the $\log$-likelihood.]
+In practice, maximization is performed on the $\log$-likelihood. However, as noted in the literature (e.g. Gelman et al, 2004; Marin, Mengersen, Robert, 2005), mixture model likelihoods can be notoriously multimodal. This can cause problems when finding MLEs of the parameters. Here simulated annealing (SANN; Press et al., 1992, Chapter 10) was used to explore the parameter space (for 500 iterations) then after that the Broyden-Fletcher-Goldfarb-Shanno method (BFGS; Press et al., 1992, Chapter 10) was used to find the maxima (the implementations in the \textsf{R} function \texttt{optim()} were used). These two steps were run 5 times. This two step approach appears to be satisfactory in most cases. The EM algorithm (Dempster, Laird and Rubin, 1977) was also used although there was no significant performance increase (in terms of computational time or parameter precision) over using BFGS with SANN. To aid the optimization, analytic derivatives were also used; these can are given in Web Appendix B.
 
-As noted in the literature (e.g. Gelman et al, 2004, Marin, Mengersen, Robert, 2005]], mixture model likelihoods can be notoriously multimodal. This can cause serious problems when finding MLEs of the parameters. Here simulated annealing was used to explore the parameter space (for 500 iterations) then after that BFGS was used to find the maxima (the implementations in the \textsf{R} function \texttt{optim()} were used). These two steps were run 5 times. This two step approach appears to be satisfactory in most cases. The EM algorithm (Dempster, Laird and Rubin, 1977) was also used although there was no significant performance increase (in terms of computational time or parameter precision) over using BFGS with SANN. To aid the optimization, analytic derivatives were also found; these can be found in appendix B.
-
-\subsection{Starting values}
-Beavers and Ramsay (1998) give a method for estimating starting values for the scale parameter of a half-Normal detection function. In the non-covariate case, the estimate is given as the intercept parameter from intercept only regression on $\log(x+\frac{w}{1000})$ (where $w$ denotes the truncation distance, as above). For covariate models, the equation used for the $\sigma$ is used in the regression and the estimated parameters from the linear regression are used as the starting values for the $\beta$s.
+\subsection*{Starting values}
+Beavers and Ramsay (1998) give a method for estimating starting values for the scale parameter of a half-normal detection function. In the non-covariate case, the estimate is given as the intercept parameter from intercept only regression on $\log(x+\frac{w}{1000})$ (where $w$ denotes the truncation distance, as above). For covariate models, the equation used for the $\sigma$ is used in the regression and the estimated parameters from the linear regression are used as the starting values for the $\beta$s.
 
 A similar approach can be use in the mixture case by dividing the sorted distances into $J$ equal parts. For each of these parts a Beavers and Ramsay-type estimate is used for the $\beta$s. The $\phi_j$ had starting values of $1/J$ since there is no reason \textit{a priori} to believe anything else.
 
-\subsection{Parametrisation of the mixture proportions}
+\subsection*{Parametrisation of the mixture proportions}
 
 When using 2-point mixtures, the constraint that the mixture proportions must sum to unity is enforced by definition (since $\phi_2=1-\phi_1$). However, in $J$-point mixtures when $J>2$ ensuring that the proportions sum to 1 is not guaranteed. The obvious way to get around this would be to penalise the likelihood, should the optimisation procedure propose values for the $\phi_j$s that are not in accordance with this condition. This is, of course, inefficient and ugly. Instead, a parametrisation is used for the mixture proportions which yields $\phi_j$s that comply.
 
@@ -108,7 +108,14 @@ and
 \begin{equation*}
 \phi_J = 1-\sum_{j=1}^{J-1} \phi_j
 \end{equation*}
-where $F$ is any continuous CDF on $(0,\infty]$. Exponentiation ensures that $e^{\alpha_p}\geq0$, so $\alpha_p$ may lie anywhere on the real line, allowing unconstrained optimisation. Summing these orders the $\phi_j$s, since only offsets are estimated. Finally, using the cumulative density function ensures that the $\phi_j$s sum to $1$. In practise the $\text{Gamma}(3,2)$ CDF is (somewhat arbitrarily) used. Figure [[\textbf{LEN} figure -- do we need this?]] illustrates the relationship.
+where $F$ is any continuous CDF on $(0,\infty]$. Exponentiation ensures that $e^{\alpha_p}\geq0$, so $\alpha_p$ may lie anywhere on the real line, allowing unconstrained optimisation. Summing these orders the $\phi_j$s, since only offsets are estimated. Finally, using the cumulative density function ensures that the $\phi_j$s sum to $1$. In practise the $\text{Gamma}(3,2)$ CDF is (somewhat arbitrarily) used. Figure \ref{mmds-phifig} illustrates the relationship.
+
+\begin{figure*}
+\centering
+\includegraphics[width=0.5\textwidth]{figs/phidia.eps}
+\caption{The relationship between the mixture proportions, $\phi_j$ and the quantities estimated during the optimization procedure, $\alpha_p$.}
+\label{mmds-phifig}
+\end{figure*}
 
 To transform from the $\phi_j$s back to the $\alpha_p$s we simply re-arrange the above expression.
 \begin{equation*}
@@ -118,23 +125,16 @@ Note that we only need as many $\alpha_p$s as we had $\phi_j$s, so we do not req
 
 \section*{Web Appendix B - Derivatives}
 
-[check this has been cited somewhere -- for example in web appendix A -- optimization is based on method xxx which requires analytic derivatives.  for convenience we provide these in web appendix B]
+As mentioned above, maximization is performed on the $\log$-likelihood. In this section we give the derivations of the derivates of the $\log$-likelihood, which were used to aid optimization. To avoid confusion distances in the line transect case are denoted by $x$ and in the point transect case are denoted by $r$.
 
-[Turn x's to y's and also double check for mistakes]
+\subsection*{Line transects}
 
-\begin{equation}
-l(\bm{\theta}, \bm{\phi}; \mathbf{r},\mathbf{Z}) = n \log 2 \pi + \sum_{i=1}^n \Big( \log r_i + \log \sum_{j=1}^J \phi_j g_j(r_i,\mathbf{Z}; \bm{\theta}_j) - \log \sum_{j=1}^J \phi_j \nu_{ij}\Big)
-\label{pt-lik}
-\end{equation}
+Starting from the $\log$-likelihood:
 \begin{equation}
 l(\bm{\theta}, \bm{\phi}; \mathbf{x},\mathbf{Z}) = \sum_{i=1}^n \Big( \log \sum_{j=1}^J \phi_j g_j(x_i,\mathbf{Z}; \bm{\theta}_j) - \log \sum_{j=1}^J \phi_j \mu_{ij}\Big)
 \label{lt-lik}
 \end{equation}
-
-
-\subsection*{Line transects}
-
-Starting from the likelihood given in (\ref{lt-lik}), we derive the derivatives with respect to the optimisation parameters.
+we derive the derivatives with respect to the optimisation parameters.
 
 \subsubsection*{With respect to $\beta_{0j*}$}. For the intercept terms (also considering in the non-covariate case, these are just the parameters), the parameters have no effect outside of their mixture (ie. $\beta_{0j*}$ only has an influence on mixture component $j*$), so we can write:
 \begin{equation*}
@@ -142,7 +142,7 @@ Starting from the likelihood given in (\ref{lt-lik}), we derive the derivatives 
 \end{equation*}
 Now, to first fine $\frac{\partial}{\partial \beta_{0j*}} g_{j*}(x_i,\mathbf{Z}; \bm{\theta}_{j*})$:
 \begin{equation*}
-\frac{\partial g_{j*}(x_i,\mathbf{Z}; \bm{\theta}_{j*})}{\partial \beta_{0j*}} = \frac{\partial}{\partial \beta_{0j*}} \exp\Big( -\frac{x_i^2}{2\sigma_{j*}^2} \Big)
+\frac{\partial g_{j*}(x_i,\mathbf{Z}; \bm{\theta}_{j*})}{\partial \beta_{0j*}} = \frac{\partial}{\partial \beta_{0j*}} \exp\Big( -\frac{x_i^2}{2\sigma_{j*}^2} \Big),
 \end{equation*}
 applying the chain rule and remembering that $\sigma_{j*}$ is a (trivial) function of the $\beta_{0j}$s:
 \begin{equation*}
@@ -247,7 +247,14 @@ Substituting these back into (\ref{app-lik-alphad}) and re-arranging gives:
 
 \subsection*{Point transects}
 
-\subsubsection*{With respect to $\beta_{0j}$}. Starting with the likelihood in (\ref{pt-lik}), one can see that we obtain:
+We now provide the corresponding quantities for point transects, starting from the $\log$-likelihood:
+\begin{equation}
+l(\bm{\theta}, \bm{\phi}; \mathbf{r},\mathbf{Z}) = n \log 2 \pi + \sum_{i=1}^n \Big( \log r_i + \log \sum_{j=1}^J \phi_j g_j(r_i,\mathbf{Z}; \bm{\theta}_j) - \log \sum_{j=1}^J \phi_j \nu_{ij}\Big).
+\label{pt-lik}
+\end{equation}
+
+
+\subsubsection*{With respect to $\beta_{0j}$}. From (\ref{pt-lik}), one can see that we obtain:
 \begin{align*}
 \frac{\partial l(\bm{\theta}, \bm{\phi}; \mathbf{r},\mathbf{Z})}{\partial \beta_{0j*}}  &= \sum_{i=1}^n \Big( \frac{\partial}{\partial \beta_{0j*}} \log \sum_{j=1}^J \phi_j g_j(r_i,\mathbf{Z}; \bm{\theta}_j) - \frac{\partial}{\partial \beta_{0j*}}\log \sum_{j=1}^J \phi_j \nu_{ij}\Big)\\
 &= \sum_{i=1}^n \Big( \frac{ \phi_{j*} \frac{\partial}{\partial \beta_{0j*}}  g_{j*} (r_i,\mathbf{Z}; \bm{\theta}_j)}{g(r_i,\mathbf{Z}; \bm{\theta}, \bm{\phi})} - \frac{ \phi_{j*}\frac{\partial}{\partial \beta_{0j*}}  \nu_{ij*} }{ \sum_{j=1}^J \phi_j \nu_{ij}}\Big)
@@ -281,125 +288,79 @@ Putting that together:
 
 \section*{Web Appendix C - Simulation parameters}
 
-[[TKTKTK True p and true parameters go here!]]
-%pt
-%parmat[1,]<-c(log(0.8),log(0.15), inv.reparam.pi(0.3))
-%parmat[2,]<-c(log(0.6),log(0.1), inv.reparam.pi(1-0.3))
-%parmat[3,]<-c(log(10),log(0.2), inv.reparam.pi(0.15))
-%parmat[4,]<-c(log(0.7),log(0.05),inv.reparam.pi(0.6))
-%
-%
-%nocov
-%parmat[1,]<-c(log(0.8),log(0.15), inv.reparam.pi(0.3))
-%parmat[2,]<-c(log(0.6),log(0.1), inv.reparam.pi(1-0.3))
-%parmat[3,]<-c(log(10),log(0.2), inv.reparam.pi(0.15))
-%parmat[4,]<-c(log(0.7),log(0.05),inv.reparam.pi(0.6))
-%
-%
-%covsim 1
-%mixp<-inv.reparam.pi(0.4)
-%true.pars<-c(log(c(0.1,0.75,0.6)),mixp)
-%
-%
-%covsim2
-%true.pars<-c(log(0.2),log(0.8),log(0.4), inv.reparam.pi(0.4))
-%
-%
-%3pt
-%parmat[1,]<-c(log(0.8),log(0.5),log(0.1),inv.reparam.pi(rep(1/3,3))[1:2])
-%parmat[2,]<-c(log(15),log(.25),log(0.05),inv.reparam.pi(c(0.1,0.4,0.5))[1:2])
-%
-%
+\begin{table}[htbp]
+\centering
+\caption{Parameters of the detection functions used in the simulations in Section 3 and the true average detection probability ($P_a$) for each model. Note that for covariate models, $\beta_1$ corresponds to the intercept of the first mixture component, $\beta_2$ to the intercept of the second mixture component and $\beta_3$ to the coefficient for(common) covariate effect. Number is as in Figures 2 and 3 in the main article.}
+\begin{tabular}{c c c c c c c c}\\
+\hline
+\hline
+Model & & $\beta_1$ & $\beta_2$ & $\beta_3$ & $\pi_1$ & $\pi_2$ & $P_a$ \\
+\hline
+\hline
+Line transect &1 & -0.223 & -1.897 & &  0.3 & &  0.369\\
+ &2 & -0.511 & -2.303 & &  0.7 & &  0.514\\
+ &3 &  2.303 & -1.609 & & 0.15 & &  0.363\\
+ &4 & -0.357 & -2.996 & &  0.6 & &  0.471\\
+Point transect &1 & -0.223 & -1.897 & &  0.3 & &  0.24\\
+ &2 & -0.511 & -2.303 & &  0.7 & &  0.384\\
+ &3 &  2.303 & -1.609 & & 0.15 & &  0.218\\
+ &4 & -0.357 & -2.996 & &  0.6 & &  0.378\\
+3-point & 1 &  -0.22 &  -0.69 &  -2.3 & 0.3 & 0.3 & 0.505\\
+ & 2 &   2.71 &  -1.39 &  -3.0 & 0.1 & 0.4 & 0.257\\
+Covariate & 1 & -2.303 & -0.288 & -0.511 & 0.4 & & 0.422\\
+ & 2 & -1.609 & -0.223 & -0.916 & 0.4 & & 0.389\\
+\hline
+\end{tabular}
+\label{partable}
+\bigskip
+\end{table}
 
-%> true.p
-%          t id          model
-%1  0.368835  1  No covariates
-%2  0.513678  2  No covariates
-%3  0.362814  3  No covariates
-%4  0.470853  4  No covariates
-%5  0.368835  1  No covariates
-%6  0.513678  2  No covariates
-%7  0.362814  3  No covariates
-%8  0.470853  4  No covariates
-%9  0.368835  1  No covariates
-%10 0.513678  2  No covariates
-%11 0.362814  3  No covariates
-%12 0.470853  4  No covariates
-%13 0.368835  1  No covariates
-%14 0.513678  2  No covariates
-%15 0.362814  3  No covariates
-%16 0.470853  4  No covariates
-%17 0.239692  1 Point transect
-%18 0.384326  2 Point transect
-%19 0.217625  3 Point transect
-%20 0.378057  4 Point transect
-%21 0.239692  1 Point transect
-%22 0.384326  2 Point transect
-%23 0.217625  3 Point transect
-%24 0.378057  4 Point transect
-%25 0.239692  1 Point transect
-%26 0.384326  2 Point transect
-%27 0.217625  3 Point transect
-%28 0.378057  4 Point transect
-%29 0.239692  1 Point transect
-%30 0.384326  2 Point transect
-%31 0.217625  3 Point transect
-%32 0.378057  4 Point transect
-%33 0.422207  1      Covariate
-%34 0.389230  2      Covariate
-%35 0.504756  1        3-point
-%36 0.256582  2        3-point
+\section*{Web Appendix D - Simulation results}
+
+Include bias in $p$ and in $N$.
 
 
+\section*{Web Appendix E - Variance estimation}
 
+Variances of both $\hat{N}$ and $\hat{P}_a$ were estimated for both non-covariate models and covariate models using standard methods (Borchers, Buckland and Zucchini, 2002, Appendix C; Marques and Buckland, 2004, Section 3.3.3; Borchers et al, 1998).
+
+In the most general case, the variance of $\hat{N}$ is estimated by:
+\begin{equation*}
+\hat{\text{Var}}\left( \hat{N} \right) = \left(\frac{\partial \hat{N}}{\partial\hat{\bm{\theta}}}\right)^\text{T}\hat{\mathbf{I}}(\hat{\bm{\theta}})^{-1}\frac{\partial \hat{N}}{\partial\hat{\bm{\theta}}} + \sum_{i=1}^n \frac{(1-p_i)}{p_i^2}
+\end{equation*}
+where $\hat{\mathbf{I}}(\hat{\bm{\theta}})^{-1}$ is the inverse of the Fisher information matrix,  $\hat{\bm{\theta}}$ is a vector of all of the maximum likelihood estimates of the parameters of the detection function and all other notation is as in previous sections.
+
+Then for the average detectability:
+\begin{equation*}
+\hat{\text{Var}}\left( \hat{P}_a \right) = \hat{P}_a^2\left\{ \frac{\hat{\text{Var}}(\hat{N})}{\hat{N}^2} + \frac{\left(\frac{\partial \hat{P}_a}{\partial\bm{\hat{\theta}}}\right)^\text{T}\hat{\mathbf{I}}(\hat{\bm{\theta}})^{-1}\frac{\partial \hat{P}_a}{\partial\bm{\hat{\theta}}}+\sum_{i=1}^n (1-p_i)}{n^2}-\frac{2\left(\left(\frac{\partial \hat{N}}{\partial\bm{\hat{\theta}}}\right)^\text{T}\hat{\mathbf{I}}(\hat{\bm{\theta}})^{-1}\frac{\partial \hat{P}_a}{\partial\bm{\hat{\theta}}}+\sum_{i=1}^n\frac{(1-p_i)}{p_i^2}\right)}{n\hat{N}}\right\}.
+\end{equation*}
+
+[[\textbf{LEN}: I think we might need to explain this a bit and there might be some simplification that we can do, but I didn't see it yet. I guess we can express this as something like $P_a^2(cv(N)^+cv(P_a)^2\text{ish}-2\text{(a cross term)}$), do you think that would make more sense?]]
+[[\textbf{DAVE}: Yes, I think this would be helpful.  Also, you'll need to split the equation across two lines (perhaps at the minus]] 
 
 \begin{thebibliography}{}
 
 \bibitem{ } Beavers, S. C., and Ramsey, F. L. (1998). Detectability analysis in transect surveys. \textit{Journal of Wildlife Management} \textbf{62}(3), pp. 948--957.
 
-\bibitem{ } Becker, E. F. and Quang, P. X. (2009). A gamma-shaped detection function for line-transect surveys with mark-recapture and covariate data. \textit{Journal of Agricultural, Biological, and Environmental Statistics} \textbf{14}(2), 207--223.
-
-\bibitem{ } Borkin, K.M., Summers, R.W. and Thomas, L. (2012). Distribution, density and stand-type preferences of wood ant Formica spp. nest mounts in a Scots pinewood. \textit{European Journal of Entomology} \textbf{109}: 47--53.
-
-\bibitem{ } Buckland, S.T. (1992). Fitting density functions using polynomials. \textit{Applied Statistics} \textbf{41}, 63--76. 
+\bibitem{} Borchers, D. L., and Buckland, S. T. and Zucchini, W. (2002). \textit{Estimating Animal Abundance: Closed Populations}. Springer.
 
 \bibitem{ }  Buckland, S. T., Anderson, D. R., Burnham, K. P., Laake, J. L., Borchers, D. L., and Thomas, L.  (2001). \textit{Distance Sampling}. Oxford University Press. Oxford, UK.
 
-\bibitem{ }  Buckland, S. T., Anderson, D. R., Burnham, K. P., Laake, J. L., Borchers, D. L., and Thomas, L.  (2004). \textit{Advanced Distance Sampling}. Oxford University Press. Oxford, UK.
-
 \bibitem{ } Dempster, A.P., Laird,  N. M. and Rubin, D. B. (1977). Maximum Likelihood from Incomplete Data via the EM Algorithm. \textit{Journal of the Royal Statistical Society: Series B (Methodological)} \textbf{39}(1), 1--38.
 
-\bibitem{ } Dorazio, R. M. and Royle, J. A. (2003) Mixture Models for Estimating the Size of a Closed Population When Capture Rates Vary among Individuals. \textit{Biometrics} \textbf{59}(2), 351--364 
+\bibitem{ }  Gelman, A., Carlin, J. B., Stern, H. S., and Rubin, D. B. (2004). \textit{Bayesian Data Analysis}. CRC Press.
 
-\bibitem{ }  Gelman, A., Carlin, J. B., Stern, H. S., and Rubin, D. B. (2004). \textit{Bayesian Data Analysis}. CRC Press. Boca Ranton, Florida, US.
+%\bibitem{ } Innes, S., Heide-J\o rgensen, M. P., Laake, J. L., Laidre, K. L., Cleator, H. J., Richard, P. and Stewart, R. E. A. (2002). Surveys of belugas and narwhals in the {C}anadian {H}igh {A}rctic in 1996. \textit{NAMMCO Scientific Publications} \textbf{4}, 169--190.
 
-\bibitem{ } Innes, S., Heide-J\o rgensen, M. P., Laake, J. L., Laidre, K. L., Cleator, H. J., Richard, P. and Stewart, R. E. A. (2002). Surveys of belugas and narwhals in the {C}anadian {H}igh {A}rctic in 1996. \textit{NAMMCO Scientific Publications} \textbf{4}, 169--190.
-
-\bibitem{ } Laake, J. L., B. A. Collier, B. A., Morrison, M. L. and Wilkins, R. N. (2011). Point-Based Mark-Recapture Distance Sampling. \textit{Journal of Agricultural, Biological, and Environmental Statistics}, \textbf{16}(3), 389--408.
-
-\bibitem{ } Mack, Y. P. and Quang, P. (1998). Kernel methods in line and point transect sampling. \textit{Biometrics} \textbf{54}(2), 606--619. 
+\bibitem{} Borchers, D. L., Buckland, S. T., Goedhart, P. W., Clarke, E. D. and Hedley, S. L. (1998). Horvitz-Thompson Estimators for Double-Platform Line Transect Surveys. \textit{Biometrics} \textbf{54}(4), 1221--1237.
 
 \bibitem{ } Marin, J. M., Mengersen, K. and Robert, C. P. (2005). Bayesian modelling and inference on mixtures of distributions. \textit{Handbook of Statistics 25} D. Dey and C.R. Rao (eds). Elsevier-Sciences.
 
-\bibitem{ } Marques, T. A., Thomas, L., Fancy, S. G., Buckland, S. T. (2007). Improving estimates of bird density using multiple-covariate distance sampling. \textit{The Auk} \textbf{124}(9), 1229--1243.
+\bibitem{ } Marques, F. F. C. and Buckland, S. T. (2004). Covariate models for the detection function. In \textit{Advanced Distance Sampling}, pp. 31--47. S. T. Buckland, D. R. Anderson, K. P. Burnham, J. L. Laake, D. L. Borchers and L. Thomas (eds). Oxford University Press, Oxford.
 
-\bibitem{ } Morgan, B. J. T. and Ridout, M. (2008). A new mixture model for capture heterogeneity. \textit{Journal of the Royal Statistical Society: Series C} \textbf{57}(4), 433--446. 
-
-\bibitem{ } Pike, D. G., Gunnlaugsson, T., V\'{i}kingsson, G .A., Desportes, G. and Mikkelson, B.  (2003) An estimate of the abundance of long-finned pilot whales (\textit{globicephala melas}) from the NASS-2001 shipboard survey. Paper SC/11/AE/10 presented to the North Atlantic Marine Mammal Commission (NAMMCO) Scientific Committee Working Group on Abundance Estimates.
-
-\bibitem{ } Pledger, S. (2000). Unified maximum likelihood estimates for closed capture-recapture models using mixtures. \textit{Biometrics} \textbf{56}(2), 434--442. 
-
-\bibitem{ } Pledger, S. (2005). The performance of mixture models in heterogeneous closed population capture-recapture. \textit{Biometrics} \textbf{61}(3), 868--873.
-
-\bibitem{ } Thomas, L., Buckland, S. T., Rexstad, E. A., Laake, J. L., Strindberg, S., Hedley, S. L., Bishop, J. R. B., Marques, T. A. and Burnham, K. P. (2010). Distance software: design and analysis of distance sampling surveys for estimating population size. \textit{Journal of Applied Ecology} \textit{47}, 5--14.
-
-\bibitem{ } Thompson, S. K. (2002). \textit{Sampling}. Wiley, New York, US.
-
-\bibitem{ } Williams, R. and Thomas, L. (2007). Distribution and abundance of marine mammals in the coastal waters of British Columbia, Canada. \textit{Journal of Cetacean Research and Management} \textbf{9}(1), pp. 15--38.
+\bibitem{ } Press, W. H., Teukolsky, S. A., Vetterling, W. T., Flannery, B. P. (1992). \textit{Numerical Recipes: The Art of Scientific Computing}. Cambridge University Press. 
 
 \end{thebibliography}
-
-
 
 \label{lastpage}
 
