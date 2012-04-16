@@ -139,18 +139,18 @@ for(n.samples in n.samps){
        res<-rbind(res,c(n.samples,sim,NA,NA,NA,NA,NA,"hr+poly"))
      }
 
-     ######################################################## 
-     # CDS - unif+cos
+     ######################################################### 
+     ## CDS - unif+cos
 
-     fit<-try(ds(testdata,width,monotonicity="strict",key="unif",
-                 adjustment="cos"))
-     if(all(class(fit$ddf)!="try-error")){
-       res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
-                        n.samples/sum(1/fitted(fit$ddf)),
-                        fit$ddf$Nhat,true.N,NA,"unif+cos"))
-     }else{
-       res<-rbind(res,c(n.samples,sim,NA,NA,NA,NA,NA,"unif+cos"))
-     }
+     #fit<-try(ds(testdata,width,monotonicity="strict",key="unif",
+     #            adjustment="cos"))
+     #if(all(class(fit$ddf)!="try-error")){
+     #  res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
+     #                   n.samples/sum(1/fitted(fit$ddf)),
+     #                   fit$ddf$Nhat,true.N,NA,"unif+cos"))
+     #}else{
+     #  res<-rbind(res,c(n.samples,sim,NA,NA,NA,NA,NA,"unif+cos"))
+     #}
 
      # MCDS analyses
      
@@ -179,18 +179,18 @@ for(n.samples in n.samps){
        res<-rbind(res,c(n.samples,sim,NA,NA,NA,NA,NA,"hr+poly+cov1"))
      }
 
-     ######################################################## 
-     # MCDS - unif+cos + as.factor(cov1)
+     ######################################################### 
+     ## MCDS - unif+cos + as.factor(cov1)
 
-     fit<-try(ds(testdata,width,formula=as.formula(model.formula),key="unif",
-                 adjustment="cos",scale="width"))
-     if(all(class(fit$ddf)!="try-error")){
-       res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
-                        n.samples/sum(1/fitted(fit$ddf)),
-                        fit$ddf$Nhat,true.N,NA,"unif+cos+cov1-width"))
-     }else{
-       res<-rbind(res,c(n.samples,sim,NA,NA,NA,NA,NA,"unif+cos+cov1-width"))
-     }
+     #fit<-try(ds(testdata,width,formula=as.formula(model.formula),key="unif",
+     #            adjustment="cos",scale="width"))
+     #if(all(class(fit$ddf)!="try-error")){
+     #  res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
+     #                   n.samples/sum(1/fitted(fit$ddf)),
+     #                   fit$ddf$Nhat,true.N,NA,"unif+cos+cov1-width"))
+     #}else{
+     #  res<-rbind(res,c(n.samples,sim,NA,NA,NA,NA,NA,"unif+cos+cov1-width"))
+     #}
 
 
      ######################################################## 

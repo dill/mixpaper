@@ -1,5 +1,6 @@
 # settings for the no-covar sims - point transect
 library(mmds)
+library(Distance)
 
 # so, the real parameter matrix would be...
 #parmat[1,]<-c(0.8,0.2, 0.6400597)

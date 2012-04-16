@@ -82,7 +82,7 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
       if(all(class(fit$ddf)!="try-error")){
         res<-rbind(res,c("cds-hnc",par.ind,n.samp,sim,rep(NA,3),
                          fitted(fit$ddf)[1],fit$ddf$criterion,
-                         fit$ddf$Nhat,true.N))
+                         true.N,fit$ddf$Nhat))
       }else{
         res<-rbind(res,c("cds-hnc",par.ind,n.samp,sim,rep(NA,7)))
       }
@@ -95,23 +95,23 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
       if(all(class(fit$ddf)!="try-error")){
         res<-rbind(res,c("cds-hrp",par.ind,n.samp,sim,rep(NA,3),
                          fitted(fit$ddf)[1],fit$ddf$criterion,
-                         fit$ddf$Nhat,true.N))
+                         true.N,fit$ddf$Nhat))
       }else{
         res<-rbind(res,c("cds-hrp",par.ind,n.samp,sim,rep(NA,7)))
       }
 
-      ######################################################## 
-      # CDS - unif+cos
+      ######################################################### 
+      ## CDS - unif+cos
 
-      fit<-try(ds(sim.data,width,monotonicity="strict",key="unif",
-                  adjustment="cos"))
-      if(all(class(fit$ddf)!="try-error")){
-        res<-rbind(res,c("cds-uc",par.ind,n.samp,sim,rep(NA,3),
-                         fitted(fit$ddf)[1],fit$ddf$criterion,
-                         fit$ddf$Nhat,true.N))
-      }else{
-        res<-rbind(res,c("cds-uc",par.ind,n.samp,sim,rep(NA,7)))
-      }
+      #fit<-try(ds(sim.data,width,monotonicity="strict",key="unif",
+      #            adjustment="cos"))
+      #if(all(class(fit$ddf)!="try-error")){
+      #  res<-rbind(res,c("cds-uc",par.ind,n.samp,sim,rep(NA,3),
+      #                   fitted(fit$ddf)[1],fit$ddf$criterion,
+      #                   true.N,fit$ddf$Nhat))
+      #}else{
+      #  res<-rbind(res,c("cds-uc",par.ind,n.samp,sim,rep(NA,7)))
+      #}
 
     }# sim block end
   }# foreach block end

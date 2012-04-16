@@ -1,5 +1,6 @@
 # 3-point mixtures 
 library(mmds)
+library(Distance)
 
 # fit 2 point mixtures to these too?
 
