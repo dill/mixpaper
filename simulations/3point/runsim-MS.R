@@ -55,10 +55,10 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
       #  parameter set, # samples, sim #, par est, aic 
       if(class(fit)!="try-error"){
          # par index, no. samples, sim no., par est(3),likelihood, aic, pa, Nhat, N
-         res<-rbind(res,c(par.ind,n.samp,sim,fit$likelihood,
+         res<-rbind(res,c("mmds-MS",par.ind,n.samp,sim,fit$likelihood,
                           fit$aic,fit$pa,fit$N, true.N,fit$mix.terms))
       }else{
-         res<-rbind(res,c(par.ind,n.samp,sim,rep(NA,6)))
+         res<-rbind(res,c("mmds-MS",par.ind,n.samp,sim,rep(NA,6)))
       }
 
       #### CDS below here!
@@ -67,11 +67,10 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
 
       fit<-try(ds(sim.data,width,monotonicity="strict"))
       if(all(class(fit$ddf)!="try-error")){
-        res<-rbind(res,c("cds-hnc",par.ind,n.samp,sim,rep(NA,3),
-                         fitted(fit$ddf)[1],fit$ddf$criterion,
-                         true.N,fit$ddf$Nhat))
+        res<-rbind(res,c("cds-hnc",par.ind,n.samp,sim,"ll",fit$ddf$criterion,
+                          fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
       }else{
-        res<-rbind(res,c("cds-hnc",par.ind,n.samp,sim,rep(NA,7)))
+        res<-rbind(res,c("cds-hnc",par.ind,n.samp,sim,rep(NA,6)))
       }
 
       ######################################################## 
@@ -80,9 +79,8 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
       fit<-try(ds(sim.data,width,monotonicity="strict",key="hr",
                   adjustment="poly"))
       if(all(class(fit$ddf)!="try-error")){
-        res<-rbind(res,c("cds-hrp",par.ind,n.samp,sim,rep(NA,3),
-                         fitted(fit$ddf)[1],fit$ddf$criterion,
-                         true.N,fit$ddf$Nhat))
+        res<-rbind(res,c("cds-hnc",par.ind,n.samp,sim,"ll",fit$ddf$criterion,
+                          fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
       }else{
         res<-rbind(res,c("cds-hrp",par.ind,n.samp,sim,rep(NA,7)))
       }
