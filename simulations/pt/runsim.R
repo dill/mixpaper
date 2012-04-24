@@ -21,10 +21,10 @@ showit<-0
 # actually do the simulation
 
 ## loop over possible parameters
-results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
-                   .inorder=FALSE, .init=c()) %dopar% {
-  res<-c()
-  res1<-c()
+#Oresults<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
+#O                   .inorder=FALSE, .init=c()) %dopar% {
+par.ind<-3
+#O  res<-c()
 
   # make sure that the seed is the same on all cores
   set.seed(123)
@@ -32,7 +32,12 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
   ## loop over number of samples to take
   for(n.samp in n.samps){
     ## loop over number of replicates
-    for(sim in 1:n.sims){
+#O    for(sim in 1:n.sims){
+
+results<-foreach(sim = 1:n.sims, .combine=rbind,
+                   .inorder=FALSE, .init=c()) %dopar% {
+
+res<-c()
   
       # simulate the data
       sim.data<-sim.mix(parmat[par.ind,],mix.terms,n.samp,width,pt=TRUE)
@@ -122,9 +127,14 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
       #}else{
       #  res<-rbind(res,c("cds-uc",par.ind,n.samp,sim,rep(NA,7)))
       #}
+
+write.table(res,file=paste(opt.method,"-",n.samp,"-",par.ind,"-pt-results.csv",sep=""),append=TRUE,col.names=FALSE)
+return(1)
     }
+
+
   }
   # write them out
-  write.csv(res,file=paste(opt.method,"-",par.ind,"-pt-results.csv",sep=""))
-  return(1)
-}
+#O  write.csv(res,file=paste(opt.method,"-",par.ind,"-pt-results.csv",sep=""))
+#O  return(1)
+#O}
