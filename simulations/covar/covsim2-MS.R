@@ -218,9 +218,10 @@ for(n.samples in n.samps){
        res<-rbind(res,c(n.samples,sim,NA,NA,NA,NA,NA,"hr+poly+cov1-width"))
      }
 
+write.table(res,file=paste("covsim2-",n.samples,"-",opt.method,".csv",sep=""),append=TRUE,col.names=FALSE)
      return(res)
   }
 
   big.res<-rbind(big.res,results)
 }
-write.csv(big.res,file=paste("covsim2-",opt.method,".csv",sep=""))
+#write.csv(big.res,file=paste("covsim2-",opt.method,".csv",sep=""))
