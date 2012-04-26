@@ -8,7 +8,7 @@ library(Distance)
 # let's do this in parallel
 library(foreach)
 library(doMC)
-options(cores=2)
+options(cores=6)
 registerDoMC()
 
 ### SETUP
@@ -28,7 +28,7 @@ n.samps<-c(30,60,120,480,960)
 # number of realisations
 n.sims<-200
 # set the seed
-set.seed(102837)
+set.seed(1028)
 showit<-0
 starting.vals<-NULL # unknown starting values
 
