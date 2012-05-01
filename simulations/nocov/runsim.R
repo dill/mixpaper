@@ -82,7 +82,7 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
       if(all(class(fit$ddf)!="try-error")){
         res<-rbind(res,c("cds-hnc",par.ind,n.samp,sim,rep(NA,3),
                          fitted(fit$ddf)[1],fit$ddf$criterion,
-                         true.N,fit$ddf$Nhat))
+                         fit$ddf$Nhat,true.N))
       }else{
         res<-rbind(res,c("cds-hnc",par.ind,n.samp,sim,rep(NA,7)))
       }
@@ -95,7 +95,7 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
       if(all(class(fit$ddf)!="try-error")){
         res<-rbind(res,c("cds-hrp",par.ind,n.samp,sim,rep(NA,3),
                          fitted(fit$ddf)[1],fit$ddf$criterion,
-                         true.N,fit$ddf$Nhat))
+                         fit$ddf$Nhat,true.N))
       }else{
         res<-rbind(res,c("cds-hrp",par.ind,n.samp,sim,rep(NA,7)))
       }
