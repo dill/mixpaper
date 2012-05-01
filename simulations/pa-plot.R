@@ -17,7 +17,6 @@ true.ps<-c()
 
 samp.sizes<-c(30,60,120,480,960)
 
-
 ### nocov
 # no covariate models
 
