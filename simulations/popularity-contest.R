@@ -143,9 +143,9 @@ for(combi in todo){
   p<-p+geom_text(aes(x=factor(winner),y=n.y,label=n.winner),
                       size=3,data=win.labels,col="grey")
 
-  quartz()
+#  quartz()
   print(p)
-#  ggsave(paste("boxplots-",type,".pdf",sep=""))
+  ggsave(paste("boxplots-",type,".pdf",sep=""))
 
 }
 
