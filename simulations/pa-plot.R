@@ -20,66 +20,55 @@ samp.sizes<-c(30,60,120,480,960)
 
 ### nocov
 # no covariate models
-#for(selection in c("none")){#,"AIC")){
-for(selection in c("AIC")){
 
-  cat("Model selection:",selection,"\n")
-
-  for(par.ind in 1:4){
-    for(n.samps in samp.sizes){
+for(par.ind in 1:4){
+  for(n.samps in samp.sizes){
+  
+    fit.method<-"BFGS+SANN"
     
-      fit.method<-"BFGS+SANN"
-      
-      dat<-read.csv(file=paste("nocov/",fit.method,"-",par.ind,
-                                "-960-results.csv",sep=""))
-      dat<-dat[,-1]
+    dat<-read.csv(file=paste("nocov/",fit.method,"-",par.ind,
+                              "-960-results.csv",sep=""))
+    dat<-dat[,-1]
 
-      names(dat)<-c("model","par.ind","n","sim","par1","par2",
-                    "par3","pa","AIC","Nhat","N")
+    names(dat)<-c("model","par.ind","n","sim","par1","par2",
+                  "par3","pa","AIC","Nhat","N")
 
-      dat$Nhat<-as.double(as.character(dat$Nhat))
-      dat$N<-as.double(as.character(dat$N))
+    dat$Nhat<-as.double(as.character(dat$Nhat))
+    dat$N<-as.double(as.character(dat$N))
 
-      dat1<-dat[dat$model=="mmds-1",]
-      dat<-dat[dat$model=="mmds-c",]
+    dat1<-dat[dat$model=="mmds-1",]
+    dat<-dat[dat$model=="mmds-c",]
 
-      dat<-dat[dat$n==n.samps,]
-      dat1<-dat1[dat1$n==n.samps,]
+    dat<-dat[dat$n==n.samps,]
+    dat1<-dat1[dat1$n==n.samps,]
 
-      #dat1<-dat1[dat$simno,] #????
-      ind<- is.na(dat$Nhat) & is.na(dat1$Nhat) & is.na(dat$N) & is.na(dat1$N)
-      dat<-dat[!ind,]
-      dat1<-dat1[!ind,]
+    #dat1<-dat1[dat$simno,] #????
+    ind<- is.na(dat$Nhat) & is.na(dat1$Nhat) & is.na(dat$N) & is.na(dat1$N)
+    dat<-dat[!ind,]
+    dat1<-dat1[!ind,]
 
-      if(selection=="AIC"){
+    aics<-cbind(dat1$AIC,dat$AIC)
+    aic.pick<-apply(aics,1,which.min)
 
-         aics<-cbind(dat1$AIC,dat$AIC)
-         aic.pick<-apply(aics,1,which.min)
+    p<-n.samps/cbind(dat1$Nhat,dat$Nhat)
 
-         p<-n.samps/cbind(dat1$Nhat,dat$Nhat)
-
-         this.p<-c(p[,1][aic.pick==1],p[,2][aic.pick==2])
+    this.p<-c(p[,1][aic.pick==1],p[,2][aic.pick==2])
+  
+    aic.winners<-rbind(aic.winners,
+                   data.frame(mix.terms=aic.pick,
+                              n=rep(n.samps,length(aic.pick)),
+                              model=rep("nocov",length(aic.pick)),
+                              id=rep(par.ind,length(aic.pick))))
+    baf<-rbind(baf,data.frame(pa=this.p,
+                              n=rep(n.samps,length(this.p)),
+                              id=rep(par.ind,length(this.p)),
+                              model=rep("nocov",length(this.p))
+               ))
     
-         aic.winners<-rbind(aic.winners,
-                        data.frame(mix.terms=aic.pick,
-                                   n=rep(n.samps,length(aic.pick)),
-                                   model=rep("nocov",length(aic.pick)),
-                                   id=rep(par.ind,length(aic.pick))))
-      }else{
-
-         this.p<-n.samps/dat$Nhat
-      }
-
-      baf<-rbind(baf,data.frame(pa=this.p,
-                                n=rep(n.samps,length(this.p)),
-                                id=rep(par.ind,length(this.p)),
-                                model=rep("nocov",length(this.p))
-                 ))
-      
-      true.ps<-c(true.ps,n.samps/as.double(as.character(dat$N[!is.na(dat$N)])))
-    }
+    true.ps<-c(true.ps,n.samps/as.double(as.character(dat$N[!is.na(dat$N)])))
   }
 }
+
 # truth lines -- nocov
 true.p<-data.frame(t=rep(unique(round(true.ps,6)),4),
                    id=rep(1:4,4),
@@ -90,59 +79,49 @@ true.p<-data.frame(t=rep(unique(round(true.ps,6)),4),
 
 true.ps<-c()
 # point transects
-for(selection in c("AIC")){
 
-  cat("Model selection:",selection,"\n")
+for(par.ind in 1:4){
+  for(n.samps in samp.sizes){
 
-  for(par.ind in 1:4){
-    for(n.samps in samp.sizes){
+    n.samps<-as.integer(n.samps)
+  
+    fit.mthod<-"BFGS+SANN"
+    dat<-read.csv(file=paste("pt/",fit.method,"-",par.ind,"-pt-results.csv",sep=""))
+  
+    dat<-dat[,-1]
+    names(dat)<-c("model","par.ind","n.samps","sim","par1","par2",
+                  "par3","pall","AIC","N","Nhat")
 
-      n.samps<-as.integer(n.samps)
+    dat1<-dat[dat$model=="mmds-1",]
+    dat<-dat[dat$model=="mmds-2",]
+
+    dat<-dat[dat$n==n.samps,]
+    dat1<-dat1[dat1$n==n.samps,]
+
+    #dat1<-dat1[dat$simno,] # ???
+    ind<- is.na(dat$Nhat) & is.na(dat1$Nhat)
+    dat<-dat[!ind,]
+    dat1<-dat1[!ind,]
+
+    aics<-cbind(dat1$AIC,dat$AIC)
+    aic.pick<-apply(aics,1,which.min)
+
+    p<-n.samps/cbind(dat1$Nhat,dat$Nhat)
+
+    this.p<-c(p[,1][aic.pick==1],p[,2][aic.pick==2])
+  
+    aic.winners<-rbind(aic.winners,
+                   data.frame(mix.terms=aic.pick,
+                              n=rep(n.samps,length(aic.pick)),
+                              model=rep("pt",length(aic.pick)),
+                              id=rep(par.ind,length(aic.pick))))
+    baf<-rbind(baf,data.frame(pa=this.p,
+                              n=rep(n.samps,length(this.p)),
+                              id=rep(par.ind,length(this.p)),
+                              model=rep("pt",length(this.p))
+               ))
     
-      fit.mthod<-"BFGS+SANN"
-      dat<-read.csv(file=paste("pt/",fit.method,"-",par.ind,"-pt-results.csv",sep=""))
-    
-      dat<-dat[,-1]
-      names(dat)<-c("model","par.ind","n.samps","sim","par1","par2",
-                    "par3","pall","AIC","N","Nhat")
-
-      dat1<-dat[dat$model=="mmds-1",]
-      dat<-dat[dat$model=="mmds-2",]
-
-      dat<-dat[dat$n==n.samps,]
-      dat1<-dat1[dat1$n==n.samps,]
-
-      #dat1<-dat1[dat$simno,] # ???
-      ind<- is.na(dat$Nhat) & is.na(dat1$Nhat)
-      dat<-dat[!ind,]
-      dat1<-dat1[!ind,]
-
-      if(selection=="AIC"){
-
-        aics<-cbind(dat1$AIC,dat$AIC)
-        aic.pick<-apply(aics,1,which.min)
-
-        p<-n.samps/cbind(dat1$Nhat,dat$Nhat)
-
-        this.p<-c(p[,1][aic.pick==1],p[,2][aic.pick==2])
-    
-        aic.winners<-rbind(aic.winners,
-                       data.frame(mix.terms=aic.pick,
-                                  n=rep(n.samps,length(aic.pick)),
-                                  model=rep("pt",length(aic.pick)),
-                                  id=rep(par.ind,length(aic.pick))))
-      }else{
-        this.p<-n.samps/dat$Nhat
-      }
-
-      baf<-rbind(baf,data.frame(pa=this.p,
-                                n=rep(n.samps,length(this.p)),
-                                id=rep(par.ind,length(this.p)),
-                                model=rep("pt",length(this.p))
-                 ))
-      
-      true.ps<-c(true.ps,n.samps/as.double(as.character(dat$N[!is.na(dat$N)])))
-    }
+    true.ps<-c(true.ps,n.samps/as.double(as.character(dat$N[!is.na(dat$N)])))
   }
 }
 # truth lines -- nocov
@@ -163,16 +142,11 @@ true.pp<-c()
 # separate cov table stuff to see what's going on
 cov.aic.winners<-data.frame(mix.terms=0,n=0,model=NA,id=0)
 
-
 for(par.ind in 1:2){
   for(n.samps in samp.sizes){
   
     fit.method<-"BFGS+SANN"
-    # read in dat
-    # format of the file:
-    # par index, no. samples, sim no., par est(3),likelihood, aic, pa
     dat<-read.csv(file=paste("covar/covsim",par.ind,"-",fit.method,".csv",sep=""))
-  
     dat<-dat[,-1]
     names(dat)<-c("n.samps","sim","AIC","pa","Nhat","N","mix.terms","mod")
   
@@ -181,51 +155,44 @@ for(par.ind in 1:2){
     ind<- !is.na(dat$Nhat) & !is.na(dat$N)
     dat<-dat[ind,]
 
-
     # do the selection
-    sel<-TRUE
-    if(sel){
-      dat.cov<-dat[dat$mod=="cov",]
-      dat.nocov<-dat[dat$mod=="nocov",]
+    dat.cov<-dat[dat$mod=="cov",]
+    dat.nocov<-dat[dat$mod=="nocov",]
 
-      pa.res<-n.samps/cbind(dat.nocov$Nhat,dat.cov$Nhat)
+    pa.res<-n.samps/cbind(dat.nocov$Nhat,dat.cov$Nhat)
 
-      aic.res<-cbind(dat.nocov$AIC,dat.cov$AIC)
-      aic.pick<-apply(aic.res,1,which.min)
+    aic.res<-cbind(dat.nocov$AIC,dat.cov$AIC)
+    aic.pick<-apply(aic.res,1,which.min)
 
-      mixs<-cbind(dat.nocov$mix.terms,dat.cov$mix.terms)
-      mixs2<-rep(0,nrow(mixs))
-      mixs2[aic.pick==1]<-dat.nocov$mix.terms[aic.pick==1]
-      mixs2[aic.pick==2]<-dat.cov$mix.terms[aic.pick==2]
-      aic.pick2<-aic.pick
-      aic.pick2[aic.pick2==1]<-paste("nocov",mixs2[aic.pick2==1])
-      aic.pick2[aic.pick2==2]<-paste("covar",mixs2[aic.pick2==2])
+    mixs<-cbind(dat.nocov$mix.terms,dat.cov$mix.terms)
+    mixs2<-rep(0,nrow(mixs))
+    mixs2[aic.pick==1]<-dat.nocov$mix.terms[aic.pick==1]
+    mixs2[aic.pick==2]<-dat.cov$mix.terms[aic.pick==2]
+    aic.pick2<-aic.pick
+    aic.pick2[aic.pick2==1]<-paste("nocov",mixs2[aic.pick2==1])
+    aic.pick2[aic.pick2==2]<-paste("covar",mixs2[aic.pick2==2])
 
-      cov.aic.winners<-rbind(cov.aic.winners,
-                             data.frame(mix.terms=aic.pick2,
-                                        n=rep(n.samps,length(aic.pick)),
-                                        model=rep(1,length(mixs2)),
-                                        id=rep(par.ind,length(aic.pick))))
+    cov.aic.winners<-rbind(cov.aic.winners,
+                           data.frame(mix.terms=aic.pick2,
+                                      n=rep(n.samps,length(aic.pick)),
+                                      model=rep(1,length(mixs2)),
+                                      id=rep(par.ind,length(aic.pick))))
 
-      # make aic.winners be right vs wrong model...
-      # recode cov model when the number of mix terms != 2 
-      # to be "1"
-      ind.aic<-aic.pick==2
-      mt<-dat.cov$mix.terms[ind.aic]
-      mt[mt!=2]<-1
-      aic.pick[ind.aic]<-mt
+    # make aic.winners be right vs wrong model...
+    # recode cov model when the number of mix terms != 2 
+    # to be "1"
+    ind.aic<-aic.pick==2
+    mt<-dat.cov$mix.terms[ind.aic]
+    mt[mt!=2]<-1
+    aic.pick[ind.aic]<-mt
 
-      aic.winners<-rbind(aic.winners,
-                     data.frame(mix.terms=aic.pick,
-                                n=rep(n.samps,length(aic.pick)),
-                                model=rep("covar",length(aic.pick)),
-                                id=rep(par.ind,length(aic.pick))))
+    aic.winners<-rbind(aic.winners,
+                   data.frame(mix.terms=aic.pick,
+                              n=rep(n.samps,length(aic.pick)),
+                              model=rep("covar",length(aic.pick)),
+                              id=rep(par.ind,length(aic.pick))))
 
-      this.p<-c(pa.res[,1][aic.pick==1],pa.res[,2][aic.pick==2])
-
-    }else{
-      this.p<-n.samps/dat$Nhat
-    }
+    this.p<-c(pa.res[,1][aic.pick==1],pa.res[,2][aic.pick==2])
 
     baf<-rbind(baf,data.frame(pa=this.p,
                               n=rep(n.samps,length(this.p)),
@@ -282,10 +249,10 @@ for(par.ind in 1:2){
                               model=rep("3pt",length(this.p))
                ))
     
-#    true.ps<-c(true.ps,n.samps/dat$N)
     true.ps<-c(true.ps,n.samps/as.double(as.character(dat$N[!is.na(dat$N)])))
   }
 }
+
 # truth lines -- covar
 true.p<-rbind(true.p,data.frame(t=unique(round(true.ps,6)),
                    id=1:2,
@@ -370,7 +337,6 @@ levels(true.p$model)<-c("No covariates","Point transect","3-point","Covariate")
 p<-ggplot(baf,aes(x=factor(n),y=pa))
 p<-p+geom_boxplot(outlier.size=1)
 p<-p+facet_grid(model~id)
-#p<-p+facet_grid(.~.)
 #p<-p+geom_text(aes(x=factor(n),y=-0.1,label=prop),size=3,data=itm)
 
 
@@ -388,20 +354,5 @@ p
 
 
 #dev.copy2eps(file="pa-plot.eps")
-
-
-
-# second plot of AIC winners
-#pp<-ggplot(aic.winners)
-##pp<-pp+geom_histogram(aes(y=mix.terms,x=n),binwidth=1)
-#pp<-pp+geom_histogram(aes(factor(mix.terms)),binwidth=1)
-#pp<-pp+facet_grid(n~id)
-#pp<-pp+opts(panel.grid.major=theme_blank(),
-#          panel.grid.minor=theme_blank(),
-#          legend.background=theme_blank(),
-#          legend.key=theme_blank(),
-#          panel.background=theme_rect())
-#pp
-
 
 
