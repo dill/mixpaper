@@ -50,7 +50,7 @@ for(pari in 1:nrow(pars)){
   hr.par<-these.pars[4]
   these.pars<-these.pars[1:3]
 
-  for(n.samples in n.samp){
+  for(n.samples in n.samps){
 #n.samples<-1000
 
     true.N<-calc.true.N(these.pars,hr.par,n.samples)
