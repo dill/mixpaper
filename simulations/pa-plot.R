@@ -3,7 +3,7 @@
 # proportion of time that the true model was selected by AIC printed
 # below each box.
 
-# also of interest are table(aic.winners) and table(cov.aic.winners)
+# also of interest is table(aic.winners)
 # which give the breakdown of the AIC best models according to model
 # type.
 
@@ -13,6 +13,7 @@ library(ggplot2)
 samp.sizes<-c(30,60,120,480,960)
 
 for(set in c("mmds","cds","combined")){
+#for(set in c("combined")){
   baf<-data.frame(pa=NA,n=NA,id=NA,model=NA)
   aic.winners<-data.frame(mix.terms=0,n=0,model=NA,id=0)
   true.ps<-c()
@@ -36,28 +37,47 @@ for(set in c("mmds","cds","combined")){
       dat$N<-as.double(as.character(dat$N))
   
       if(set=="mmds"){
-        dat1<-dat[dat$model=="mmds-1",]
-        dat<-dat[dat$model=="mmds-c",]
-        aic.res<-cbind(dat1$AIC,dat$AIC)
-        pa.res<-n.samps/cbind(dat1$Nhat,dat$Nhat)
+        models<-c("mmds-1","mmds-c")
+
+        pa.res<-matrix(NA,200,length(models))
+        aic.res<-matrix(NA,200,length(models))
+
+        for(modi in seq_along(models)){
+          if(sum(dat$mod==models[modi])>0){
+            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
+                                                dat$Nhat[dat$mod==models[modi]]
+            aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
+                                                dat$AIC[dat$mod==models[modi]]
+          }
+        }
       }else if(set=="cds"){
-        dat1<-dat[dat$model=="cds-hrp",]
-        dat<-dat[dat$model=="cds-hnc",]
-        aic.res<-cbind(dat1$AIC,dat$AIC)
-        pa.res<-n.samps/cbind(dat1$Nhat,dat$Nhat)
+        models<-c("cds-hnc","cds-hrp")
+
+        pa.res<-matrix(NA,200,length(models))
+        aic.res<-matrix(NA,200,length(models))
+
+        for(modi in seq_along(models)){
+          if(sum(dat$mod==models[modi])>0){
+            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
+                                                dat$Nhat[dat$mod==models[modi]]
+            aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
+                                                dat$AIC[dat$mod==models[modi]]
+          }
+        }
       }else{
-        pa.res<-n.samps/cbind(
-                              dat$Nhat[dat$model=="mmds-1"],
-                              dat$Nhat[dat$model=="mmds-c"],
-                              dat$Nhat[dat$model=="cds-hnc"],
-                              dat$Nhat[dat$model=="cds-hrp"]
-                             )
-        aic.res<-cbind(
-                       dat$AIC[dat$model=="mmds-1"],
-                       dat$AIC[dat$model=="mmds-c"],
-                       dat$AIC[dat$model=="cds-hnc"],
-                       dat$AIC[dat$model=="cds-hrp"]
-                      )
+        models<-c("mmds-1","mmds-c","cds-hnc","cds-hrp")
+
+        pa.res<-matrix(NA,200,length(models))
+        aic.res<-matrix(NA,200,length(models))
+
+        for(modi in seq_along(models)){
+          if(sum(dat$mod==models[modi])>0){
+            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
+                                                dat$Nhat[dat$mod==models[modi]]
+            aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
+                                                dat$AIC[dat$mod==models[modi]]
+          }
+        }
       }
 
       aic.res[is.na(aic.res)]<-Inf
@@ -71,7 +91,7 @@ for(set in c("mmds","cds","combined")){
       this.p <- this.p[ind]
       aic.pick <- aic.pick[ind]
     
-      if(set=="mmds"){
+      if(set=="mmds" | set == "combined"){
         aic.winners<-rbind(aic.winners,
                        data.frame(mix.terms=aic.pick,
                                   n=rep(n.samps,length(aic.pick)),
@@ -104,7 +124,8 @@ for(set in c("mmds","cds","combined")){
       n.samps<-as.integer(n.samps)
     
       fit.mthod<-"BFGS+SANN"
-      dat<-read.csv(file=paste("pt/BFGS+SANN-",par.ind,"-pt-results.csv",sep=""))
+      dat<-read.csv(file=paste("pt/BFGS+SANN-",par.ind,
+                               "-pt-results.csv",sep=""))
     
       dat<-dat[,-1]
       names(dat)<-c("model","par.ind","n.samps","sim","par1","par2",
@@ -115,28 +136,47 @@ for(set in c("mmds","cds","combined")){
       dat$N<-as.double(as.character(dat$N))
 
       if(set=="mmds"){
-        dat1<-dat[dat$model=="mmds-1",]
-        dat<-dat[dat$model=="mmds-2",]
-        aic.res<-cbind(dat1$AIC,dat$AIC)
-        pa.res<-n.samps/cbind(dat1$Nhat,dat$Nhat)
+        models<-c("mmds-1","mmds-2")
+
+        pa.res<-matrix(NA,200,length(models))
+        aic.res<-matrix(NA,200,length(models))
+
+        for(modi in seq_along(models)){
+          if(sum(dat$mod==models[modi])>0){
+            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
+                                                dat$Nhat[dat$mod==models[modi]]
+            aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
+                                                dat$AIC[dat$mod==models[modi]]
+          }
+        }
       }else if(set=="cds"){
-        dat1<-dat[dat$model=="cds-hrp",]
-        dat<-dat[dat$model=="cds-hnc",]
-        aic.res<-cbind(dat1$AIC,dat$AIC)
-        pa.res<-n.samps/cbind(dat1$Nhat,dat$Nhat)
+        models<-c("cds-hnc","cds-hrp")
+
+        pa.res<-matrix(NA,200,length(models))
+        aic.res<-matrix(NA,200,length(models))
+
+        for(modi in seq_along(models)){
+          if(sum(dat$mod==models[modi])>0){
+            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
+                                                dat$Nhat[dat$mod==models[modi]]
+            aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
+                                                dat$AIC[dat$mod==models[modi]]
+          }
+        }
       }else{
-        pa.res<-n.samps/cbind(
-                              dat$Nhat[dat$model=="mmds-1"],
-                              dat$Nhat[dat$model=="mmds-2"],
-                              dat$Nhat[dat$model=="cds-hnc"],
-                              dat$Nhat[dat$model=="cds-hrp"]
-                             )
-        aic.res<-cbind(
-                       dat$AIC[dat$model=="mmds-1"],
-                       dat$AIC[dat$model=="mmds-2"],
-                       dat$AIC[dat$model=="cds-hnc"],
-                       dat$AIC[dat$model=="cds-hrp"]
-                      )
+        models<-c("mmds-1","mmds-2","cds-hnc","cds-hrp")
+
+        pa.res<-matrix(NA,200,length(models))
+        aic.res<-matrix(NA,200,length(models))
+
+        for(modi in seq_along(models)){
+          if(sum(dat$mod==models[modi])>0){
+            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
+                                                dat$Nhat[dat$mod==models[modi]]
+            aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
+                                                dat$AIC[dat$mod==models[modi]]
+          }
+        }
       }
 
       aic.res[is.na(aic.res)]<-Inf
@@ -146,7 +186,7 @@ for(set in c("mmds","cds","combined")){
       pa.aic<-cbind(pa.res,aic.pick)
       this.p<-apply(pa.aic,1,function(x){x[x[pa.cols+1]]})
     
-      if(set=="mmds"){
+      if(set=="mmds" | set=="combined"){
         aic.winners<-rbind(aic.winners,
                        data.frame(mix.terms=aic.pick,
                                   n=rep(n.samps,length(aic.pick)),
@@ -171,9 +211,6 @@ for(set in c("mmds","cds","combined")){
   ### covar
   true.ps<-c()
   
-  # separate cov table stuff to see what's going on
-  cov.aic.winners<-data.frame(mix.terms=0,n=0,model=NA,id=0)
-  
   for(par.ind in 1:2){
     true.pp<-c()
     for(n.samps in samp.sizes){
@@ -185,32 +222,56 @@ for(set in c("mmds","cds","combined")){
       dat<-dat[dat$n==n.samps,]
   
       if(set == "mmds"){
-        dat.cov<-dat[dat$mod=="cov",]
-        dat.nocov<-dat[dat$mod=="nocov",]
-  
-        pa.res<-n.samps/cbind(dat.nocov$Nhat,dat.cov$Nhat)
-  
-        aic.res<-cbind(dat.nocov$AIC,dat.cov$AIC)
+        models<-c("nocov","cov")
+
+        pa.res<-matrix(NA,200,length(models))
+        aic.res<-matrix(NA,200,length(models))
+
+        for(modi in seq_along(models)){
+          pa.res[dat$sim[dat$mod==models[modi]],modi]<-n.samps/
+                                                dat$Nhat[dat$mod==models[modi]]
+          aic.res[dat$sim[dat$mod==models[modi]],modi]<-
+                                                dat$AIC[dat$mod==models[modi]]
+        }
         aic.pick<-apply(aic.res,1,which.min)
-  
-        mixs<-cbind(dat.nocov$mix.terms,dat.cov$mix.terms)
-        mixs2<-rep(0,nrow(mixs))
-        mixs2[aic.pick==1]<-dat.nocov$mix.terms[aic.pick==1]
-        mixs2[aic.pick==2]<-dat.cov$mix.terms[aic.pick==2]
-        aic.pick2<-aic.pick
-        aic.pick2[aic.pick2==1]<-paste("nocov",mixs2[aic.pick2==1])
-        aic.pick2[aic.pick2==2]<-paste("covar",mixs2[aic.pick2==2])
-  
-        cov.aic.winners<-rbind(cov.aic.winners,
-                               data.frame(mix.terms=aic.pick2,
-                                          n=rep(n.samps,length(aic.pick)),
-                                          model=rep(1,length(mixs2)),
-                                          id=rep(par.ind,length(aic.pick))))
-  
+      }else if(set=="cds"){
+        models<-c("hn+cos","hr+poly","hn+cos+cov1","hr+poly+cov1",
+                  "hn+cos+cov1-width","hr+poly+cov1-width")
+
+        pa.res<-matrix(NA,200,length(models))
+        aic.res<-matrix(NA,200,length(models))
+
+        for(modi in seq_along(models)){
+          pa.res[dat$sim[dat$mod==models[modi]],modi]<-n.samps/
+                                                dat$Nhat[dat$mod==models[modi]]
+          aic.res[dat$sim[dat$mod==models[modi]],modi]<-
+                                                dat$AIC[dat$mod==models[modi]]
+        }
+        aic.pick<-apply(aic.res,1,which.min)
+      }else{
+        models<-c("nocov","cov","hn+cos","hr+poly","hn+cos+cov1","hr+poly+cov1",
+                  "hn+cos+cov1-width","hr+poly+cov1-width")
+
+        pa.res<-matrix(NA,200,length(models))
+        aic.res<-matrix(NA,200,length(models))
+
+        for(modi in seq_along(models)){
+          if(sum(dat$mod==models[modi])>0){
+            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
+                                                dat$Nhat[dat$mod==models[modi]]
+            aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
+                                                dat$AIC[dat$mod==models[modi]]
+          }
+        }
+        aic.pick<-apply(aic.res,1,which.min)
+      }
+
+      if(set=="mmds" | set=="combined"){
         # make aic.winners be right vs wrong model...
         # recode cov model when the number of mix terms != 2 
         # to be "1"
         ind.aic<-aic.pick==2
+        dat.cov<-dat[dat$mod=="cov",]
         mt<-dat.cov$mix.terms[ind.aic]
         mt[mt!=2]<-1
         aic.pick[ind.aic]<-mt
@@ -220,57 +281,8 @@ for(set in c("mmds","cds","combined")){
                                   n=rep(n.samps,length(aic.pick)),
                                   model=rep("covar",length(aic.pick)),
                                   id=rep(par.ind,length(aic.pick))))
-  
-      }else if(set=="cds"){
-
-        pa.res<-n.samps/cbind(
-                              dat$Nhat[dat$mod=="hn+cos"],
-                              dat$Nhat[dat$mod=="hr+poly"],
-                              dat$Nhat[dat$mod=="hn+cos+cov1"],
-                              dat$Nhat[dat$mod=="hr+poly+cov1"],
-                              dat$Nhat[dat$mod=="hn+cos+cov1-width"],
-                              dat$Nhat[dat$mod=="hr+poly+cov1-width"]
-                             )
-
-        aic.res<-cbind(
-                       dat$AIC[dat$mod=="hn+cos"],
-                       dat$AIC[dat$mod=="hr+poly"],
-                       dat$AIC[dat$mod=="hn+cos+cov1"],
-                       dat$AIC[dat$mod=="hr+poly+cov1"],
-                       dat$AIC[dat$mod=="hn+cos+cov1-width"],
-                       dat$AIC[dat$mod=="hr+poly+cov1-width"]
-                      )
-  
-        aic.pick<-apply(aic.res,1,which.min)
-
-      }else{
-
-        pa.res<-n.samps/cbind(
-                              dat$Nhat[dat$mod=="nocov"],
-                              dat$Nhat[dat$mod=="cov"],
-                              dat$Nhat[dat$mod=="hr+poly"],
-                              dat$Nhat[dat$mod=="hn+cos"],
-                              dat$Nhat[dat$mod=="hr+poly"],
-                              dat$Nhat[dat$mod=="hn+cos+cov1"],
-                              dat$Nhat[dat$mod=="hr+poly+cov1"],
-                              dat$Nhat[dat$mod=="hn+cos+cov1-width"],
-                              dat$Nhat[dat$mod=="hr+poly+cov1-width"]
-                             )
-
-        aic.res<-cbind(
-                       dat$AIC[dat$mod=="nocov"],
-                       dat$AIC[dat$mod=="cov"],
-                       dat$AIC[dat$mod=="hn+cos"],
-                       dat$AIC[dat$mod=="hr+poly"],
-                       dat$AIC[dat$mod=="hn+cos+cov1"],
-                       dat$AIC[dat$mod=="hr+poly+cov1"],
-                       dat$AIC[dat$mod=="hn+cos+cov1-width"],
-                       dat$AIC[dat$mod=="hr+poly+cov1-width"]
-                      )
-  
-        aic.pick<-apply(aic.res,1,which.min)
-
       }
+  
 
       # pick the best -- I really like this idiom
       pa.cols<-ncol(pa.res)
@@ -313,40 +325,65 @@ for(set in c("mmds","cds","combined")){
       dat$N<-as.double(as.character(dat$N))
 
       if(set=="mmds"){
-        dat<-dat[dat$model=="mmds-MS",]
+        dat1<-dat[dat$model=="mmds-MS",]
 
-        this.p<-n.samps/dat$Nhat
+        this.p<-n.samps/dat1$Nhat
+        aic.pick<-rep(1,200)
 
-        aic.winners<-rbind(aic.winners,
-                       data.frame(mix.terms=dat$mix.terms,
-                                  n=rep(n.samps,length(dat$mix.terms)),
-                                  model=rep("3pt",length(dat$mix.terms)),
-                                  id=rep(par.ind,length(dat$mix.terms))))
       }else if(set=="cds"){
-        dat1<-dat[dat$model=="cds-hrp",]
-        dat<-dat[dat$model=="cds-hnc",]
-        aic.res<-cbind(dat1$AIC,dat$AIC)
-        pa.res<-n.samps/cbind(dat1$Nhat,dat$Nhat)
+        models<-c("cds-hnc","cds-hrp")
+
+        pa.res<-matrix(NA,200,length(models))
+        aic.res<-matrix(NA,200,length(models))
+
+        for(modi in seq_along(models)){
+          if(sum(dat$mod==models[modi])>0){
+            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
+                                                dat$Nhat[dat$mod==models[modi]]
+            aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
+                                                dat$AIC[dat$mod==models[modi]]
+          }
+        }
       }else{
-        pa.res<-n.samps/cbind(
-                              dat$Nhat[dat$model=="mmds-MS"],
-                              dat$Nhat[dat$model=="cds-hnc"],
-                              dat$Nhat[dat$model=="cds-hrp"]
-                             )
-        aic.res<-cbind(
-                       dat$AIC[dat$model=="mmds-MS"],
-                       dat$AIC[dat$model=="cds-hnc"],
-                       dat$AIC[dat$model=="cds-hrp"]
-                      )
+
+        models<-c("mmds-MS","cds-hnc","cds-hrp")
+
+        pa.res<-matrix(NA,200,length(models))
+        aic.res<-matrix(NA,200,length(models))
+
+        for(modi in seq_along(models)){
+          if(sum(dat$mod==models[modi])>0){
+            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
+                                                dat$Nhat[dat$mod==models[modi]]
+            aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
+                                                dat$AIC[dat$mod==models[modi]]
+          }
+        }
       }
 
       if(set=="combined" | set=="cds"){
         aic.res[is.na(aic.res)]<-Inf
-
         aic.pick<-apply(aic.res,1,which.min)
         pa.cols<-ncol(pa.res)
         pa.aic<-cbind(pa.res,aic.pick)
         this.p<-apply(pa.aic,1,function(x){x[x[pa.cols+1]]})
+      }
+
+      if(set=="mmds" | set=="combined"){
+
+        # since we used model selection, recode mix.terms!=3
+        # as the wrong model
+        mt<-rep(NA,200)
+        mt[dat$sim[dat$mod=="mmds-MS"]] <- dat$mix.terms[dat$mod=="mmds-MS"]
+        aic.pick2<-aic.pick
+        aic.pick2[mt!=3 & aic.pick==1]<-4
+
+        # calculate the aic winners...
+        aic.winners<-rbind(aic.winners,
+                       data.frame(mix.terms=aic.pick2,
+                                  n=rep(n.samps,length(aic.pick2)),
+                                  model=rep("3pt",length(aic.pick2)),
+                                  id=rep(par.ind,length(aic.pick2))))
       }
   
       baf<-rbind(baf,data.frame(pa=this.p,
@@ -360,30 +397,33 @@ for(set in c("mmds","cds","combined")){
     }
   }
   
-  # truth lines -- covar
+
   true.p<-rbind(true.p,data.frame(t=unique(round(true.ps,6)),
                      id=1:2,
                      model=rep("3pt",2)))
   
+##################################
   
   
   baf<-baf[-1,]
   baf$model<-as.factor(baf$model)
   
-  if(set=="mmds"){  
-    # make the annotations of the proportion of results that had
-    # the true number of mixture terms
+
+##################################
+
+  # make the annotations of the proportion of results that had
+  # the true number of mixture terms
+  if(set=="mmds" | set=="combined"){  
     aic.winners<-aic.winners[-1,]
-    cov.aic.winners<-cov.aic.winners[-1,]
     
-    #(in true model)
+    # (in true model)
     itm<-data.frame(n=0,prop=0,model=NA,id=0)
     
     # nocov
     for(i in 1:4){
        # calculate the proportions
-       this.prop<-table(aic.winners)[2,,"nocov",i]/
-                    (table(aic.winners)[1,,"nocov",i]+table(aic.winners)[2,,"nocov",i])
+       this.prop<-table(aic.winners)[2,,"nocov",i]/200
+                    
        itm<-rbind(itm,cbind(n=samp.sizes,
                             prop=round(this.prop,2),
                             model=rep("nocov",5),
@@ -392,8 +432,7 @@ for(set in c("mmds","cds","combined")){
     # pt
     for(i in 1:4){
        # calculate the proportions
-       this.prop<-table(aic.winners)[2,,"pt",i]/
-                    (table(aic.winners)[1,,"pt",i]+table(aic.winners)[2,,"pt",i])
+       this.prop<-table(aic.winners)[2,,"pt",i]/200
        itm<-rbind(itm,cbind(n=samp.sizes,
                             prop=round(this.prop,2),
                             model=rep("pt",5),
@@ -402,8 +441,7 @@ for(set in c("mmds","cds","combined")){
     # covar
     for(i in 1:2){
        # calculate the proportions
-       this.prop<-table(aic.winners)[2,,"covar",i]/
-                    (table(aic.winners)[1,,"covar",i]+table(aic.winners)[2,,"covar",i])
+       this.prop<-table(aic.winners)[2,,"covar",i]/200
        itm<-rbind(itm,cbind(n=samp.sizes,
                             prop=round(this.prop,2),
                             model=rep("covar",5),
@@ -412,10 +450,7 @@ for(set in c("mmds","cds","combined")){
     # 3pt
     for(i in 1:2){
        # calculate the proportions
-       this.prop<-table(aic.winners)[3,,"3pt",i]/
-                    (table(aic.winners)[1,,"3pt",i]+
-                     table(aic.winners)[2,,"3pt",i]+
-                     table(aic.winners)[3,,"3pt",i])
+       this.prop<-table(aic.winners)[1,,"3pt",i]/200
        itm<-rbind(itm,cbind(n=samp.sizes,
                             prop=round(this.prop,2),
                             model=rep("3pt",5),
@@ -444,7 +479,7 @@ for(set in c("mmds","cds","combined")){
   p<-p+geom_boxplot(outlier.size=1)
   p<-p+facet_grid(model~id)
 
-  if(set=="mmds"){
+  if(set=="mmds" | set=="combined"){
     p<-p+geom_text(aes(x=factor(n),y=-0.1,label=prop),size=3,data=itm)
   }
   

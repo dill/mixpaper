@@ -6,13 +6,13 @@ sim.combs<-data.frame(types=c("nocov","pt","3point","covar"),
                       start=c("BFGS+SANN-","BFGS+SANN-","BFGS+SANN-","covsim"),
                       end=c("-960-results.csv","-pt-results.csv",
                             "-960-3pt-results.csv","-BFGS+SANN.csv"),
-                      n.y=c(-2.1,-3.6,-1.75,-0.5))
+                      n.y=c(-2.0,-3.8,-2.2,-0.5))
 
 headers<-list(
 c("model","par.ind","n.samp","sim","par1","par2","par3","pa","aic","Nhat","N"),
 c("model","par.ind","n.samp","sim","par1","par2","par3","pall","aic","N","Nhat"),
 c("model","par.ind","n.samp","sim","ll","aic","pa","Nhat","N","mixterms"),
-c("n.samp","sim","aic","pa","Nhat","N","mixpart","model")
+c("n.samp","sim","aic","pa","Nhat","N","mixterms","model")
 )
 
 todo<-1:4 
@@ -29,7 +29,7 @@ for(combi in todo){
   n.y<-sim.combs$n.y[combi]
   
   for(pari in 1:simn){
-    # nocov
+
     dat<-read.csv(paste(type,"/",start,pari,end,sep=""))
     dat<-dat[,-1]
 
@@ -37,35 +37,71 @@ for(combi in todo){
     
     # some things got messed up, not sure why...
     if(combi==4){
-      dat$model[which(dat$pa==Inf)]<-dat$mixpart[which(dat$pa==Inf)]
+      dat$model[which(dat$pa==Inf)]<-dat$mixterms[which(dat$pa==Inf)]
     }
+
+    models<-unique(dat$model)
+
 
     dat.aic<-c()
     dat.N<-c()
     dat.Nhat<-c()
     dat.n.samp<-c()
+    dat.mixterms<-c()
 
-    # put some data together
-    for(model.names in unique(dat$model)){
-      dat.aic<-cbind(dat.aic,
-                   as.numeric(as.character(dat$aic[dat$model==model.names])))
-      dat.N<-cbind(dat.N,
-                 as.numeric(as.character(dat$N[dat$model==model.names])))
-      dat.Nhat<-cbind(dat.Nhat,
-                    as.numeric(as.character(dat$Nhat[dat$model==model.names])))
-      dat.n.samp<-cbind(dat.n.samp,
-                  as.numeric(as.character(dat$n.samp[dat$model==model.names])))
+    n.samples<-c(30,60,120,480,960)
+
+    for(n in n.samples){
+      dat.aic.t<-matrix(NA,200,length(models))
+      dat.N.t<-matrix(NA,200,length(models))
+      dat.Nhat.t<-matrix(NA,200,length(models))
+      dat.n.samp.t<-matrix(NA,200,length(models))
+      dat.mixterms.t<-rep(NA,200)
+
+      # put some data together
+      for(modi in seq_along(models)){
+
+        ind <- dat$sim[dat$model==models[modi] & dat$n.samp==n]
+        ind2 <- dat$model==models[modi] & dat$n.samp==n
+
+        dat.aic.t[,modi][ind]<-as.numeric(as.character(dat$aic[ind2]))
+        dat.N.t[,modi][ind]<-as.numeric(as.character(dat$N[ind2]))
+        dat.Nhat.t[,modi][ind]<-as.numeric(as.character(dat$Nhat[ind2]))
+        dat.n.samp.t[,modi][ind]<-as.numeric(as.character(dat$n.samp[ind2]))
+      }
+
+      if(combi==3){
+        dat.mixterms.t[dat$sim[dat$model=="mmds-MS"]]<-
+               as.numeric(as.character(dat$mixterms[dat$model=="mmds-MS"]))
+      }
+      if(combi==4){
+        dat.mixterms.t[dat$sim[dat$model=="cov"]]<-
+               as.numeric(as.character(dat$mixterms[dat$model=="cov"]))
+      }
+
+      dat.aic<-rbind(dat.aic,dat.aic.t)
+      dat.N<-rbind(dat.N,dat.N.t)
+      dat.Nhat<-rbind(dat.Nhat,dat.Nhat.t)
+      dat.n.samp<-rbind(dat.n.samp,dat.n.samp.t)
+      dat.mixterms<-rbind(dat.mixterms,dat.mixterms.t)
     }
+
+
     # find the AIC-best models
+    dat.aic[is.na(dat.aic)]<-Inf
     winners <- apply(dat.aic,1,which.min)
-    these.winners <- unique(dat$model)[winners]
+    these.winners <- models[winners]
 
     # now re-code the models so that we are just comparing mmds and (m)cds
     if(combi==1 | combi==2 ){
-      levels(these.winners)<-c("CDS","CDS","MMDS","MMDS")
+      levels(these.winners)<-c("CDS","CDS","CDS","MMDS")
     }else if(combi==3){
+      these.winners[these.winners=="mmds-MS" & 
+                            (dat.mixterms!=3 | dat.mixterms!=2)]<-"cds-hnc"
       levels(these.winners)<-c("CDS","CDS","MMDS")
     }else if(combi==4){
+      these.winners[these.winners=="cov" & dat.mixterms!=2]<-"hn+cos+cov1"
+      these.winners[these.winners=="nocov" & dat.mixterms!=2]<-"hn+cos"
       levels(these.winners)<-c(rep("MCDS",4),"CMMDS","CDS","MCDS","MCDS",
                                 "CDS","MCDS","MCDS","MMDS")
     }
@@ -141,18 +177,11 @@ for(combi in todo){
   p<-p+labs(x="Sample size",y="rel. bias in p")
   p<-p+geom_hline(yintercept=0,col="grey")
   p<-p+geom_text(aes(x=factor(winner),y=n.y,label=n.winner),
-                      size=3,data=win.labels,col="grey")
+                      size=3,data=win.labels,col="black")
 
-#  quartz()
+  quartz()
   print(p)
-  ggsave(paste("boxplots-",type,".pdf",sep=""))
+  #ggsave(paste("boxplots-",type,".pdf",sep=""))
 
 }
-
-
-
-
-
-
-
 
