@@ -402,14 +402,93 @@ for(set in c("mmds","cds","combined")){
                      id=1:2,
                      model=rep("3pt",2)))
   
-##################################
+  ##################################
+  # hazard rate mixtures
+  for(par.ind in 1:2){
+    for(n.samps in samp.sizes){
   
+      n.samps<-as.integer(n.samps)
+    
+      fit.mthod<-"BFGS+SANN"
+      dat<-read.csv(file=paste("hazard/hr-",par.ind,
+                               "-results.csv",sep=""))
+    
+      dat<-dat[,-1]
+      names(dat)<-c("mod","par.ind","n.samp","sim","ll","AIC",
+                    "pa","Nhat","N","mixterms")
+  
+      dat<-dat[dat$n==n.samps,]
+      dat$Nhat<-as.double(as.character(dat$Nhat))
+      dat$N<-as.double(as.character(dat$N))
+
+      if(set=="mmds"){
+        pa.res<-matrix(n.samps/dat$Nhat[dat$mod=="mmds-MS"],200,1)
+        aic.res<-matrix(dat$AIC[dat$mod=="mmds-MS"],200,1)
+      }else if(set=="cds"){
+        models<-c("cds-hnc","cds-hrp")
+
+        pa.res<-matrix(NA,200,length(models))
+        aic.res<-matrix(NA,200,length(models))
+
+        for(modi in seq_along(models)){
+          if(sum(dat$mod==models[modi])>0){
+            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
+                                                dat$Nhat[dat$mod==models[modi]]
+            aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
+                                                dat$AIC[dat$mod==models[modi]]
+          }
+        }
+      }else{
+        models<-c("mmds-MS","cds-hnc","cds-hrp")
+
+        pa.res<-matrix(NA,200,length(models))
+        aic.res<-matrix(NA,200,length(models))
+
+        for(modi in seq_along(models)){
+          if(sum(dat$mod==models[modi])>0){
+            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
+                                                dat$Nhat[dat$mod==models[modi]]
+            aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
+                                                dat$AIC[dat$mod==models[modi]]
+          }
+        }
+      }
+
+      aic.res[is.na(aic.res)]<-Inf
+
+      aic.pick<-apply(aic.res,1,which.min)
+      pa.cols<-ncol(pa.res)
+      pa.aic<-cbind(pa.res,aic.pick)
+      this.p<-apply(pa.aic,1,function(x){x[x[pa.cols+1]]})
+    
+      if(set=="mmds" | set=="combined"){
+        aic.winners<-rbind(aic.winners,
+                       data.frame(mix.terms=aic.pick,
+                                  n=rep(n.samps,length(aic.pick)),
+                                  model=rep("haz",length(aic.pick)),
+                                  id=rep(par.ind,length(aic.pick))))
+      }
+      baf<-rbind(baf,data.frame(pa=this.p,
+                                n=rep(n.samps,length(this.p)),
+                                id=rep(par.ind,length(this.p)),
+                                model=rep("haz",length(this.p))
+                 ))
+      
+      true.ps<-c(true.ps,n.samps/dat$N[!is.na(dat$N)])
+    }
+  }
+  # truth lines 
+  true.p<-rbind(true.p,data.frame(t=rep(unique(round(true.ps,2)),2),
+                     id=rep(1:2,2),
+                     model=rep("haz",4)))
+
+
+  ##################################
   
   baf<-baf[-1,]
   baf$model<-as.factor(baf$model)
-  
 
-##################################
+  ##################################
 
   # make the annotations of the proportion of results that had
   # the true number of mixture terms
@@ -456,23 +535,34 @@ for(set in c("mmds","cds","combined")){
                             model=rep("3pt",5),
                             id=rep(i,5)))
     }
-    
-    
+    ## hazard
+    #for(i in 1:2){
+    #   # calculate the proportions
+    #   this.prop<-table(aic.winners)[2,,"haz",i]/200
+    #   itm<-rbind(itm,cbind(n=samp.sizes,
+    #                        prop=round(this.prop,2),
+    #                        model=rep("haz",5),
+    #                        id=rep(i,5)))
+    #}
     
     itm<-itm[-1,]
+    #itm$model<-factor(itm$model,levels=c("nocov","pt","3pt","covar","haz"))
+    #levels(itm$model)<-c("No covariates","Point transect","3-point",
+    #                     "Covariate","Hazard mixture")
     itm$model<-factor(itm$model,levels=c("nocov","pt","3pt","covar"))
-    levels(itm$model)<-c("No covariates","Point transect","3-point","Covariate")
+    levels(itm$model)<-c("No covariates","Point transect","3-point",
+                         "Covariate")
   }
   
   # reorder the models
-  baf$model<-factor(baf$model,levels=c("nocov","pt","3pt","covar"))
-  true.p$model<-factor(true.p$model,levels=c("nocov","pt","3pt","covar"))
+  baf$model<-factor(baf$model,levels=c("nocov","pt","3pt","covar","haz"))
+  true.p$model<-factor(true.p$model,levels=c("nocov","pt","3pt","covar","haz"))
   
   # rename the models
   levels(baf$model)<-c("No covariates","Point transect",
-                       "3-point","Covariate")
+                       "3-point","Covariate","Hazard mixture")
   levels(true.p$model)<-c("No covariates","Point transect",
-                          "3-point","Covariate")
+                          "3-point","Covariate","Hazard mixture")
   
   # actually do the plotting here
   p<-ggplot(baf,aes(x=factor(n),y=pa))

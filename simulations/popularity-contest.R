@@ -1,21 +1,24 @@
 # what won?
 library(ggplot2)
 
-sim.combs<-data.frame(types=c("nocov","pt","3point","covar"),
-                      number=c(4,4,2,2),
-                      start=c("BFGS+SANN-","BFGS+SANN-","BFGS+SANN-","covsim"),
+sim.combs<-data.frame(types=c("nocov","pt","3point","covar","hazard"),
+                      number=c(4,4,2,2,2),
+                      start=c("BFGS+SANN-","BFGS+SANN-","BFGS+SANN-",
+                              "covsim","hr-"),
                       end=c("-960-results.csv","-pt-results.csv",
-                            "-960-3pt-results.csv","-BFGS+SANN.csv"),
-                      n.y=c(-2.0,-3.8,-2.2,-0.5))
+                            "-960-3pt-results.csv","-BFGS+SANN.csv",
+                            "-results.csv"),
+                      n.y=c(-2.0,-3.8,-2.2,-0.5,0))
 
 headers<-list(
 c("model","par.ind","n.samp","sim","par1","par2","par3","pa","aic","Nhat","N"),
 c("model","par.ind","n.samp","sim","par1","par2","par3","pall","aic","N","Nhat"),
 c("model","par.ind","n.samp","sim","ll","aic","pa","Nhat","N","mixterms"),
-c("n.samp","sim","aic","pa","Nhat","N","mixterms","model")
+c("n.samp","sim","aic","pa","Nhat","N","mixterms","model"),
+c("model","par.ind","n.samp","sim","ll","aic","pa","Nhat","N","mixterms")
 )
 
-todo<-1:4 
+todo<-1:5 
 
 for(combi in todo){
 
@@ -104,6 +107,8 @@ for(combi in todo){
       these.winners[these.winners=="nocov" & dat.mixterms!=2]<-"hn+cos"
       levels(these.winners)<-c(rep("MCDS",4),"CMMDS","CDS","MCDS","MCDS",
                                 "CDS","MCDS","MCDS","MMDS")
+    }else if(combi==5){
+      levels(these.winners)<-c("CDS","CDS","MMDS")
     }
 
     # cheatcode to pull the winners out of the other data
@@ -127,7 +132,7 @@ for(combi in todo){
 
     this.win <- c()
 
-    if(combi==1 | combi==2 | combi==3){
+    if(combi==1 | combi==2 | combi==3 | combi == 5){
       ermcds<-"CDS"
       for(win.n.samp in unique(pop$n.samp)){
 
@@ -181,7 +186,7 @@ for(combi in todo){
 
   quartz()
   print(p)
-  #ggsave(paste("boxplots-",type,".pdf",sep=""))
+  ggsave(paste("boxplots-",type,".pdf",sep=""))
 
 }
 
