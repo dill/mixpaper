@@ -85,7 +85,7 @@ for(n.samples in n.samps){
                         n.samples/sum(1/fitted(fit$ddf)),
                         fit$ddf$Nhat,true.N,NA,"hr+cov1"))
      }else{
-       res<-rbind(res,c(n.samples,sim,NA,NA,NA,NA,NA,"hr+poly+cov1"))
+       res<-rbind(res,c(n.samples,sim,NA,NA,NA,NA,NA,"hr+cov1"))
      }
 
 

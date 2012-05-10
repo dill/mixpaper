@@ -202,7 +202,7 @@ for(set in c("mmds","cds","combined")){
       true.ps<-c(true.ps,n.samps/dat$N[!is.na(dat$N)])
     }
   }
-  # truth lines -- nocov
+  # truth lines 
   true.p<-rbind(true.p,data.frame(t=rep(unique(round(true.ps,6)),4),
                      id=rep(1:4,4),
                      model=rep("pt",16)))
@@ -211,14 +211,25 @@ for(set in c("mmds","cds","combined")){
   ### covar
   true.ps<-c()
   
-  for(par.ind in 1:2){
+  #for(par.ind in 1:2){
+  for(par.ind in 2){
     true.pp<-c()
     for(n.samps in samp.sizes){
     
       dat<-read.csv(file=paste("covar/covsim",par.ind,"-BFGS+SANN.csv",sep=""))
       dat<-dat[,-1]
-      names(dat)<-c("n.samps","sim","AIC","pa","Nhat","N","mix.terms","mod")
+      names(dat)<-c("n","sim","AIC","pa","Nhat","N","mix.terms","mod")
     
+      # load the covar data with no adjustments
+      dat2<-read.csv(file=paste("covar/covsim",par.ind,
+                                "-noadj-BFGS+SANN.csv",sep=""))
+      dat2<-dat2[,-1]
+      names(dat2)<-c("n","sim","AIC","pa","Nhat","N","mix.terms","mod")
+
+      # bind that on the end and delete the data
+      dat<-rbind(dat,dat2)
+      rm(dat2)
+
       dat<-dat[dat$n==n.samps,]
   
       if(set == "mmds"){
@@ -235,8 +246,9 @@ for(set in c("mmds","cds","combined")){
         }
         aic.pick<-apply(aic.res,1,which.min)
       }else if(set=="cds"){
-        models<-c("hn+cos","hr+poly","hn+cos+cov1","hr+poly+cov1",
-                  "hn+cos+cov1-width","hr+poly+cov1-width")
+        #models<-c("hn+cos","hr+poly","hn+cos+cov1","hr+poly+cov1",
+        #          "hn+cos+cov1-width","hr+poly+cov1-width")
+        models<-c("hn+cos","hr+poly","hn+cov1","hr+cov1")
 
         pa.res<-matrix(NA,200,length(models))
         aic.res<-matrix(NA,200,length(models))
@@ -249,8 +261,9 @@ for(set in c("mmds","cds","combined")){
         }
         aic.pick<-apply(aic.res,1,which.min)
       }else{
-        models<-c("nocov","cov","hn+cos","hr+poly","hn+cos+cov1","hr+poly+cov1",
-                  "hn+cos+cov1-width","hr+poly+cov1-width")
+        #models<-c("nocov","cov","hn+cos","hr+poly","hn+cos+cov1","hr+poly+cov1",
+        #          "hn+cos+cov1-width","hr+poly+cov1-width")
+        models<-c("nocov","cov","hn+cos","hr+poly","hn+cov1","hr+cov1")
 
         pa.res<-matrix(NA,200,length(models))
         aic.res<-matrix(NA,200,length(models))
