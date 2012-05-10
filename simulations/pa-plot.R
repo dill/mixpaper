@@ -211,8 +211,7 @@ for(set in c("mmds","cds","combined")){
   ### covar
   true.ps<-c()
   
-  #for(par.ind in 1:2){
-  for(par.ind in 2){
+  for(par.ind in 1:2){
     true.pp<-c()
     for(n.samps in samp.sizes){
     

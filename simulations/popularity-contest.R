@@ -38,13 +38,23 @@ for(combi in todo){
 
     names(dat)<-headers[[combi]]
     
-    # some things got messed up, not sure why...
     if(combi==4){
+      # add in the extra models with no adjustments
+      dat2<-read.csv(paste(type,"/",start,pari,"-noadj",end,sep=""))
+      dat2<-dat2[,-1]
+      names(dat2)<-headers[[combi]]
+      dat<-rbind(dat,dat2)
+      rm(dat2)
+
+      # some things got messed up, not sure why...
       dat$model[which(dat$pa==Inf)]<-dat$mixterms[which(dat$pa==Inf)]
+
+      # ignore the adjustment models
+      models<-c("nocov","cov","hn+cos","hr+poly","hn+cov1","hr+cov1")
+
+    }else{
+      models<-unique(dat$model)
     }
-
-    models<-unique(dat$model)
-
 
     dat.aic<-c()
     dat.N<-c()
@@ -103,10 +113,14 @@ for(combi in todo){
                             (dat.mixterms!=3 | dat.mixterms!=2)]<-"cds-hnc"
       levels(these.winners)<-c("CDS","CDS","MMDS")
     }else if(combi==4){
-      these.winners[these.winners=="cov" & dat.mixterms!=2]<-"hn+cos+cov1"
-      these.winners[these.winners=="nocov" & dat.mixterms!=2]<-"hn+cos"
-      levels(these.winners)<-c(rep("MCDS",4),"CMMDS","CDS","MCDS","MCDS",
-                                "CDS","MCDS","MCDS","MMDS")
+      #these.winners[these.winners=="cov" & dat.mixterms!=2]<-"hn+cos+cov1"
+      #these.winners[these.winners=="nocov" & dat.mixterms!=2]<-"hn+cos"
+      #levels(these.winners)<-c(rep("MCDS",4),"CMMDS","CDS","MCDS","MCDS",
+      #                          "CDS","MCDS","MCDS","MMDS")
+      these.winners<-as.factor(these.winners)
+      these.winners[these.winners=="cov" & dat.mixterms!=2]<-"hn+cov1"
+      these.winners[these.winners=="nocov" & dat.mixterms!=2]<-"hr+poly"
+      levels(these.winners)<-c("CMMDS","MCDS","MCDS","CDS","MMDS")
     }else if(combi==5){
       levels(these.winners)<-c("CDS","CDS","MMDS")
     }
