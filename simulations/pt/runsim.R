@@ -21,9 +21,10 @@ showit<-0
 # actually do the simulation
 
 ## loop over possible parameters
-results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
+results<-foreach(par.ind = 1:2, .combine=rbind,
                    .inorder=FALSE, .init=c()) %dopar% {
-#par.ind<-3
+#results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
+#                   .inorder=FALSE, .init=c()) %dopar% {
   res<-c()
 
   # make sure that the seed is the same on all cores
