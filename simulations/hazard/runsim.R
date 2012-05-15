@@ -46,18 +46,17 @@ nsim<-200
 
 for(pari in 1:nrow(pars)){
 
+
   these.pars<-pars[pari,]
   hr.par<-these.pars[4]
   these.pars<-these.pars[1:3]
 
   for(n.samples in n.samps){
-#n.samples<-1000
 
     true.N<-calc.true.N(these.pars,hr.par,n.samples)
 
     results<-foreach(sim = 1:nsim, .combine=rbind,
                   .inorder=FALSE, .init=c()) %dopar% {
-#sim<-1
       res<-c()
     
       # generate some data
@@ -67,10 +66,6 @@ for(pari in 1:nrow(pars)){
       seed <- get(".Random.seed",envir=.GlobalEnv) ## store RNG seed
       fit<-try(fitmix(sim.data,mix.terms=1,ftype="hn",width=1,
                       model.formula="~1",usegrad=TRUE))
-
-      fit<-try(fitmix(sim.data,initialvalues=starting.vals,mix.terms=1,
-                  ftype="hn",width=width,model.formula=model.formula,
-                  usegrad=TRUE,opt.method=opt.method,showit=showit))
       fit<-step.ds.mixture(fit)
 
       # restore the seed   
@@ -84,10 +79,7 @@ for(pari in 1:nrow(pars)){
          res<-rbind(res,c("mmds-MS",pari,n.samples,sim,rep(NA,6)))
       }
 
-
       # CDS
-
-
       ######################################################## 
       # CDS - hn+cos
       fit<-try(ds(sim.data,width,monotonicity="strict"))
@@ -116,7 +108,7 @@ for(pari in 1:nrow(pars)){
         res<-rbind(res,c("cds-hnc-w",pari,n.samples,sim,"ll",fit$ddf$criterion,
                           fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
       }else{
-        res<-rbind(res,c("cds-hnc",pari,n.samples,sim,rep(NA,6)))
+        res<-rbind(res,c("cds-hnc-w",pari,n.samples,sim,rep(NA,6)))
       }
 
       ######################################################## 

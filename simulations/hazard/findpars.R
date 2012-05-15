@@ -71,27 +71,27 @@ plot(fit)
 
 
 
-# for a hazard parameter of 1,holding the other pars as-is
-hr.par<-1
-
-sim.data <- sim.mix(c(ll$par[1:2],inv.reparam.pi(0.5)),mix.terms=2,n=500,
-                    width=1,key="hr",hr.shape=hr.par)
-g.eval<-mix.hr(xvec,ll$par)
-g.eval1<-keyfct.hr(xvec,ll$par[1],hr.par)
-g.eval2<-keyfct.hr(xvec,ll$par[2],hr.par)
-
-a<-hist(sim.data$distance,plot=FALSE)#,breaks=seq(0,1,len=50))
-hist.sum<-sum(a$density*diff(a$breaks))
-a$density<-a$density*(f.int(ll$par)+0.5)/hist.sum
-
-plot(a,xlab="Distance",freq=FALSE,main="shape=1")
-lines(xvec,g.eval)
-lines(xvec,g.eval1,col="blue")
-lines(xvec,g.eval2,lty=2,col="red")
-
-fit<-try(fitmix(sim.data,mix.terms=2,ftype="hn",width=1,
-                model.formula="~1",usegrad=TRUE))
-plot(fit)
+## for a hazard parameter of 1,holding the other pars as-is
+#hr.par<-1
+#
+#sim.data <- sim.mix(c(ll$par[1:2],inv.reparam.pi(0.5)),mix.terms=2,n=500,
+#                    width=1,key="hr",hr.shape=hr.par)
+#g.eval<-mix.hr(xvec,ll$par)
+#g.eval1<-keyfct.hr(xvec,ll$par[1],hr.par)
+#g.eval2<-keyfct.hr(xvec,ll$par[2],hr.par)
+#
+#a<-hist(sim.data$distance,plot=FALSE)#,breaks=seq(0,1,len=50))
+#hist.sum<-sum(a$density*diff(a$breaks))
+#a$density<-a$density*(f.int(ll$par)+0.5)/hist.sum
+#
+#plot(a,xlab="Distance",freq=FALSE,main="shape=1")
+#lines(xvec,g.eval)
+#lines(xvec,g.eval1,col="blue")
+#lines(xvec,g.eval2,lty=2,col="red")
+#
+#fit<-try(fitmix(sim.data,mix.terms=2,ftype="hn",width=1,
+#                model.formula="~1",usegrad=TRUE))
+#plot(fit)
 
 
 
