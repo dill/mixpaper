@@ -91,7 +91,7 @@ res<-c()
       }
 
       ##############################################
-      # CDS - hn+cos
+      # CDS - hn+cos (scale scaling)
 
       fit<-try(ds(sim.data,width,monotonicity="strict",transect="point"))
       if(all(class(fit$ddf)!="try-error")){
@@ -103,7 +103,7 @@ res<-c()
       }
 
       ######################################################## 
-      # CDS - hr+poly
+      # CDS - hr+poly (scale scaling)
 
       fit<-try(ds(sim.data,width,monotonicity="strict",key="hr",
                   adjustment="poly",transect="point"))
@@ -113,6 +113,32 @@ res<-c()
                          true.N,fit$ddf$Nhat))
       }else{
         res<-rbind(res,c("cds-hrp",par.ind,n.samp,sim,rep(NA,7)))
+      }
+
+      ##############################################
+      # CDS - hn+cos (width scaling)
+
+      fit<-try(ds(sim.data,width,monotonicity="strict",transect="point",
+                  scale="width"))
+      if(all(class(fit$ddf)!="try-error")){
+        res<-rbind(res,c("cds-hnc-w",par.ind,n.samp,sim,rep(NA,3),
+                         fitted(fit$ddf)[1],fit$ddf$criterion,
+                         true.N,fit$ddf$Nhat))
+      }else{
+        res<-rbind(res,c("cds-hnc-w",par.ind,n.samp,sim,rep(NA,7)))
+      }
+
+      ######################################################## 
+      # CDS - hr+poly (width scaling)
+
+      fit<-try(ds(sim.data,width,monotonicity="strict",key="hr",
+                  adjustment="poly",transect="point",scale="width"))
+      if(all(class(fit$ddf)!="try-error")){
+        res<-rbind(res,c("cds-hrp-w",par.ind,n.samp,sim,rep(NA,3),
+                         fitted(fit$ddf)[1],fit$ddf$criterion,
+                         true.N,fit$ddf$Nhat))
+      }else{
+        res<-rbind(res,c("cds-hrp-w",par.ind,n.samp,sim,rep(NA,7)))
       }
 
       ######################################################### 

@@ -76,7 +76,7 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
       }
 
       ######################################################## 
-      # CDS - hn+cos
+      # CDS - hn+cos (scale scaling)
 
       fit<-try(ds(sim.data,width,monotonicity="strict"))
       if(all(class(fit$ddf)!="try-error")){
@@ -88,7 +88,7 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
       }
 
       ######################################################## 
-      # CDS - hr+poly
+      # CDS - hr+poly (scale scaling)
 
       fit<-try(ds(sim.data,width,monotonicity="strict",key="hr",
                   adjustment="poly"))
@@ -98,6 +98,31 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
                          fit$ddf$Nhat,true.N))
       }else{
         res<-rbind(res,c("cds-hrp",par.ind,n.samp,sim,rep(NA,7)))
+      }
+
+      ######################################################## 
+      # CDS - hn+cos (width scaling)
+
+      fit<-try(ds(sim.data,width,monotonicity="strict",scale="width"))
+      if(all(class(fit$ddf)!="try-error")){
+        res<-rbind(res,c("cds-hnc-w",par.ind,n.samp,sim,rep(NA,3),
+                         fitted(fit$ddf)[1],fit$ddf$criterion,
+                         fit$ddf$Nhat,true.N))
+      }else{
+        res<-rbind(res,c("cds-hnc-w",par.ind,n.samp,sim,rep(NA,7)))
+      }
+
+      ######################################################## 
+      # CDS - hr+poly (width scaling)
+
+      fit<-try(ds(sim.data,width,monotonicity="strict",key="hr",
+                  adjustment="poly",scale="width"))
+      if(all(class(fit$ddf)!="try-error")){
+        res<-rbind(res,c("cds-hrp-w",par.ind,n.samp,sim,rep(NA,3),
+                         fitted(fit$ddf)[1],fit$ddf$criterion,
+                         fit$ddf$Nhat,true.N))
+      }else{
+        res<-rbind(res,c("cds-hrp-w",par.ind,n.samp,sim,rep(NA,7)))
       }
 
       ######################################################### 
