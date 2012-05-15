@@ -88,6 +88,8 @@ for(pari in 1:nrow(pars)){
       # CDS
 
 
+      ######################################################## 
+      # CDS - hn+cos
       fit<-try(ds(sim.data,width,monotonicity="strict"))
       if(all(class(fit$ddf)!="try-error")){
         res<-rbind(res,c("cds-hnc",pari,n.samples,sim,"ll",fit$ddf$criterion,
@@ -106,6 +108,27 @@ for(pari in 1:nrow(pars)){
                           fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
       }else{
         res<-rbind(res,c("cds-hrp",pari,n.samples,sim,rep(NA,7)))
+      }
+      ######################################################## 
+      # CDS - hn+cos (width)
+      fit<-try(ds(sim.data,width,monotonicity="strict",scale="width"))
+      if(all(class(fit$ddf)!="try-error")){
+        res<-rbind(res,c("cds-hnc-w",pari,n.samples,sim,"ll",fit$ddf$criterion,
+                          fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
+      }else{
+        res<-rbind(res,c("cds-hnc",pari,n.samples,sim,rep(NA,6)))
+      }
+
+      ######################################################## 
+      # CDS - hr+poly (width)
+
+      fit<-try(ds(sim.data,width,monotonicity="strict",key="hr",
+                  adjustment="poly",scale="width"))
+      if(all(class(fit$ddf)!="try-error")){
+        res<-rbind(res,c("cds-hnc-w",pari,n.samples,sim,"ll",fit$ddf$criterion,
+                          fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
+      }else{
+        res<-rbind(res,c("cds-hrp-w",pari,n.samples,sim,rep(NA,7)))
       }
 
       write.table(res,file=paste("hr-",n.samples,"-",pari,"-results.csv",
