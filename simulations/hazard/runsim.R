@@ -126,8 +126,6 @@ for(pari in 1:nrow(pars)){
       write.table(res,file=paste("hr-",n.samples,"-",pari,"-results.csv",
                                  sep=""),append=TRUE,col.names=FALSE)
 
-
-
     }
   }
 }
