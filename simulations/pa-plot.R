@@ -51,7 +51,7 @@ for(set in c("mmds","cds","combined")){
           }
         }
       }else if(set=="cds"){
-        models<-c("cds-hnc","cds-hrp")
+        models<-c("cds-hnc","cds-hrp","cds-hnc-w","cds-hrp-w")
 
         pa.res<-matrix(NA,200,length(models))
         aic.res<-matrix(NA,200,length(models))
@@ -65,7 +65,7 @@ for(set in c("mmds","cds","combined")){
           }
         }
       }else{
-        models<-c("mmds-1","mmds-c","cds-hnc","cds-hrp")
+        models<-c("mmds-1","mmds-c","cds-hnc","cds-hrp","cds-hnc-w","cds-hrp-w")
 
         pa.res<-matrix(NA,200,length(models))
         aic.res<-matrix(NA,200,length(models))
@@ -343,7 +343,7 @@ for(set in c("mmds","cds","combined")){
         aic.pick<-rep(1,200)
 
       }else if(set=="cds"){
-        models<-c("cds-hnc","cds-hrp")
+        models<-c("cds-hnc","cds-hrp","cds-hnc-w","cds-hrp-w")
 
         pa.res<-matrix(NA,200,length(models))
         aic.res<-matrix(NA,200,length(models))
@@ -358,7 +358,7 @@ for(set in c("mmds","cds","combined")){
         }
       }else{
 
-        models<-c("mmds-MS","cds-hnc","cds-hrp")
+        models<-c("mmds-MS","cds-hnc","cds-hrp","cds-hnc-w","cds-hrp-w")
 
         pa.res<-matrix(NA,200,length(models))
         aic.res<-matrix(NA,200,length(models))

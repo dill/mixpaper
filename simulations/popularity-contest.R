@@ -19,6 +19,8 @@ c("model","par.ind","n.samp","sim","ll","aic","pa","Nhat","N","mixterms")
 )
 
 todo<-1:5 
+# miss pt and hazard for now...
+todo<-c(1,3,4) 
 
 for(combi in todo){
 
@@ -107,11 +109,23 @@ for(combi in todo){
 
     # now re-code the models so that we are just comparing mmds and (m)cds
     if(combi==1 | combi==2 ){
-      levels(these.winners)<-c("CDS","CDS","CDS","MMDS")
+      #levels(these.winners)<-c("CDS","CDS","CDS","CDS","CDS","MMDS")
+      levels(these.winners)[levels(these.winners)=="mmds-c"]<-"MMDS"
+      levels(these.winners)[levels(these.winners)=="mmds-1"]<-"CDS"
+      levels(these.winners)[levels(these.winners)=="cds-hrp"]<-"CDS"
+      levels(these.winners)[levels(these.winners)=="cds-hrp-w"]<-"CDS"
+      levels(these.winners)[levels(these.winners)=="cds-hnc"]<-"CDS"
+      levels(these.winners)[levels(these.winners)=="cds-hnc-w"]<-"CDS"
     }else if(combi==3){
       these.winners[these.winners=="mmds-MS" & 
                             (dat.mixterms!=3 | dat.mixterms!=2)]<-"cds-hnc"
-      levels(these.winners)<-c("CDS","CDS","MMDS")
+      #levels(these.winners)<-c("CDS","CDS","MMDS")
+      levels(these.winners)[levels(these.winners)=="mmds-MS"]<-"MMDS"
+      levels(these.winners)[levels(these.winners)=="mmds-1"]<-"CDS"
+      levels(these.winners)[levels(these.winners)=="cds-hrp"]<-"CDS"
+      levels(these.winners)[levels(these.winners)=="cds-hrp-w"]<-"CDS"
+      levels(these.winners)[levels(these.winners)=="cds-hnc"]<-"CDS"
+      levels(these.winners)[levels(these.winners)=="cds-hnc-w"]<-"CDS"
     }else if(combi==4){
       #these.winners[these.winners=="cov" & dat.mixterms!=2]<-"hn+cos+cov1"
       #these.winners[these.winners=="nocov" & dat.mixterms!=2]<-"hn+cos"
