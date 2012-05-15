@@ -414,6 +414,7 @@ for(set in c("mmds","cds","combined")){
                      id=1:2,
                      model=rep("3pt",2)))
   
+
   ##################################
   # hazard rate mixtures
   for(par.ind in 1:2){
@@ -431,11 +432,16 @@ for(set in c("mmds","cds","combined")){
   
       dat<-dat[dat$n==n.samps,]
       dat$Nhat<-as.double(as.character(dat$Nhat))
+      dat$pa<-as.double(as.character(dat$pa))
       dat$N<-as.double(as.character(dat$N))
 
       if(set=="mmds"){
-        pa.res<-matrix(n.samps/dat$Nhat[dat$mod=="mmds-MS"],200,1)
-        aic.res<-matrix(dat$AIC[dat$mod=="mmds-MS"],200,1)
+        pa.res<-matrix(NA,200,1)
+        aic.res<-matrix(NA,200,1)
+#        pa.res[dat$sim[dat$mod=="mmds-MS"]]<-n.samps/
+#                                              dat$Nhat[dat$mod=="mmds-MS"]
+        pa.res[dat$sim[dat$mod=="mmds-MS"]]<-dat$pa[dat$mod=="mmds-MS"]
+        aic.res[dat$sim[dat$mod=="mmds-MS"]]<-dat$AIC[dat$mod=="mmds-MS"]
       }else if(set=="cds"){
         models<-c("cds-hnc","cds-hrp")
 
@@ -444,8 +450,9 @@ for(set in c("mmds","cds","combined")){
 
         for(modi in seq_along(models)){
           if(sum(dat$mod==models[modi])>0){
-            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
-                                                dat$Nhat[dat$mod==models[modi]]
+#            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
+#                                                dat$Nhat[dat$mod==models[modi]]
+            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-dat$pa[dat$mod==models[modi]]
             aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
                                                 dat$AIC[dat$mod==models[modi]]
           }
@@ -458,8 +465,9 @@ for(set in c("mmds","cds","combined")){
 
         for(modi in seq_along(models)){
           if(sum(dat$mod==models[modi])>0){
-            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
-                                                dat$Nhat[dat$mod==models[modi]]
+#            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
+#                                                dat$Nhat[dat$mod==models[modi]]
+            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-dat$pa[dat$mod==models[modi]]
             aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
                                                 dat$AIC[dat$mod==models[modi]]
           }
@@ -480,21 +488,29 @@ for(set in c("mmds","cds","combined")){
                                   model=rep("haz",length(aic.pick)),
                                   id=rep(par.ind,length(aic.pick))))
       }
+
       baf<-rbind(baf,data.frame(pa=this.p,
                                 n=rep(n.samps,length(this.p)),
                                 id=rep(par.ind,length(this.p)),
                                 model=rep("haz",length(this.p))
                  ))
       
-      true.ps<-c(true.ps,n.samps/dat$N[!is.na(dat$N)])
+#      true.ps<-c(true.ps,n.samps/dat$N[!is.na(dat$N)])
     }
   }
   # truth lines 
-  true.p<-rbind(true.p,data.frame(t=rep(unique(round(true.ps,2)),2),
-                     id=rep(1:2,2),
-                     model=rep("haz",4)))
+  true.p<-rbind(true.p,
+#                data.frame(t=unique(round(true.ps,2)),
+                data.frame(t=rep(0.5,2),
+                           id=1:2,
+                           model=rep("haz",2)))
 
 
+
+
+
+  ##################################
+  ##################################
   ##################################
   
   baf<-baf[-1,]

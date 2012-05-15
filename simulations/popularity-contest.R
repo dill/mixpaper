@@ -8,7 +8,7 @@ sim.combs<-data.frame(types=c("nocov","pt","3point","covar","hazard"),
                       end=c("-960-results.csv","-pt-results.csv",
                             "-960-3pt-results.csv","-BFGS+SANN.csv",
                             "-results.csv"),
-                      n.y=c(-2.0,-3.8,-2.2,-0.5,0))
+                      n.y=c(-2.0,-3.8,-2.2,-1.1,-1.1))
 
 headers<-list(
 c("model","par.ind","n.samp","sim","par1","par2","par3","pa","aic","Nhat","N"),
@@ -19,8 +19,6 @@ c("model","par.ind","n.samp","sim","ll","aic","pa","Nhat","N","mixterms")
 )
 
 todo<-1:5 
-# miss pt and hazard for now...
-todo<-c(1,3,4) 
 
 for(combi in todo){
 
@@ -52,7 +50,8 @@ for(combi in todo){
       dat$model[which(dat$pa==Inf)]<-dat$mixterms[which(dat$pa==Inf)]
 
       # ignore the adjustment models
-      models<-c("nocov","cov","hn+cos","hr+poly","hn+cov1","hr+cov1")
+      models<-c("nocov","cov","hn+cos","hr+poly","hn+cov1",
+                 "hr+cov1")#,"hn+cos+cov1-width","hr+poly+cov1-width")
 
     }else{
       models<-unique(dat$model)
@@ -134,9 +133,22 @@ for(combi in todo){
       these.winners<-as.factor(these.winners)
       these.winners[these.winners=="cov" & dat.mixterms!=2]<-"hn+cov1"
       these.winners[these.winners=="nocov" & dat.mixterms!=2]<-"hr+poly"
-      levels(these.winners)<-c("CMMDS","MCDS","MCDS","CDS","MMDS")
+      levels(these.winners)[levels(these.winners)=="cov"]<-"CMMDS"
+      levels(these.winners)[levels(these.winners)=="nocov"]<-"MMDS"
+      levels(these.winners)[levels(these.winners)=="hr+cov1"]<-"CDS"
+      levels(these.winners)[levels(these.winners)=="hn+cov1"]<-"CDS"
+      levels(these.winners)[levels(these.winners)=="hn+cos"]<-"CDS"
+      levels(these.winners)[levels(these.winners)=="hr+poly"]<-"CDS"
+      levels(these.winners)[levels(these.winners)=="hn+cos+cov1-width"]<-"CDS"
+      levels(these.winners)[levels(these.winners)=="hr+poly+cov1-width"]<-"CDS"
+#      levels(these.winners)<-c("CMMDS","MCDS","MCDS","CDS","MMDS")
     }else if(combi==5){
-      levels(these.winners)<-c("CDS","CDS","MMDS")
+      #levels(these.winners)<-c("CDS","CDS","MMDS")
+      levels(these.winners)[levels(these.winners)=="mmds-MS"]<-"MMDS"
+      levels(these.winners)[levels(these.winners)=="cds-hrp"]<-"CDS"
+      levels(these.winners)[levels(these.winners)=="cds-hrp-w"]<-"CDS"
+      levels(these.winners)[levels(these.winners)=="cds-hnc"]<-"CDS"
+      levels(these.winners)[levels(these.winners)=="cds-hnc-w"]<-"CDS"
     }
 
     # cheatcode to pull the winners out of the other data
@@ -153,7 +165,7 @@ for(combi in todo){
                     N=this.N,
                     Nhat=this.Nhat,
                     prb=(this.N-this.Nhat)/this.N,
-                    p.prb=(1/this.N-1/this.Nhat)*this.N
+                    p.prb=(1/this.Nhat-1/this.N)*this.N
                    )
   
     big.pop <- rbind(big.pop,pop)
