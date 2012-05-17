@@ -62,45 +62,45 @@ for(pari in 1:nrow(pars)){
       # generate some data
       sim.data <- sim.mix(these.pars,2,n.samples,1,key="hr",hr.shape=hr.par)
 
-      #### mmds fitting
-      seed <- get(".Random.seed",envir=.GlobalEnv) ## store RNG seed
-      fit<-try(fitmix(sim.data,mix.terms=1,ftype="hn",width=1,
-                      model.formula="~1",usegrad=TRUE))
-      fit<-step.ds.mixture(fit)
-
-      # restore the seed   
-      assign(".Random.seed",seed,envir=.GlobalEnv)
-
-      # result vector
-      if(class(fit)!="try-error"){
-         res<-rbind(res,c("mmds-MS",pari,n.samples,sim,fit$likelihood,
-                fit$aic,fit$pa,fit$N, true.N,fit$mix.terms))
-      }else{
-         res<-rbind(res,c("mmds-MS",pari,n.samples,sim,rep(NA,6)))
-      }
-
-      # CDS
-      ######################################################## 
-      # CDS - hn+cos
-      fit<-try(ds(sim.data,width,monotonicity="strict"))
-      if(all(class(fit$ddf)!="try-error")){
-        res<-rbind(res,c("cds-hnc",pari,n.samples,sim,"ll",fit$ddf$criterion,
-                          fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
-      }else{
-        res<-rbind(res,c("cds-hnc",pari,n.samples,sim,rep(NA,6)))
-      }
-
-      ######################################################## 
-      # CDS - hr+poly
-
-      fit<-try(ds(sim.data,width,monotonicity="strict",key="hr",
-                  adjustment="poly"))
-      if(all(class(fit$ddf)!="try-error")){
-        res<-rbind(res,c("cds-hnc",pari,n.samples,sim,"ll",fit$ddf$criterion,
-                          fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
-      }else{
-        res<-rbind(res,c("cds-hrp",pari,n.samples,sim,rep(NA,7)))
-      }
+#      #### mmds fitting
+#      seed <- get(".Random.seed",envir=.GlobalEnv) ## store RNG seed
+#      fit<-try(fitmix(sim.data,mix.terms=1,ftype="hn",width=1,
+#                      model.formula="~1",usegrad=TRUE))
+#      fit<-step.ds.mixture(fit)
+#
+#      # restore the seed   
+#      assign(".Random.seed",seed,envir=.GlobalEnv)
+#
+#      # result vector
+#      if(class(fit)!="try-error"){
+#         res<-rbind(res,c("mmds-MS",pari,n.samples,sim,fit$likelihood,
+#                fit$aic,fit$pa,fit$N, true.N,fit$mix.terms))
+#      }else{
+#         res<-rbind(res,c("mmds-MS",pari,n.samples,sim,rep(NA,6)))
+#      }
+#
+#      # CDS
+#      ######################################################## 
+#      # CDS - hn+cos
+#      fit<-try(ds(sim.data,width,monotonicity="strict"))
+#      if(all(class(fit$ddf)!="try-error")){
+#        res<-rbind(res,c("cds-hnc",pari,n.samples,sim,"ll",fit$ddf$criterion,
+#                          fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
+#      }else{
+#        res<-rbind(res,c("cds-hnc",pari,n.samples,sim,rep(NA,6)))
+#      }
+#
+#      ######################################################## 
+#      # CDS - hr+poly
+#
+#      fit<-try(ds(sim.data,width,monotonicity="strict",key="hr",
+#                  adjustment="poly"))
+#      if(all(class(fit$ddf)!="try-error")){
+#        res<-rbind(res,c("cds-hnc",pari,n.samples,sim,"ll",fit$ddf$criterion,
+#                          fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
+#      }else{
+#        res<-rbind(res,c("cds-hrp",pari,n.samples,sim,rep(NA,7)))
+#      }
       ######################################################## 
       # CDS - hn+cos (width)
       fit<-try(ds(sim.data,width,monotonicity="strict",scale="width"))
@@ -123,9 +123,11 @@ for(pari in 1:nrow(pars)){
         res<-rbind(res,c("cds-hrp-w",pari,n.samples,sim,rep(NA,7)))
       }
 
-      write.table(res,file=paste("hr-",n.samples,"-",pari,"-results.csv",
-                                 sep=""),append=TRUE,col.names=FALSE)
+#      write.table(res,file=paste("hr-",n.samples,"-",pari,"-results.csv",
+#                                 sep=""),append=TRUE,col.names=FALSE)
 
+      write.table(res,file=paste("width-hr-",n.samples,"-",pari,"-results.csv",
+                                 sep=""),append=TRUE,col.names=FALSE)
     }
   }
 }
