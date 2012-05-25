@@ -10,7 +10,7 @@ width<-1
 n.samps<-10000
 mix.terms<-2
 model.formula<-"~1"
-par(mfrow=c(3,2))
+par(mfrow=c(2,2))
 
 hr.par<-7
 
@@ -46,7 +46,7 @@ ll<-optim(log(c(0.1,0.1)),f.int)
 cat("scales=",ll$par[1:2],"\n")
 #cat("shapes=",ll$par[4],"\n")
 
-sim.data <- sim.mix(c(ll$par[1:2],inv.reparam.pi(0.5)),mix.terms=2,n=500,
+sim.data <- sim.mix(c(ll$par[1:2],inv.reparam.pi(0.5)),mix.terms=2,n=1000,
                     width=1,key="hr",hr.shape=hr.par)
 g.eval<-mix.hr(xvec,ll$par)
 g.eval1<-keyfct.hr(xvec,ll$par[1],hr.par)
@@ -97,11 +97,20 @@ plot(fit)
 
 
 # with scale=1 but selecting pars again...
+mix.hr<-function(x,pars){
+  pis<-c(0.6,0.4)#reparam.pi(pars[1])
+  keysc1<-pars[1]
+  keysc2<-pars[2]
+  #hr.shape<-pars[4]
+  hr.shape<-hr.par
+  pis[1]*keyfct.hr(x,keysc1,hr.shape)+pis[2]*keyfct.hr(x,keysc2,hr.shape)
+}
 
 
+hr.par<-1
 ll<-optim(log(c(0.1,0.1)),f.int)
 cat("scales=",ll$par[1:2],"\n")
-sim.data <- sim.mix(c(ll$par[1:2],inv.reparam.pi(0.5)),mix.terms=2,n=500,
+sim.data <- sim.mix(c(ll$par[1:2],inv.reparam.pi(0.6)),mix.terms=2,n=960,
                     width=1,key="hr",hr.shape=hr.par)
 g.eval<-mix.hr(xvec,ll$par)
 g.eval1<-keyfct.hr(xvec,ll$par[1],hr.par)
@@ -120,3 +129,5 @@ fit<-try(fitmix(sim.data,mix.terms=2,ftype="hn",width=1,
                 model.formula="~1",usegrad=TRUE))
 plot(fit)
 
+
+dev.copy2pdf(file="notaplot.pdf")

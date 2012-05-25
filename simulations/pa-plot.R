@@ -111,9 +111,9 @@ for(set in c("mmds","cds","combined")){
       if(set=="mmds"){
         models<-c("mmds-1","mmds-2")
       }else if(set=="cds"){
-        models<-c("cds-hnc","cds-hrp")
+        models<-c("cds-hnc","cds-hrp","cds-hnc-w","cds-hrp-w")
       }else{
-        models<-c("mmds-1","mmds-2","cds-hnc","cds-hrp")
+        models<-c("mmds-1","mmds-2","cds-hnc","cds-hrp","cds-hnc-w","cds-hrp-w")
       }
 
       pa.res<-matrix(NA,200,length(models))
@@ -128,6 +128,15 @@ for(set in c("mmds","cds","combined")){
         }
       }
 
+      # one of the results is way out for CDS, just remove that p
+      if(set=="cds" & n.samps==30){
+        ind<-FALSE
+        for(this.col in 1:ncol(pa.res)){
+          ind<-ind|pa.res[,this.col]<6
+        }
+        pa.res<-pa.res[ind,]
+        aic.res<-aic.res[ind,]
+      }
       aic.res[is.na(aic.res)]<-Inf
 
       aic.pick<-apply(aic.res,1,which.min)
@@ -379,9 +388,9 @@ for(set in c("mmds","cds","combined")){
       if(set=="mmds"){
         models<-c("mmds-MS")
       }else if(set=="cds"){
-        models<-c("cds-hnc","cds-hrp")
+        models<-c("cds-hnc","cds-hrp","cds-hnc-w","cds-hrp-w")
       }else{
-        models<-c("mmds-MS","cds-hnc","cds-hrp")
+        models<-c("mmds-MS","cds-hnc","cds-hrp","cds-hnc-w","cds-hrp-w")
       }
       pa.res<-matrix(NA,200,length(models))
       aic.res<-matrix(NA,200,length(models))

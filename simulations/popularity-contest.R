@@ -107,9 +107,10 @@ for(combi in todo){
     these.winners <- models[winners]
 
     # now re-code the models so that we are just comparing mmds and (m)cds
-    if(combi==1 | combi==2 ){
+    if(combi==1 | combi==2){
       #levels(these.winners)<-c("CDS","CDS","CDS","CDS","CDS","MMDS")
       levels(these.winners)[levels(these.winners)=="mmds-c"]<-"MMDS"
+      levels(these.winners)[levels(these.winners)=="mmds-2"]<-"MMDS"
       levels(these.winners)[levels(these.winners)=="mmds-1"]<-"CDS"
       levels(these.winners)[levels(these.winners)=="cds-hrp"]<-"CDS"
       levels(these.winners)[levels(these.winners)=="cds-hrp-w"]<-"CDS"
@@ -135,12 +136,12 @@ for(combi in todo){
       these.winners[these.winners=="nocov" & dat.mixterms!=2]<-"hr+poly"
       levels(these.winners)[levels(these.winners)=="cov"]<-"CMMDS"
       levels(these.winners)[levels(these.winners)=="nocov"]<-"MMDS"
-      levels(these.winners)[levels(these.winners)=="hr+cov1"]<-"CDS"
-      levels(these.winners)[levels(these.winners)=="hn+cov1"]<-"CDS"
+      levels(these.winners)[levels(these.winners)=="hr+cov1"]<-"MCDS"
+      levels(these.winners)[levels(these.winners)=="hn+cov1"]<-"MCDS"
       levels(these.winners)[levels(these.winners)=="hn+cos"]<-"CDS"
       levels(these.winners)[levels(these.winners)=="hr+poly"]<-"CDS"
-      levels(these.winners)[levels(these.winners)=="hn+cos+cov1-width"]<-"CDS"
-      levels(these.winners)[levels(these.winners)=="hr+poly+cov1-width"]<-"CDS"
+      levels(these.winners)[levels(these.winners)=="hn+cos+cov1-width"]<-"MCDS"
+      levels(these.winners)[levels(these.winners)=="hr+poly+cov1-width"]<-"MCDS"
 #      levels(these.winners)<-c("CMMDS","MCDS","MCDS","CDS","MMDS")
     }else if(combi==5){
       #levels(these.winners)<-c("CDS","CDS","MMDS")
