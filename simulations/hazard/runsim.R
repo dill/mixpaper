@@ -18,8 +18,9 @@ width<-1
 # number of realisations
 n.sims<-200
 # sample sizes
-#n.samps<-c(30,60,120,480,960)
-n.samps<-c(120)
+n.samps<-c(30,60,120,480,960)
+n.samps<-c(30,60,480,960)
+#n.samps<-c(120)
 # number of mixture components
 mix.terms<-2
 # no covariates
