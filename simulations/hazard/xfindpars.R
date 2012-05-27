@@ -68,7 +68,7 @@ hist.sum<-sum(a$density*diff(a$breaks))
 a$density<-a$density*(
                 integrate(mix.hr,lower=0,upper=1,pars=pars)$value)/hist.sum
 
-plot(a,xlab="Distance",freq=FALSE,main="shape=1, new scale",ylim=c(0,1))
+plot(a,xlab="Distance",freq=FALSE,main="scale as nocov4",ylim=c(0,1))
 lines(xvec,g.eval)
 #plot(xvec,g.eval,type="l")
 lines(xvec,g.eval1,col="blue")

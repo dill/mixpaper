@@ -3,7 +3,8 @@ library(mmds)
 library(Distance)
 library(foreach)
 library(doMC)
-options(cores=6)
+#options(cores=6)
+options(cores=1)
 registerDoMC()
 
 
@@ -19,8 +20,7 @@ width<-1
 n.sims<-200
 # sample sizes
 n.samps<-c(30,60,120,480,960)
-n.samps<-rev(c(480,960))
-#n.samps<-c(120)
+n.samps<-c(30)#,60,120)
 # number of mixture components
 mix.terms<-2
 # no covariates
