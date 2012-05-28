@@ -3,10 +3,10 @@ library(mmds)
 library(Distance)
 library(foreach)
 library(doMC)
-#options(cores=6)
-options(cores=1)
+options(cores=8)
 registerDoMC()
 
+set.seed(123)
 
 pars<-matrix(NA,2,5)
 
