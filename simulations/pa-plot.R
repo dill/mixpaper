@@ -13,6 +13,7 @@ library(ggplot2)
 samp.sizes<-c(30,60,120,480,960)
 
 for(set in c("mmds","cds","combined")){
+#for(set in c("cds")){
   baf<-data.frame(pa=NA,n=NA,id=NA,model=NA)
   aic.winners<-data.frame(mix.terms=0,n=0,model=NA,id=0)
   true.ps<-c()
@@ -214,7 +215,24 @@ for(set in c("mmds","cds","combined")){
       }
       aic.pick<-apply(aic.res,1,which.min)
 
+
       if(set=="mmds" | set=="combined"){
+
+        if(set=="combined"){
+          # actually do a recode here...
+          # models where # mixtures >1 cov and nocov
+          ind.aic<-aic.pick==2
+          dat.cov<-dat[dat$mod=="cov",]
+          mt <- as.numeric(dat.cov$mix.terms[ind.aic])
+          mt[mt==1]<-4
+          aic.pick[ind.aic]<-mt
+
+          ind.aic<-aic.pick==1
+          dat.cov<-dat[dat$mod=="nocov",]
+          mt<- as.numeric(dat.cov$mix.terms[ind.aic])
+          mt[mt==1]<-3
+          aic.pick[ind.aic]<-mt
+        }
 
         aic.winners<-rbind(aic.winners,
                        data.frame(mix.terms=aic.pick,
@@ -404,6 +422,16 @@ for(set in c("mmds","cds","combined")){
       }
 
       aic.res[is.na(aic.res)]<-Inf
+  
+      # CDS has two outliers
+      if(set=="cds"){
+        rem.ind <- which(pa.res>2,arr.ind=TRUE)[,1]
+        if(length(rem.ind)>0){
+          pa.res<-pa.res[-rem.ind,]
+          aic.res<-aic.res[-rem.ind,]
+        }
+      }
+        
 
       aic.pick<-apply(aic.res,1,which.min)
       pa.cols<-ncol(pa.res)
@@ -424,13 +452,14 @@ for(set in c("mmds","cds","combined")){
                                 model=rep("haz",length(this.p))
                  ))
       
-#      true.ps<-c(true.ps,n.samps/dat$N[!is.na(dat$N)])
+      true.ps<-c(true.ps,n.samps/dat$N[!is.na(dat$N)])
     }
   }
   # truth lines 
   true.p<-rbind(true.p,
 #                data.frame(t=unique(round(true.ps,2)),
-                data.frame(t=rep(0.5,2),
+#                data.frame(t=rep(0.5,2),
+                data.frame(t=c(0.5,0.4708531),
                            id=1:2,
                            model=rep("haz",2)))
 
@@ -500,7 +529,7 @@ for(set in c("mmds","cds","combined")){
 
 
     ######################
-    # time in mmds
+    # time in mmds (>=2 pt mix)
     aic.winners<-aic.winners[-1,]
     
     # (time) in true model
@@ -509,8 +538,9 @@ for(set in c("mmds","cds","combined")){
     # nocov
     for(i in 1:4){
        # calculate the proportions
-       this.prop<-colSums(table(aic.winners)[1:2,,"nocov",i]/200)
-                    
+#       this.prop<-colSums(table(aic.winners)[1:2,,"nocov",i]/200)
+         this.prop<-table(aic.winners)[2,,"nocov",i]/200
+       
        immds<-rbind(immds,cbind(n=samp.sizes,
                             prop=round(this.prop,2),
                             model=rep("nocov",5),
@@ -519,7 +549,8 @@ for(set in c("mmds","cds","combined")){
     # pt
     for(i in 1:4){
        # calculate the proportions
-       this.prop<-colSums(table(aic.winners)[1:2,,"pt",i]/200)
+#       this.prop<-colSums(table(aic.winners)[1:2,,"pt",i]/200)
+       this.prop<-table(aic.winners)[2,,"pt",i]/200
        immds<-rbind(immds,cbind(n=samp.sizes,
                             prop=round(this.prop,2),
                             model=rep("pt",5),
@@ -546,7 +577,8 @@ for(set in c("mmds","cds","combined")){
     # hazard
     for(i in 1:2){
        # calculate the proportions
-       this.prop<-colSums(table(aic.winners)[1:2,,"haz",i]/200)
+#       this.prop<-colSums(table(aic.winners)[1,,"haz",i]/200)
+       this.prop<-table(aic.winners)[1,,"haz",i]/200
        immds<-rbind(immds,cbind(n=samp.sizes,
                             prop=round(this.prop,2),
                             model=rep("haz",5),

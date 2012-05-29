@@ -104,7 +104,7 @@ pari <- 2
       fit<-try(ds(sim.data,width,monotonicity="strict",key="hr",
                   adjustment="poly"))
       if(all(class(fit$ddf)!="try-error")){
-        res<-rbind(res,c("cds-hnc",pari,n.samples,sim,"ll",fit$ddf$criterion,
+        res<-rbind(res,c("cds-hrp",pari,n.samples,sim,"ll",fit$ddf$criterion,
                           fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
       }else{
         res<-rbind(res,c("cds-hrp",pari,n.samples,sim,rep(NA,7)))
@@ -125,7 +125,7 @@ pari <- 2
       fit<-try(ds(sim.data,width,monotonicity="strict",key="hr",
                   adjustment="poly",scale="width"))
       if(all(class(fit$ddf)!="try-error")){
-        res<-rbind(res,c("cds-hnc-w",pari,n.samples,sim,"ll",fit$ddf$criterion,
+        res<-rbind(res,c("cds-hrp-w",pari,n.samples,sim,"ll",fit$ddf$criterion,
                           fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
       }else{
         res<-rbind(res,c("cds-hrp-w",pari,n.samples,sim,rep(NA,7)))

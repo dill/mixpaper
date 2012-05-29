@@ -54,7 +54,7 @@ for(combi in todo){
                  "hr+cov1")#,"hn+cos+cov1-width","hr+poly+cov1-width")
 
     }else{
-      models<-unique(dat$model)
+      models<-as.character(unique(dat$model))
     }
 
     dat.aic<-c()
@@ -72,25 +72,26 @@ for(combi in todo){
       dat.n.samp.t<-matrix(NA,200,length(models))
       dat.mixterms.t<-rep(NA,200)
 
+      datn<-dat[dat$n.samp==n,]
+
       # put some data together
       for(modi in seq_along(models)){
+        ind <- datn$sim[datn$model==models[modi]]
+        ind2 <- datn$model==models[modi] & datn$n.samp==n
 
-        ind <- dat$sim[dat$model==models[modi] & dat$n.samp==n]
-        ind2 <- dat$model==models[modi] & dat$n.samp==n
-
-        dat.aic.t[,modi][ind]<-as.numeric(as.character(dat$aic[ind2]))
-        dat.N.t[,modi][ind]<-as.numeric(as.character(dat$N[ind2]))
-        dat.Nhat.t[,modi][ind]<-as.numeric(as.character(dat$Nhat[ind2]))
-        dat.n.samp.t[,modi][ind]<-as.numeric(as.character(dat$n.samp[ind2]))
+        dat.aic.t[,modi][ind]<-as.numeric(as.character(datn$aic[ind2]))
+        dat.N.t[,modi][ind]<-as.numeric(as.character(datn$N[ind2]))
+        dat.Nhat.t[,modi][ind]<-as.numeric(as.character(datn$Nhat[ind2]))
+        dat.n.samp.t[,modi][ind]<-as.numeric(as.character(datn$n.samp[ind2]))
       }
 
       if(combi==3){
-        dat.mixterms.t[dat$sim[dat$model=="mmds-MS"]]<-
-               as.numeric(as.character(dat$mixterms[dat$model=="mmds-MS"]))
+        dat.mixterms.t[datn$sim[datn$model=="mmds-MS"]]<-
+               as.numeric(as.character(datn$mixterms[datn$model=="mmds-MS"]))
       }
       if(combi==4){
-        dat.mixterms.t[dat$sim[dat$model=="cov"]]<-
-               as.numeric(as.character(dat$mixterms[dat$model=="cov"]))
+        dat.mixterms.t[datn$sim[datn$model=="cov"]]<-
+               as.numeric(as.character(datn$mixterms[datn$model=="cov"]))
       }
 
       dat.aic<-rbind(dat.aic,dat.aic.t)
@@ -108,7 +109,7 @@ for(combi in todo){
 
     # now re-code the models so that we are just comparing mmds and (m)cds
     if(combi==1 | combi==2){
-      #levels(these.winners)<-c("CDS","CDS","CDS","CDS","CDS","MMDS")
+      these.winners<-as.factor(these.winners)
       levels(these.winners)[levels(these.winners)=="mmds-c"]<-"MMDS"
       levels(these.winners)[levels(these.winners)=="mmds-2"]<-"MMDS"
       levels(these.winners)[levels(these.winners)=="mmds-1"]<-"CDS"
@@ -117,9 +118,9 @@ for(combi in todo){
       levels(these.winners)[levels(these.winners)=="cds-hnc"]<-"CDS"
       levels(these.winners)[levels(these.winners)=="cds-hnc-w"]<-"CDS"
     }else if(combi==3){
+      these.winners<-as.factor(these.winners)
       these.winners[these.winners=="mmds-MS" & 
-                            (dat.mixterms!=3 | dat.mixterms!=2)]<-"cds-hnc"
-      #levels(these.winners)<-c("CDS","CDS","MMDS")
+                            (dat.mixterms==1)]<-"cds-hnc"
       levels(these.winners)[levels(these.winners)=="mmds-MS"]<-"MMDS"
       levels(these.winners)[levels(these.winners)=="mmds-1"]<-"CDS"
       levels(these.winners)[levels(these.winners)=="cds-hrp"]<-"CDS"
@@ -127,10 +128,6 @@ for(combi in todo){
       levels(these.winners)[levels(these.winners)=="cds-hnc"]<-"CDS"
       levels(these.winners)[levels(these.winners)=="cds-hnc-w"]<-"CDS"
     }else if(combi==4){
-      #these.winners[these.winners=="cov" & dat.mixterms!=2]<-"hn+cos+cov1"
-      #these.winners[these.winners=="nocov" & dat.mixterms!=2]<-"hn+cos"
-      #levels(these.winners)<-c(rep("MCDS",4),"CMMDS","CDS","MCDS","MCDS",
-      #                          "CDS","MCDS","MCDS","MMDS")
       these.winners<-as.factor(these.winners)
       these.winners[these.winners=="cov" & dat.mixterms!=2]<-"hn+cov1"
       these.winners[these.winners=="nocov" & dat.mixterms!=2]<-"hr+poly"
@@ -142,9 +139,8 @@ for(combi in todo){
       levels(these.winners)[levels(these.winners)=="hr+poly"]<-"CDS"
       levels(these.winners)[levels(these.winners)=="hn+cos+cov1-width"]<-"MCDS"
       levels(these.winners)[levels(these.winners)=="hr+poly+cov1-width"]<-"MCDS"
-#      levels(these.winners)<-c("CMMDS","MCDS","MCDS","CDS","MMDS")
     }else if(combi==5){
-      #levels(these.winners)<-c("CDS","CDS","MMDS")
+      these.winners<-as.factor(these.winners)
       levels(these.winners)[levels(these.winners)=="mmds-MS"]<-"MMDS"
       levels(these.winners)[levels(these.winners)=="cds-hrp"]<-"CDS"
       levels(these.winners)[levels(these.winners)=="cds-hrp-w"]<-"CDS"
