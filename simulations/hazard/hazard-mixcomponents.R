@@ -9,8 +9,7 @@ baf<-data.frame(n.samp=0,par.ind=0,mix.terms=0)
 for(par.ind in 1:2){
 
   fit.mthod<-"BFGS+SANN"
-  dat<-read.csv(file=paste("hazard/hr-",par.ind,
-                           "-results.csv",sep=""))
+  dat<-read.csv(file=paste("hr-",par.ind,"-results.csv",sep=""))
 
   dat<-dat[,-1]
   names(dat)<-c("mod","par.ind","n.samp","sim","ll","AIC",

@@ -10,7 +10,8 @@ width<-1
 n.samps<-10000
 mix.terms<-2
 model.formula<-"~1"
-par(mfrow=c(2,2))
+#par(mfrow=c(2,2))
+par(mfrow=c(1,2))
 
 hr.par<-7
 
@@ -43,7 +44,7 @@ ll<-optim(log(c(0.1,0.1)),f.int)
 # what did we get?
 
 #cat("pi=",reparam.pi(ll$par[1]),"\n")
-cat("scales=",ll$par[1:2],"\n")
+#cat("scales=",ll$par[1:2],"\n")
 #cat("shapes=",ll$par[4],"\n")
 
 sim.data <- sim.mix(c(ll$par[1:2],inv.reparam.pi(0.5)),mix.terms=2,n=1000,
@@ -62,9 +63,9 @@ lines(xvec,g.eval)
 lines(xvec,g.eval1,col="blue")
 lines(xvec,g.eval2,lty=2,col="red")
 
-fit<-try(fitmix(sim.data,mix.terms=2,ftype="hn",width=1,
-                model.formula="~1",usegrad=TRUE))
-plot(fit)
+#fit<-try(fitmix(sim.data,mix.terms=2,ftype="hn",width=1,
+#                model.formula="~1",usegrad=TRUE))
+#plot(fit)
 
 
 
@@ -109,7 +110,7 @@ mix.hr<-function(x,pars){
 
 hr.par<-1
 ll<-optim(log(c(0.1,0.1)),f.int)
-cat("scales=",ll$par[1:2],"\n")
+#cat("scales=",ll$par[1:2],"\n")
 sim.data <- sim.mix(c(ll$par[1:2],inv.reparam.pi(0.6)),mix.terms=2,n=960,
                     width=1,key="hr",hr.shape=hr.par)
 g.eval<-mix.hr(xvec,ll$par)
@@ -125,9 +126,9 @@ lines(xvec,g.eval)
 lines(xvec,g.eval1,col="blue")
 lines(xvec,g.eval2,lty=2,col="red")
 
-fit<-try(fitmix(sim.data,mix.terms=2,ftype="hn",width=1,
-                model.formula="~1",usegrad=TRUE))
-plot(fit)
+#fit<-try(fitmix(sim.data,mix.terms=2,ftype="hn",width=1,
+#                model.formula="~1",usegrad=TRUE))
+#plot(fit)
 
 
-dev.copy2pdf(file="notaplot.pdf")
+#dev.copy2pdf(file="notaplot.pdf")
