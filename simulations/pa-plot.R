@@ -632,7 +632,7 @@ for(set in c("mmds","cds","combined")){
   quartz()
   print(p)
 
-#  dev.copy2eps(file=paste("pa-plot-",set,".eps",sep=""))
+  dev.copy2eps(file=paste("pa-plot-",set,".eps",sep=""))
   dev.copy2pdf(file=paste("pa-plot-",set,".pdf",sep=""))
 
 }
