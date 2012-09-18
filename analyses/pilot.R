@@ -2,7 +2,7 @@
 
 library(mmds)
 
-set.seed(1254)
+set.seed(125)
 
 fin<-read.csv(file="danpike.csv")
 
@@ -48,11 +48,16 @@ cat("Min at",which.min(aics),"\n")
 #plot(fin.BSS2.best,breaks=c(seq(0,1000,len=10),seq(1250,3000,250)),main=c("Average detection function","Levels of Beaufort sea state"),style="comp") 
 
 # best model was continuous BSS
-#plot(fin.BSSc.best,breaks=c(seq(0,1000,len=10),seq(1250,3000,250)),main=c("Average detection function","Quantiles of Beaufort sea state"),style="comp") 
+pdf(file="danpike-bssc.pdf",width=7.6, height=4.1)
+plot(fin.BSSc.best,breaks=c(seq(0,1000,len=10),seq(1250,3000,250)),main=c("Average detection function","Quantiles of Beaufort sea state"),style="comp") 
 #dev.copy2eps(file="danpike-bssc.eps",width=7.6, height=4.1)
-## plot without histograms too, stitch together in tex...
-#plot(fin.BSSc.best,breaks=c(seq(0,1000,len=10),seq(1250,3000,250)),main=c("Average detection function","Quantiles of Beaufort sea state"),style="comp",hide.hist=TRUE) 
+dev.off()
+
+# plot without histograms too, stitch together in tex...
+pdf(file="danpike-bssc-hh.pdf",width=7.6, height=4.1)
+plot(fin.BSSc.best,breaks=c(seq(0,1000,len=10),seq(1250,3000,250)),main=c("Average detection function","Quantiles of Beaufort sea state"),style="comp",hide.hist=TRUE) 
 #dev.copy2eps(file="danpike-bssc-hh.eps",width=7.6, height=4.1)
+dev.off()
 #####
 source("grabresults.R")
 

@@ -57,10 +57,16 @@ aics<-c(aics,ants.nesthabspecies.best$aic)
 
 
 # plot nest+hab model
-#plot(ants.nesthab.best,breaks=c(seq(0,5,len=10),seq(6,25,1)),main=c("Detection function","Quantiles of nest size","Levels of habitat"))
+pdf(file="ants-nesthab-1.pdf",width=8.6,height=3.4)
+plot(ants.nesthab.best,breaks=c(seq(0,5,len=10),seq(6,25,1)),main=c("Detection function","Quantiles of nest size","Levels of habitat"))
+#dev.copy2eps(file="ants-nesthab-1.eps",width=8.6,height=3.4)
+dev.off()
+
 # again without the histograms
-#plot(ants.nesthab.best,breaks=c(seq(0,5,len=10),seq(6,25,1)),main=c("Detection function","Quantiles of nest size","Levels of habitat"),hide.hist=TRUE)
-#dev.copy2eps(file="ants-nesthab.eps",width=8.6,height=3.4)
+pdf(file="ants-nesthab-2.pdf",width=8.6,height=3.4)
+plot(ants.nesthab.best,breaks=c(seq(0,5,len=10),seq(6,25,1)),main=c("Detection function","Quantiles of nest size","Levels of habitat"),hide.hist=TRUE)
+#dev.copy2eps(file="ants-nesthab-2.eps",width=8.6,height=3.4)
+dev.off()
 ### can stitch these together later
 
 #save.image("ants-run.RData")

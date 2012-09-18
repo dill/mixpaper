@@ -15,7 +15,8 @@
 %  as are almost all equations in the journal.  Use a recent version of the
 %  journal as a guide. 
 %  
-\documentclass[useAMS,referee, usegraphicx]{biom}
+%\documentclass[useAMS,referee, usegraphicx]{biom}
+\documentclass[useAMS,referee]{biom}
 %\documentclass[useAMS, usegraphicx]{biom}
 %
 %  If your system does not have the AMS fonts version 2.0 installed, then
@@ -42,7 +43,7 @@
 %  smoother fonts in a PDF file) then uncomment the next line
 %\usepackage{Times}
 \usepackage{amsmath}
-\usepackage{graphicx}
+\usepackage[pdftex]{graphicx}
 \usepackage{url}
 
 %%%%% PLACE YOUR OWN MACROS HERE %%%%%
@@ -69,90 +70,13 @@
 
 \title[Mixture model detection functions]{Mixture models for distance sampling detection functions}
 
-%  Here are examples of different configurations of author/affiliation
-%  displays.  According to the Biometrics style, in some instances,
-%  the convention is to have superscript *, **, etc footnotes to indicate 
-%  which of multiple email addresses belong to which author.  In this case,
-%  use the \email{ } command to produce the emails in the display.
-
-%  In other cases, such as a single author or two authors from 
-%  different institutions, there should be no footnoting.  Here, use
-%  the \emailx{ } command instead. 
-
-%  The examples below corrspond to almost every possible configuration
-%  of authors and may be used as a guide.  For other configurations, consult
-%  a recent issue of the the journal.
-
-%  Single author -- USE \emailx{ } here so that no asterisk footnoting
-%  for the email address will be produced.
-
-%\author{John Author\emailx{email@address.edu} \\
-%Department of Statistics, University of Warwick, Coventry CV4 7AL, U.K.}
-
-%  Two authors from the same institution, with both emails -- use
-%  \email{ } here to produce the asterisk footnoting for each email address
-
-%\author{John Author$^{*}$\email{author@address.edu} and
-%Kathy Authoress$^{**}$\email{email2@address.edu} \\
-%Department of Statistics, University of Warwick, Coventry CV4 7AL, U.K.}
-
-%  Exactly two authors from different institutions, with both emails  
-%  USE \emailx{ } here so that no asterisk footnoting for the email address
-%  is produced.
-
-%\author
-%{John Author\emailx{author@address.edu} \\
-%Department of Statistics, University of Warwick, Coventry CV4 7AL, U.K. 
-%\and
-%Kathy Author\emailx{anotherauthor@address.edu} \\
-%Department of Biostatistics, University of North Carolina at Chapel Hill, 
-%Chapel Hill, North Carolina, U.S.A.}
-
-%  Three or more authors from same institution with all emails displayed
-%  and footnoted using asterisks -- use \email{ } 
-
-%\author{John Author$^*$\email{author@address.edu}, 
-%Jane Author$^{**}$\email{jane@address.edu}, and 
-%Dick Author$^{***}$\email{dick@address.edu} \\
-%Department of Statistics, University of Warwick, Coventry CV4 7AL, U.K}
-
-%  Three or more authors from same institution with one corresponding email
-%  displayed
-
-\author{David L. Miller$^{*}$\email{dave@ninepointeightone.net}, 
-Len Thomas\\
-Centre for Research into Ecological and Environmental Modelling,\\
-University of St Andrews, The Observatory, Buchanan Gardens, St Andrews KY16 9LZ, Scotland}
-
-%  Three or more authors, with at least two different institutions,
-%  more than one email displayed 
-
-%\author{John Author$^{1,*}$\email{author@address.edu}, 
-%Kathy Author$^{2,**}$\email{anotherauthor@address.edu}, and 
-%Wilma Flinstone$^{3,***}$\email{wilma@bedrock.edu} \\
-%$^{1}$Department of Statistics, University of Warwick, Coventry CV4 7AL, U.K \\
-%$^{2}$Department of Biostatistics, University of North Carolina at 
-%Chapel Hill, Chapel Hill, North Carolina, U.S.A. \\
-%$^{3}$Department of Geology, University of Bedrock, Bedrock, Kansas, U.S.A.}
-
-%  Three or more authors with at least two different institutions and only
-%  one email displayed
-
-%\author{John Author$^{1,*}$\email{author@address.edu}, 
-%Wilma Flinstone$^{2}$, and Barney Rubble$^{2}$ \\
-%$^{1}$Department of Statistics, University of Warwick, Coventry CV4 7AL, U.K \\
-%$^{2}$Department of Geology, University of Bedrock, Bedrock, Kansas, U.S.A.}
-
+\author{David L. Miller$^{1*}$\email{dave@ninepointeightone.net}, Len Thomas$^{2}$\\
+$^{1}$Department of Natural Resources Science, University of Rhode Island,\\ 
+Kingston, Rhode Island 02881, USA\\
+$^{2}$Centre for Research into Ecological and Environmental Modelling,\\
+University of St Andrews, St Andrews KY16 9LZ, Scotland}
 
 \begin{document}
-
-%  This will produce the submission and review information that appears
-%  right after the reference section.  Of course, it will be unknown when
-%  you submit your paper, so you can either leave this out or put in 
-%  sample dates (these will have no effect on the fate of your paper in the
-%  review process!)
-
-%\date{{\it Received October} 2007. {\it Revised February} 2008.  {\it Accepted March} 2008.}
 
 %  These options will count the number of pages and provide volume
 %  and date information in the upper left hand corner of the top of the 
@@ -163,17 +87,6 @@ University of St Andrews, The Observatory, Buchanan Gardens, St Andrews KY16 9LZ
 
 %  Again, putting a volume number and date is for your own amusement and
 %  has no bearing on what actually happens to your paper!  
-
-%\pagerange{\pageref{firstpage}--\pageref{lastpage}} 
-%\volume{65}
-%\pubyear{2008}
-%\artmonth{December}
-
-%  The \doi command is where the DOI for your paper would be placed should it
-%  be published.  Again, if you make one up and stick it here, it means 
-%  nothing!
-
-%\doi{10.1111/j.1541-0420.2005.00454.x}
 
 %  This label and the label ``lastpage'' are used by the \pagerange
 %  command above to give the page range for the article.  You may have 
@@ -193,8 +106,6 @@ This version: \today %Remove this before submitting!
 [From the author guidelines:
 ``Papers appearing in the journal rarely have more than six (6) tables or figures combined; about three-fourths have 4 or less. When papers contain numerous tables and figures, editors will always ask that the number be reduced or that some tables and figures be moved to Supplementary Materials. Authors are strongly encouraged to be judicious in the use of tabular and graphical displays and should not combine what ought to be several tables or figures into very large single ones. Authors should also consider moving some tables and figures to Supplementary Material at the time of submission. Papers with an extreme number of tables and/or figures may be returned by the co-editor without review. It is recognized that graphical depictions or images are essential for conveying the message in some substantive areas. In such circumstances, more figures than in the typical submission may be appropriate, and authors should note this explicitly in a covering letter.''
 So, we need to note that we have more than typical, and exlain why. OR we could take matters into our own hands, and move e.g., figures 5 and 7 to an appendix?]
-
-[Dave - when I build this to a dvi, I get a footnote after the abstract and keywords that says (c) The Society for the Study of Evolution.  All rights reserved.  Any idea what this is about and what to do about it?  Maybe it's just me and I'm using a screwed up style file??]
 
 [Dave - note - if we get desperate for space, then uncommenting the Times font option in the preamble above results in a slightly shorter document]
 
@@ -258,7 +169,7 @@ This solution presents a number of problems. Firstly, constrained maximization i
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{figs/figure1.eps}
+\includegraphics[width=\textwidth]{figs/figure1.pdf}
 \caption{Two examples of detection functions that are not monotone, fit using conventional methods in Distance. The first panel is data from humpback whale (Williams and Thomas, 2007): a half-normal detection function with cosine adjustments provided the best fit to the data but, even with constraints in place, the detection function is non-monotonic, with a small secondary peak at approx. 1500m. The second and third panels are data from long-finned pilot whale (Pike et al., 2003) where again a half-normal plus cosine model was fit, but with Beaufort sea state as a covariate and no monotonicity constraints since they cannot be used for multiple covariate models in Distance.  The middle panel shows the detection function averaged over the covariate values and the left panel the marginal detection function for 25th, 50th and 75th quantiles of the Beaufort sea state covariate: non-monotonicity occurs at approx. 2500m.}
 \label{fig1}
 \end{figure}
@@ -371,7 +282,7 @@ Five different simulation scenarios were run, described below.  Within each scen
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{figs/sim-detfct.eps}
+\includegraphics[width=\textwidth]{figs/sim-detfct.pdf}
 \caption{Plots of the models used in the simulation. Top row: detection functions for the line transect simulations with no covariates (solid lines) and their constituent mixture components (dashed lines). Second row: pdfs for the point transect simulations with no covariates (bold lines), with associates component pdfs, rescaled so the area under each curve is one; the detection functions are as in the top row. Third row: two 3-point mixtures for non-covariate line transect data, again with components as dashed lines. Fourth row, two covariate models, the first two panels are for a binary covariate, the second two for a continuous covariate; first panels in each pair show the detection function averaged over the covariates (along with the mixture components, similarly averaged) and the second panels show marginal detection functions with the levels (or quantiles) of the detection function.}
 \label{sim-detfcts}
 \end{figure}
@@ -394,7 +305,7 @@ Further details of simulation results are given in Web Appendix D.
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{simulations/pa-plot.eps}
+\includegraphics[width=\textwidth]{simulations/pa-plot.pdf}
 \caption{Simulation results: boxplots of the estimated average detection probabilities, $P_a$, for the best model (by AIC score). Layout is as in Figure \ref{sim-detfcts}. Grey lines indicate the true value of the average detection probability. Numbers underneath each boxplot give the proportion of AIC best models that were of the same form as the model that the data was simulated from (e.g., in covariate case 1 the proportion of AIC best models that were two point mixtures that included the covariate in the model).}
 \label{sim-boxplots}
 \end{figure}
@@ -433,7 +344,7 @@ In each case a 2-point mixture was selected by AIC to be the best model. The mix
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{analyses/williamsplots.eps}
+\includegraphics[width=\textwidth]{analyses/williamsplots.pdf}
 \caption{Plots of the detection functions fit to the Williams and Thomas (2007) data. In each case the best model by AIC was a 2-point mixture. Dashed lines show the mixture components.}
 \label{williams-detfcts}
 \end{figure}
@@ -449,8 +360,7 @@ As can be seen from Table \ref{big-results-table}, the best model by AIC was a 2
 
 \begin{figure}
 \centering
-%\includegraphics[width=\textwidth]{analyses/ants-nesthab.eps}
-\includegraphics[width=0.3333\textwidth, trim=0 0 5.73228347in 0, clip=true]{analyses/ants-nesthab-1.eps}\includegraphics[width=0.6666\textwidth, trim=2.86614173in 0 0 0, clip=true]{analyses/ants-nesthab-2.eps}
+\includegraphics[width=0.3333\textwidth, trim=0 0 5.73228347in 0, clip=true]{analyses/ants-nesthab-1.pdf}\includegraphics[width=0.6666\textwidth, trim=2.86614173in 0 0 0, clip=true]{analyses/ants-nesthab-2.pdf}
 \caption{Plot of the detection functions for the AIC best model for the ants data set (2-point mixture with nest size and habitat as covariates). The first panel shows the average detection function (dashed lines are the two mixture components of the detection function, averaged over covariate values). The second and third panels show the quantiles (25\%, 50\% and 75\%) of nest size and the levels of habitat type respectively.
 [**Len: Note - think about whether the detection functions should show the same shape on right panel.**] }
 \label{ants-nesthab}
@@ -465,8 +375,7 @@ A model was fit with each of these covariates, as well as a model with no covari
 
 \begin{figure}
 \centering
-%\includegraphics[width=0.75\textwidth]{analyses/danpike-bssc.eps}
-\includegraphics[width=0.375\textwidth, trim= 0 0 3.8in 0, clip=true]{analyses/danpike-bssc.eps}\includegraphics[width=0.375\textwidth, trim= 3.8in 0 0 0, clip=true]{analyses/danpike-bssc-hh.eps}
+\includegraphics[width=0.375\textwidth, trim= 0 0 3.8in 0, clip=true]{analyses/danpike-bssc.pdf}\includegraphics[width=0.375\textwidth, trim= 3.8in 0 0 0, clip=true]{analyses/danpike-bssc-hh.pdf}
 \caption{The (AIC) best model for the long-finned pilot whale data: a 2-point mixture model detection function with Beaufort sea state as a continuous covariate. Left: the average detection function, right: the marginal detection function with the quantiles (25\%, 50\% and 75\%) of \texttt{BSS}.}
 \label{danpike-detfct}
 \end{figure}
@@ -478,9 +387,8 @@ Marques et al. (2007) analyse data on the Hawaii Amakihi (\textit{Hemignathus vi
 
 \begin{figure}
 \centering
-%\includegraphics[width=\textwidth]{analyses/amakihi-om.eps}\\
-\includegraphics[width=0.3333\textwidth, trim=0 0 7.133334in 0, clip=true]{analyses/amakihi-om.eps}\includegraphics[width=0.6666\textwidth, trim=3.566667in 0 0 0, clip=true]{analyses/amakihi-om-hh.eps}\\
-\includegraphics[width=0.4\textwidth]{analyses/amakihi-om-pdf.eps}
+\includegraphics[width=0.3333\textwidth, trim=0 0 7.133334in 0, clip=true]{analyses/amakihi-om.pdf}\includegraphics[width=0.6666\textwidth, trim=3.566667in 0 0 0, clip=true]{analyses/amakihi-om-hh.pdf}\\
+\includegraphics[width=0.4\textwidth]{analyses/amakihi-om.pdf}
 \caption{Plots of the (AIC) best mixture model for the amakihi data: a 2-point mixture with observer and minutes after sunrise as covariates. Top row: detection function averaged over covariates (dashed lines are each mixture component averaged over covariates), marginal detection function showing the levels of observer (averaged over the values of minutes after sunrise) and marginal detection function for the quantiles minutes after sunrise (averaged over the levels of observer). Bottom row: pdf of distances averaged over the covariate values.}
 \label{amakihi}
 \end{figure}

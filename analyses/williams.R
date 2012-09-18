@@ -3,6 +3,7 @@
 
 library(mmds)
 
+pdf(file="williamsplots.pdf",width=8.4,height=3.22)
 par(mfrow=c(1,3))
 
 set.seed(123)
@@ -45,6 +46,7 @@ plot(hb.best, breaks=c(0, 83.5, 167, 250.5, 333, 500, 667, 833, 1000, 1167, 1333
 
 
 #dev.copy2eps(file="williamsplots.eps",width=8.4,height=3.22)
+dev.off()
 
 source("grabresults.R")
 grab_results(hs.best)

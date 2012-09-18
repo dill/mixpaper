@@ -6,7 +6,8 @@
 #     2 - average detection function pilot whale from Dan Pike w. hist
 #     3 - levels of BSS covar for pilot whale from Dan Pike w.o. hist
 
-postscript(file="figure1.eps",width=7.5,height=3,paper="special",horizontal=FALSE)
+#postscript(file="figure1.eps",width=7.5,height=3,paper="special",horizontal=FALSE)
+pdf(file="figure1.pdf",width=7.5,height=3)
 
 par(mfrow=c(1,3),mar=c(4,4.2,4,2))
 

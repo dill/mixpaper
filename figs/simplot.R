@@ -51,8 +51,9 @@ plotcomp<-function(pars,mix.terms,pt=FALSE,asp=1){
 }
 
 
-postscript(file="sim-detfct.eps",width=9,height=9,
-            paper="special",horizontal=FALSE)
+#postscript(file="sim-detfct.eps",width=9,height=9,
+#            paper="special",horizontal=FALSE)
+pdf(file="sim-detfct.pdf",width=9,height=9)
 par(mfrow=c(5,4),mar=c(2,2.2,1.8,1.5),las=1,oma=c(2,2,0,0))
 
 ### plot for lt and pt
