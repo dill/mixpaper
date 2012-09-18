@@ -314,31 +314,13 @@ Further details of simulation results are given in Web Appendix D.
 \section{Case studies}
 \label{s:data}
 
-Given the performance of the method in simulation, several data sets were analysed using the method. Analyses were performed in \texttt{mmds} (Mixture Model Distance Sampling), an \textsf{R} package written by the authors and available on CRAN. Results from using mixture model detection functions are compared with those from the original articles.
+Given the performance of the method in simulation, several data sets were analysed using the method. Two data sets are reported here and two more data sets are reported in Web Appendices F and G. Analyses were performed in \texttt{mmds} (Mixture Model Distance Sampling), an \textsf{R} package written by the authors and available on CRAN. Results from using mixture model detection functions are compared with those from the original articles.
 
 [[\textbf{LEN}: is further detail needed for any of these?]]
 
 \subsection{Williams and Thomas (2007) cetacean survey}
 
-Williams and Thomas (2007) study several species of cetaceans off the coast of British Columbia. In particular we look at three species: harbour seal (in water), harbour porpoise and humpback whale (with truncation at 500m, 500m and 2000m respectively). Results are summarised in Table \ref{williams-table} and detection functions for the best (in an AIC sense) models are shown in Figure \ref{williams-detfcts}.
-
-\begin{table}
-\caption{Comparison of the results for the Williams and Thomas (2007) data. W\&T indicates the results reported in Williams and Thomas (2007), other results are from mixture models where the number of mixture components was selected by AIC. $\cos(x)$ indicates a Cosine adjustment of order $x$.}
-\centering
-\begin{tabular}{c c c c c c}
-\hline \hline
-Species & Model & AIC & $\hat{P_a}$ & $\% CV \hat{P_a}$ & K-S $p$\\
-\hline
-Harbour seal & Hn+$\cos(2)$ (W\&T) & 2771.05 & 0.425 & 7.55 & 0.515\\
-(in water) & Hn 2-pt  & 2769.86 & 0.335 & 15.38 & 0.945\\
-Harbour porpoise & Hr (W\&T) & 690.66 & 0.212 & 32.0 & 0.99\\
- & Hn 2-pt & 692.09 & 0.254 & 18.18 & 0.99\\
-Humpback & Hn+$\cos(2)$ (W\&T) & 1033.06 & 0.386 & 12.64 & 0.672 \\
- & Hn 2-pt & 1035.94 & 0.381 & 18.48 & 0.649 \\
-\hline
-\end{tabular}
-\label{williams-table}
-\end{table}
+Williams and Thomas (2007) study several species of cetaceans off the coast of British Columbia. In particular we look at three species: harbour seal (in water), harbour porpoise and humpback whale (with truncation at 500m, 500m and 2000m respectively). Results are summarised in Table \ref{williams-pike-table} and detection functions for the best (in an AIC sense) models are shown in Figure \ref{williams-detfcts}.
 
 In each case a 2-point mixture was selected by AIC to be the best model. The mixture models for the harbour porpoise and the humpback both did not perform as well as the models selected in Williams and Thomas (2007). However, for the harbour porpoise the AIC is only different by 2, the detectability is very similar and the \%CV is lower, so it does not appear that much is lost by using the mixture model. In the case of the humpback, the fitted detection function is monotone, which was not the case in Williams and Thomas (2007); this added to the fact that there is again not a huge difference in results, leads us to believe that mixture models for the detection function can be useful. Finally, for the harbour seal data, the mixture model had a better AIC than the half-normal with cosine adjustments of order 2 which was selected in the paper. The goodness-of-fit was also significantly better than the result given in Williams and Thomas (2007).
 
@@ -349,29 +331,11 @@ In each case a 2-point mixture was selected by AIC to be the best model. The mix
 \label{williams-detfcts}
 \end{figure}
 
-
-\subsection{Wood ants in the Abernethy forest}
-
-Borkin, Summers and Thomas (2012) analyse data on two species of wood ant (\textit{Formica aquilonia} and \textit{Formica lugubris}) in the Abernethy Forest in Strathspey Scotland over the period of August--September 2003. The number of nests sighted was 150 out to a distance of 72.04m from the track line, although 45\% of the nest sightings lay within 4m of the line. As part of their analysis several different truncation distances were used and larger truncation distances led to large variance in the encounter rate estimates and hence in overall abundance estimates (see Borkin et al., 2012). This is due to the spike caused by the large number of detections close to the line.
-
-As well as distances, three covariates were recorded: habitat type (\texttt{habitat}, a four level factor), the size (calculated as half-width multiplied by height) of each nest (\texttt{nest.size}, continuous variable) and whether \textit{Formica aquilonia} or \textit{Formica lugubris} were observed (\texttt{species}, a two level factor). In order to avoid numerical problems due to large values of the nest size, the variable was standardised.
-
-As can be seen from Table \ref{big-results-table}, the best model by AIC was a 2-point mixture with nest size and habitat as covariates. This is not that surprising given the best CDS model (selected by AIC) in Distance was a hazard-rate with the same covariates. What is rather surprising is that the best mixture model had a better AIC than the hazard-rate, even though it has 1 more parameter. This is particularly encouraging since one might expect that mixtures would give good fits but would not achieve lower AIC scores due to the number of parameters required.
-
-\begin{figure}
-\centering
-\includegraphics[width=0.3333\textwidth, trim=0 0 5.73228347in 0, clip=true]{analyses/ants-nesthab-1.pdf}\includegraphics[width=0.6666\textwidth, trim=2.86614173in 0 0 0, clip=true]{analyses/ants-nesthab-2.pdf}
-\caption{Plot of the detection functions for the AIC best model for the ants data set (2-point mixture with nest size and habitat as covariates). The first panel shows the average detection function (dashed lines are the two mixture components of the detection function, averaged over covariate values). The second and third panels show the quantiles (25\%, 50\% and 75\%) of nest size and the levels of habitat type respectively.
-[**Len: Note - think about whether the detection functions should show the same shape on right panel.**] }
-\label{ants-nesthab}
-\end{figure}
-
-
 \subsection{Long-finned pilot whales}
 
 Pike et al. (2003) analyse data on long-finned pilot whales (\textit{Globicephala melas}). There were 84 pods sighted as part of the NASS-2001 survey (of which the pilot whale was not a target). The Beaufort sea state was recorded as a covariate during the survey and enter the model as either a continuous variable (\texttt{BSS}), 6 level factor (\texttt{BSS}, as a factor), a 2 level factor (\texttt{BSS3}) or a 3 level factor (\texttt{BSS2}).
 
-A model was fit with each of these covariates, as well as a model with no covariates. A summary of the results is given in Table \ref{big-results-table} and the detection function for the best model is shown in Figure \ref{danpike-detfct}.
+A model was fit with each of these covariates, as well as a model with no covariates. A summary of the results is given in Table \ref{williams-pike-table} and the detection function for the best model is shown in Figure \ref{danpike-detfct}.
 
 \begin{figure}
 \centering
@@ -382,61 +346,29 @@ A model was fit with each of these covariates, as well as a model with no covari
 
 The best model by AIC score was a 2-point mixture with \texttt{BSS} as a continuous covariate. Figure \ref{danpike-detfct} shows the average detection function and the marginal detection function with the quantiles of \texttt{BSS}. As one would expect, none of the non-monotonic behaviour seen in Figure \ref{fig1} can be seen here.
 
-\subsection{Amakihi}
-Marques et al. (2007) analyse data on the Hawaii Amakihi (\textit{Hemignathus virens}). The data consist of 1485 observations on the bird ($n=1243$ after truncation at 82.5m), collected at 41 point transect from July 1992 to April 1995. Data was also collected on three covariates: the observer (\texttt{obs} , a three level factor), minutes after sunrise (\texttt{mas}, continuous, standardised to prevent numerical issues) and hours after sunrise (\texttt{has}, a six level factor).
-
-\begin{figure}
-\centering
-\includegraphics[width=0.3333\textwidth, trim=0 0 7.133334in 0, clip=true]{analyses/amakihi-om.pdf}\includegraphics[width=0.6666\textwidth, trim=3.566667in 0 0 0, clip=true]{analyses/amakihi-om-hh.pdf}\\
-\includegraphics[width=0.4\textwidth]{analyses/amakihi-om.pdf}
-\caption{Plots of the (AIC) best mixture model for the amakihi data: a 2-point mixture with observer and minutes after sunrise as covariates. Top row: detection function averaged over covariates (dashed lines are each mixture component averaged over covariates), marginal detection function showing the levels of observer (averaged over the values of minutes after sunrise) and marginal detection function for the quantiles minutes after sunrise (averaged over the levels of observer). Bottom row: pdf of distances averaged over the covariate values.}
-\label{amakihi}
-\end{figure}
-
-Best mixture model according to AIC was a two point mixture with observer and minutes after sunrise as covariates (shown in Figure \ref{amakihi}), closely followed by the model with only observer as a covariate (see Table \ref{big-results-table}). In this case a hazard-rate with observer and minutes after sunrise as covariates beat the mixtures in AIC terms. This is not too surprising given that the mixtures use one more parameter than a hazard-rate in this situation. It is encouraging that there is such a small difference in AIC, and that covariate mixture models were selected despite the large number of parameters that such models entail.
-
-
 \begin{table}
-\caption{Results for the three data sets with covariates. Bold indicates lowest AIC for each set. In each set the final model is the lowest AIC model reported in the original analysis (using \texttt{mrds}). Kolmogorov-Smirnov test $p$-values (KS $p$) are also given as in Section 11.11 of Buckland \textit{et al.} (2004). Results are from ($i$) the wood ant data from Borkin \textit{et al.} (2012) with truncation at 25m; ($ii$) the long-finned pilot whales Pike et al. (2003) with truncation at 3000m, (cont.) denotes that the covariate was included in the model as continuous, otherwise covariates entered the model as factors; ($iii$) the amakihi data from Marques et al. (2007) with truncation at 82.5m.}
+\caption{Comparison of results from Williams and Thomas (2007) and Pike et al. (2003) with results from fitting mixture model detection functions. In each case the first line for each data set is the model from the original article. Mixture model components were selected by AIC. In each case the AIC-best model is emboldened, but note for the Williams and Thomas (2007) data, all models were close in AIC terms. In the table ``(cont.)'' denotes that the covariate was included in the model as continuous, otherwise covariates entered the model as factors; $\cos(x)$ indicates a Cosine adjustment of order $x$.}
 \centering
-\begin{tabular}{c l c c c c}
+\begin{tabular}{c c c c c c}
 \hline \hline
-Model & Covariates & AIC & $\hat{P_a}$ & $\% CV \hat{P_a}$ & K-S $p$\\
+Species & Model & AIC & $\hat{P_a}$ & $\% CV \hat{P_a}$ & K-S $p$\\
 \hline
- & ($i$) \textit{Ants} & & & & \\
-Hn 2-pt  &  None  &  754.61  &  0.184  &  15.46  &  0.96 \\
-Hn 2-pt  &   \texttt{habitat} &  751.27  &  0.188  &  14.85  &  0.97 \\
-Hn 2-pt  &   \texttt{species} &  756.59  &  0.184  &  15.48  &  0.94 \\
-Hn 2-pt  &  \texttt{nest.size} &  741.64  &  0.214  &  15.19  &  0.76 \\
-Hn 2-pt  &  \texttt{habitat} + \texttt{species} &  753.23  &  0.186  &  14.94  &  0.99 \\
-Hn 2-pt  &  \texttt{habitat} + \texttt{nest.size}  &  \textbf{737.27}  &  0.179  &  17.55  &  0.72 \\
-Hn 2-pt  & \texttt{nest.size} + \texttt{species}   &  741.92  &  0.21  &  15.84  &  0.77 \\
-Hn 2-pt  &  \texttt{nest.size} + \texttt{species} + \texttt{habitat}  &  739.08  &  0.178  &  18.09  &  0.83 \\
-% Hr & \texttt{nest.size} + \texttt{habitat} & 745.2 & 0.194 & 10.6 & 0.95\\  % Distance result 
-Hr & \texttt{nest.size} + \texttt{habitat} & 743.56 & 0.195  & 21.72 & 0.89\\ % mrds result
- & ($ii$) \textit{Long-finned pilot whales} & & & & \\
-Hn 2-pt  &  None  &  1298.42  &  0.295  &  17.17  &  0.95 \\
-Hn 2-pt  &  \texttt{BSS}  &  1286.59  &  0.209  &  125794.8  &  0.82 \\
-Hn 2-pt  &  \texttt{BSS2}  &  1284.99  &  0.211  &  23.39  &  0.95 \\
-Hn 2-pt  &  \texttt{BSS3}  &  1296.27  &  0.27  &  17.46  &  0.99 \\
-Hn 2-pt  &  \texttt{BSS}  &  \textbf{1284.56}  &  0.216  &  24.17  &  0.67 \\
+Harbour seal & Hn+$\cos(2)$ & 2771.05 & 0.425 & 7.55 & 0.515\\
+(in water) & Hn 2-pt  & \textbf{2769.86} & 0.335 & 15.38 & 0.945\\
+Harbour porpoise & Hr  & \textbf{690.66} & 0.212 & 32.0 & 0.99\\
+ & Hn 2-pt & 692.09 & 0.254 & 18.18 & 0.99\\
+Humpback & Hn+$\cos(2)$ & \textbf{1033.06} & 0.386 & 12.64 & 0.672 \\
+ & Hn 2-pt & 1035.94 & 0.381 & 18.48 & 0.649 \\
+Long-finned & Hn 1-pt + $\cos(2)$ \texttt{BSS} (cont.) & 1286.5 & 0.452 & 8.69 & 0.48\\ % mrds
 % Hn 1-pt + $\cos(2)$& \texttt{BSS} (cont.) & 1296 & 0.37 & 9.56 & 0.319 \\ % Distance result 
-Hn 1-pt + $\cos(2)$& \texttt{BSS} (cont.) & 1286.5 & 0.452 & 8.69 & 0.48\\ % mrds
- & ($iii$) \textit{Amakihi} & & & & \\
-Hn 2-pt  &  None  &  10805.48  &  0.283  &  6.21  &  0.12 \\
-Hn 2-pt  & \texttt{obs} &  10778.69  &  0.279  &  5.86  &  0.04 \\
-Hn 2-pt  &  \texttt{has}  &  10807.19  &  0.282  &  6.95  &  0.33 \\
-Hn 2-pt  &  \texttt{mas}  &  10805.11  &  0.284  &  6.52  &  0.31 \\
-Hn 2-pt  &  \texttt{obs} +\texttt{has}  &  10782.53  &  0.283  &  6.21  &  0.23 \\
-Hn 2-pt  &  \texttt{obs} +\texttt{mas}  &  \textbf{10778.07}  &  0.279  &  6.1  &  0.14 \\
-Hn 2-pt  &  \texttt{mas} +\texttt{has}  &  10809.17  &  0.282  &  6.97  &  0.43 \\
-Hn 2-pt  &  \texttt{mas} +\texttt{has}+\texttt{obs}  &  10784.5  &  0.282  &  6.33  &  0.35 \\
-% Hr & \texttt{obs} + \texttt{mas} & \textbf{10777.72} & 0.3 & 2.65 & 0.036 \\ % Distance result 
-Hr & \texttt{obs} + \texttt{mas} & \textbf{10777.38} &  0.319 & 5.11 & 0.076\\ % mrds
-\hline
+pilot whales  & Hn 2-pt  None  &  1298.42  &  0.295  &  17.17  &  0.95 \\
+ & Hn 2-pt  \texttt{BSS}  &  1286.59  &  0.209  &  125794.8  &  0.82 \\
+ & Hn 2-pt  \texttt{BSS2}  &  1284.99  &  0.211  &  23.39  &  0.95 \\
+ & Hn 2-pt  \texttt{BSS3}  &  1296.27  &  0.27  &  17.46  &  0.99 \\
+ & Hn 2-pt  \texttt{BSS} (cont.) &  \textbf{1284.56}  &  0.216  &  24.17  &  0.67 \\
 \hline
 \end{tabular}
-\label{big-results-table}
+\label{williams-pike-table}
 \end{table}
 
 \section{Discussion}

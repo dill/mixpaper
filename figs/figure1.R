@@ -9,7 +9,7 @@
 #postscript(file="figure1.eps",width=7.5,height=3,paper="special",horizontal=FALSE)
 pdf(file="figure1.pdf",width=7.5,height=3)
 
-par(mfrow=c(1,3),mar=c(4,4.2,4,2))
+par(mfrow=c(1,3),mar=c(4,4.2,4,2),cex.lab=1.4)
 
 # 1
 # read in the plot data. 3 columns: histogram x coords, hist y coords, detfct
