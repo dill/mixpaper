@@ -1,88 +1,23 @@
-%  template.tex for Biometrics papers
-%
-%  This file provides a template for Biometrics authors.  Use this
-%  template as the starting point for creating your manuscript document.
-%  See the file biomsample.tex for an example of a full-blown manuscript.
+\documentclass{report}
 
-%  ALWAYS USE THE referee OPTION WITH PAPERS SUBMITTED TO BIOMETRICS!!!
-%  You can see what your paper would look like typeset by removing
-%  the referee option.  Because the typeset version will be in two
-%  columns, however, some of your equations may be too long. DO NOT
-%  use the \longequation option discussed in the user guide!!!  This option
-%  is reserved ONLY for equations that are impossible to split across 
-%  multiple lines; e.g., a very wide matrix.  Instead, type your equations 
-%  so that they stay in one column and are split across several lines, 
-%  as are almost all equations in the journal.  Use a recent version of the
-%  journal as a guide. 
-%  
-\documentclass[useAMS,referee]{biom}
-%\documentclass[useAMS, onecolumn, usegraphicx]{biom}
-%
-%  If your system does not have the AMS fonts version 2.0 installed, then
-%  remove the useAMS option.
-%
-%  useAMS allows you to obtain upright Greek characters.
-%  e.g. \umu, \upi etc.  See the section on "Upright Greek characters" in
-%  this guide for further information.
-%
-%  If you are using AMS 2.0 fonts, bold math letters/symbols are available
-%  at a larger range of sizes for NFSS release 1 and 2 (using \boldmath or
-%  preferably \bmath).
-% 
-%  Other options are described in the user guide. Here are a few:
-% 
-%  -  If you use Patrick Daly's natbib  to cross-reference your 
-%     bibliography entries, use the usenatbib option
-%
-%  -  If you use \includegraphics (graphicx package) for importing graphics
-%     into your figures, use the usegraphicx option
-% 
-%  If you wish to typeset the paper in Times font (if you do not have the
-%  PostScript Type 1 Computer Modern fonts you will need to do this to get
-%  smoother fonts in a PDF file) then uncomment the next line
-%  \usepackage{Times}
-\usepackage{amsmath}
+\usepackage{amsmath, bm}
 \usepackage[pdftex]{graphicx}
 \usepackage{url}
-
-%%%%% PLACE YOUR OWN MACROS HERE %%%%%
 
 \def\bSig\mathbf{\Sigma}
 \newcommand{\VS}{V\&S}
 \newcommand{\tr}{\mbox{tr}}
 
-%  The rotating package allows you to have tables displayed in landscape
-%  mode.  The rotating package is NOT included in this distribution, but
-%  can be obtained from the CTAN archive.  USE OF LANDSCAPE TABLES IS
-%  STRONGLY DISCOURAGED -- create landscape tables only as a last resort if
-%  you see no other way to display the information.  If you do do this,
-%  then you need the following command.
-
-%\usepackage[figuresright]{rotating}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%  Here, place your title and author information.  Note that in 
-%  use of the \author command, you create your own footnotes.  Follow
-%  the examples below in creating your author and affiliation information.
-%  Also consult a recent issue of the journal for examples of formatting.
-
-\title[Mixture model detection functions]{Web Appendix for: Mixture models for distance sampling detection functions}
-
-\author{David L. Miller$^{*}$\email{dave@ninepointeightone.net}, 
-Len Thomas\\
-Centre for Research into Ecological and Environmental Modelling,\\
-University of St Andrews, The Observatory, Buchanan Gardens, St Andrews KY16 9LZ, Scotland}
 
 \begin{document}
 
-\label{firstpage}
+\title{Web Appendix for: Mixture models for distance sampling detection functions}
+
+\author{David L. Miller, Len Thomas}
 
 \maketitle
 
 \section*{Outline}
-
-[[\textbf{DAVE}: I notice that none of the other supp materials on the biometrics web site uses the biometrics class, referee style, for their web appendices.  I think they use the standard article class or some such.  We should do taht too, as it seems strange to have the BIOMETRICS 00:000 header, and it's annoying to have the figures and tables far from where they are cited.  I'll sort this out at some point, unless you get boared and get there first...]]
 
 This Web Appendix contains technical details of for the paper ``Mixture models for distance sampling detection functions'' by D. L. Miller and L. Thomas.
 
@@ -112,7 +47,7 @@ where $F$ is any continuous CDF on $(0,\infty]$. Exponentiation ensures that $e^
 
 \begin{figure*}
 \centering
-\includegraphics[width=0.5\textwidth]{figs/phidia.eps}
+\includegraphics[width=0.5\textwidth]{figs/phidia.pdf}
 \caption{The relationship between the mixture proportions, $\phi_j$ and the quantities estimated during the optimization procedure, $\alpha_p$.}
 \label{mmds-phifig}
 \end{figure*}
@@ -363,7 +298,7 @@ Marques et al. (2007) analyse data on the Hawaii Amakihi (\textit{Hemignathus vi
 \begin{figure}
 \centering
 \includegraphics[width=0.3333\textwidth, trim=0 0 7.133334in 0, clip=true]{analyses/amakihi-om.pdf}\includegraphics[width=0.6666\textwidth, trim=3.566667in 0 0 0, clip=true]{analyses/amakihi-om-hh.pdf}\\
-\includegraphics[width=0.4\textwidth]{analyses/amakihi-om.pdf}
+\includegraphics[width=0.4\textwidth]{analyses/amakihi-om-pdf.pdf}
 \caption{Plots of the (AIC) best mixture model for the amakihi data: a 2-point mixture with observer and minutes after sunrise as covariates. Top row: detection function averaged over covariates (dashed lines are each mixture component averaged over covariates), marginal detection function showing the levels of observer (averaged over the values of minutes after sunrise) and marginal detection function for the quantiles minutes after sunrise (averaged over the levels of observer). Bottom row: pdf of distances averaged over the covariate values.}
 \label{amakihi}
 \end{figure}
@@ -435,7 +370,4 @@ Hr & \texttt{obs} + \texttt{mas} & \textbf{10777.38} &  0.319 & 5.11 & 0.076\\ %
 
 \end{thebibliography}
 
-\label{lastpage}
-
 \end{document}
-

@@ -54,22 +54,28 @@ aics<-c(aics,amakihi.omh.best$aic)
 #############
 
 pdf(file="amakihi-om.pdf",width=10.7,height=4.7)
-par(cex.lab=1.4, cex.axis=1.4,cex.main=1.4)
+par(cex.lab=1.6, cex.axis=1.4,cex.main=1.4)
 plot(amakihi.om.best,breaks=c(seq(0,82.5,len=20)),main=c("Detection function","Levels of observer","Quantiles of minutes after sunrise"),style="comp")
 #dev.copy2eps(file="amakihi-om.eps",width=10.7,height=4.7)
+#dev.copy2pdf(file="amakihi-om.pdf",width=10.7,height=4.7)
 dev.off()
 
 
 pdf(file="amakihi-om-hh.pdf",width=10.7,height=4.7)
-par(cex.lab=1.4, cex.axis=1.4,cex.main=1.4)
+par(cex.lab=1.6, cex.axis=1.4,cex.main=1.4)
 plot(amakihi.om.best,breaks=c(seq(0,82.5,len=20)),main=c("Detection function","Levels of observer","Quantiles of minutes after sunrise"),style="comp",hide.hist=TRUE)
 #dev.copy2eps(file="amakihi-om-hh.eps",width=10.7,height=4.7)
+#dev.copy2pdf(file="amakihi-om-hh.pdf",width=10.7,height=4.7)
 dev.off()
 
 
-#plot(amakihi.om.best,breaks=c(seq(0,82.5,len=20)),main="PDF of distances",style="comp",pdf=TRUE)
+pdf(file="amakihi-om-pdf.pdf",width=4.2,height=3.9)
+par(cex.lab=1.2)
+plot(amakihi.om.best,breaks=c(seq(0,82.5,len=20)),main="PDF of distances",style="comp",pdf=TRUE)
 #dev.copy2eps(file="amakihi-om-pdf.eps",width=4.2,height=3.9)
-#
+dev.off()
+
+
 ## to plot the last bit need to edit the code and then run this
 ## change line 300 plot.ds.mixture.R to read
 ## this.col.levels<-unique(this.col)
