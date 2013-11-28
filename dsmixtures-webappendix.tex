@@ -304,7 +304,7 @@ Covariate & D1 & -2.303 & -0.288 & -0.511 & 0.4 & & & & 0.422\\
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{simulations/bar-winners.pdf}
-\caption{Simulation results: stacked bar charts showing the number of models selected by AIC that fall into the given model classes}
+\caption{Simulation results: stacked bar charts showing the number of models selected by AIC that fall into the given model classes. Layout is as in Web Figure 3, above. ``hn'' is a half-normal detection function and ``hr'' is a hazard-rate detection function (no adjustments/1-point mixture). K+A indicates a key function plus adjustment term model where ``cos'' is cosine and ``poly'' are simple polynomial adjustments. MMDS is a mixture model with 2 or 3 components (``2-pt'' or ``3-pt'', respectively). ``(cov)'' indicates that covariates were included in the model (no adjustments were allowed when covariates were used).}
 \label{sim-barplot}
 \end{figure}
 
@@ -312,16 +312,12 @@ Covariate & D1 & -2.303 & -0.288 & -0.511 & 0.4 & & & & 0.422\\
 
 \section*{Web Appendix F - Case studies}
 
-Before analysing the wood ant data the nest size variable was standardised by
-
-*** Dave: I took out some text defining the variabels for wood ants, and also saying you standardized the nest size -- you might want to put it in here?  Ditto for Amakahi - the species codes and the fact that you standardized the minutes after sunrise.  These codes aren't used in the main text, which is why I took them out.  But I guess you need them here to make sense of the tables.
- ***
+Before analysing the wood ant and amakahi data the variables nest size (for ants) and minutes after sunrise (for amakahi) were standardised by dividing the variable by its standard error. Below are plots of the best mixture detection functions for these two analysis.
 
 \begin{figure}
 \centering
 \includegraphics[width=0.3333\textwidth, trim=0 0 5.73228347in 0, clip=true]{analyses/ants-nesthab-1.pdf}\includegraphics[width=0.6666\textwidth, trim=2.86614173in 0 0 0, clip=true]{analyses/ants-nesthab-2.pdf}
-\caption{Plot of the detection functions for the AIC best model for the ants data set (2-point mixture with nest size and habitat as covariates). The first panel shows the average detection function (dashed lines are the two mixture components of the detection function, averaged over covariate values). The second and third panels show the quantiles (25\%, 50\% and 75\%) of nest size and the levels of habitat type respectively.
-[**Len: Note - think about whether the detection functions should show the same shape on right panel.**] }
+\caption{Plot of the detection functions for the AIC best model for the ants data set (2-point mixture with nest size and habitat as covariates). The first panel shows the average detection function (dashed lines are the two mixture components of the detection function, averaged over covariate values). The second and third panels show the quantiles (25\%, 50\% and 75\%) of nest size and the levels of habitat type respectively.}
 \label{ants-nesthab}
 \end{figure}
 

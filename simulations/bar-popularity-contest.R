@@ -30,7 +30,14 @@ for(combi in todo){
   end<-sim.combs$end[combi]
   n.y<-sim.combs$n.y[combi]
 
+  if(combi==4){
+    simn <- 4
+  }
+
   for(pari in 1:simn){
+    parid <- pari
+    if(combi==4 & pari ==3) pari <- 1
+    if(combi==4 & pari ==4) pari <- 2
 
     dat<-read.csv(paste(type,"/",start,pari,end,sep=""))
     dat<-dat[,-1]
@@ -49,8 +56,16 @@ for(combi in todo){
       dat$model[which(dat$pa==Inf)]<-dat$mixterms[which(dat$pa==Inf)]
 
       # ignore the adjustment models
-      models<-c("nocov","cov","hn+cos","hr+poly","hn+cov1",
-                 "hr+cov1")#,"hn+cos+cov1-width","hr+poly+cov1-width")
+      #models<-c("nocov","cov","hn+cos","hr+poly","hn+cov1","hr+cov1")
+              #,"hn+cos+cov1-width","hr+poly+cov1-width")
+
+      if(combi==4 & parid %in% 3:4){
+        models <- c("nocov","hn+cos","hr+poly")
+        dat$par.ind <- parid
+      }
+      if(combi==4 & parid %in% 1:2){
+        models<-c("nocov","cov","hn+cos","hr+poly","hn+cov1","hr+cov1")
+      }
 
     }else{
       models<-as.character(unique(dat$model))
@@ -135,8 +150,10 @@ for(combi in todo){
       these.winners[these.winners=="nocov" & (dat.mixterms==3)]<-"MMDS 3-pt"
       these.winners[these.winners=="nocov" & (dat.mixterms==2)]<-"MMDS 2-pt"
       these.winners[these.winners=="nocov" & (dat.mixterms==1)]<-"hn"
-      these.winners[these.winners=="hr+cov1"]<-"K+A hr+poly (cov)"
-      these.winners[these.winners=="hn+cov1"]<-"K+A hn+cos (cov)"
+      #these.winners[these.winners=="hr+cov1"]<-"K+A hr+poly (cov)"
+      #these.winners[these.winners=="hn+cov1"]<-"K+A hn+cos (cov)"
+      these.winners[these.winners=="hr+cov1"]<-"hr (cov)"
+      these.winners[these.winners=="hn+cov1"]<-"hn (cov)"
       these.winners[these.winners=="hn+cos"]<-"K+A hn+cos"
       these.winners[these.winners=="hr+poly"]<-"K+A hr+poly"
       these.winners[these.winners=="hn+cos+cov1-width"] <- "K+A (cov) hn+cos (w)"
@@ -167,7 +184,7 @@ for(combi in todo){
     these.winners<-as.factor(these.winners)
 
     pop<-data.frame(winner=these.winners,
-                    pari=rep(pari,length(winners)),
+                    pari=rep(parid,length(winners)),
                     type=rep(type,length(winners)),
                     n.samp=this.n.samp,
                     N=this.N

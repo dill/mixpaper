@@ -223,7 +223,7 @@ As expected, results were worse for the point transect scenarios of Group B.  Es
 
 Group C were the 3-point mixture scenarios.  For C1, results were similar to A2 -- unsurprising, given the similarity in detection functions.  A 3-point mixture model was almost never chosen by AIC (Figure \ref{sim-boxplots}).  For C2, estimates were surprisingly good, even when the 3-point mixture was not the selected model, at lower sample sizes.  In both cases, the K+A results were worse (Web Figure 2), and the combined results were as good as those using mixtures alone (Web Figure 3).
 
-We first address the results of the Group D simulations when covariates were available for inclusion in candidate models. In this case, results are positively biased at lower sample sizes but as sample size increases the true probability of detection is found. The K+A models are generally positively biased, though with less variation (Web Figure 2), where as the combined result gives the best of both of these worlds. When covariate information is not available for fitting the model, the mixture model detection functions still perform well, showing that when covariates are not available mixture components can compensate.
+We first address the results of the Group D simulations when covariates were available for inclusion in candidate models. In this case, results are positively biased at lower sample sizes but as sample size increases the true probability of detection is found. The K+A models are generally positively biased, though with less variation (Web Figure 2), where as the combined result gives the best of both of these worlds (although no adjustment terms were used when covariates were also included in the model). When covariate information is not available for fitting the model, the mixture model detection functions still perform well, showing that when covariates are not available mixture components can compensate, though not through using additional components (see Web Figure 4, 3-point mixtures are never AIC-best models).
 
 The Group E results, simulated using mixtures of hazard-rate functions, were a little disappointing.  The half-normal mixture models produced a small positive bias in all cases, except for larger sample sizes in scenario E1, where the bias was negative.  The K+A models had similar (for low sample size) or lower (for high sample size) bias in E1, but higher bias in E2, and the combined approach showed little improvement in performance over K+A alone.
 
@@ -326,20 +326,13 @@ Amakihi & Hn 2-pt &  10805.48  &  0.283  &  6.21  &  0.12 \\
 \section{Discussion}
 \label{s:discuss}
 
-[Conclusion - works well fof some types of spiked data. - -may help.]
-[Discuss fitting strategy - combined approach]
-
-[Simulation study showed that:
-This group demonstrates that the mixture approach can have practical advantages over the K+A approach, either when used as an alternative or as part of a combined model selection strategy, and particularly for some kinds of spiked data.
-Can also have advantages for point transect data, but no approach is well able to cope with a spike there.]
-
 We have investigated and demonstrated the utility of detection functions constructed from mixtures of half-normals in both line and point transect distance sampling. We also show that covariates can be included in such models easily. These mixture detection functions can be simply ``dropped into'' existing models such as: methods for dealing with incomplete detection at zero distance \citep{Laake:2004tz, Laake:2011vm} or spatial models for distance sampling data \citep{Hedley:2004et, Miller:2013us}.
 
-We have shown that the method performs well on both simulated and case studies where traditional methods produce unrealistic results. In many cases the proposed model outperformed K+A models in AIC terms, which is surprising given that the mixture models in question often had more parameters. 
+We have shown that the method performs well on both simulated and case studies where traditional methods produce unrealistic results. In many cases the proposed model outperformed K+A models in AIC terms, which is surprising given that the mixture models in question often had more parameters. In particular mixture model detection functions appear useful when dealing with line transect data which has a spike, though it is not so useful for spiked point transect data.
 
 Simulations show that small sample sizes do not support the use of mixture models with a high number of components, even when the data were generated from such a model. We avoid poorly fitting models of this sort by using both K+A and mixture detection functions and selecting the best between them (comparing Fig. \ref{sim-boxplots} with Web Figure 2). This integrated approach is not dissimilar to current model selection procedures for a detection function analysis -- currently selection is made between different K+A formulations (and number of adjustment terms) using AIC, mixture models simply add another alternative detection function where rather than adjustment terms, mixture components are selected.
 
-In simulation we observed that 3-point mixture did not act as good surrogates for missing covariate information; 2-point mixtures were generally chosen by AIC as good models.  In Section \ref{s:data}, 2-point mixtures consistently provided the best fit. Only examination of further data will show whether 3-point and higher mixtures can be supported, however we note that when the K$+$A series formulation is used, detection functions with 5 or more parameters are rarely selected by AIC (a 3-point mixture with no covariates requires 5 parameters).
+In simulation we observed that 3-point mixture did not act as good surrogates for missing covariate information; 2-point mixtures were generally chosen by AIC as good models (however these models were useful). In Section \ref{s:data}, 2-point mixtures consistently provided the best fit. Only examination of further data will show whether 3-point and higher mixtures can be supported, however we note that when the K+A series formulation is used, detection functions with 5 or more parameters are rarely selected by AIC (a 3-point mixture with no covariates requires 5 parameters).
 
 All the models discussed in this article are available as an \textsf{R} package, \texttt{mmds} which is available on CRAN. Mixture model detection functions will be available in the next version of the Distance software and the \textsf{R} package \texttt{Distance}.
 
@@ -351,16 +344,13 @@ where $\varphi(\kappa)$ is a weighting function which controls the mixing of $g_
 
 \backmatter
 
-%  This section is optional.  Here is where you will want to cite
-%  grants, people who helped with the paper, etc.  But keep it short!
-
 \section*{Supplementary material}
 
 Web Appendices referenced in Sections \ref{s:likelihood}, \ref{s:popsize}, \ref{s:sims_res}, \ref{s:woodant} and \ref{s:amakihi} are available with this paper at the Biometrics website on Wiley Online Library.
 
 \section*{Acknowledgements}
 
-DLM acknowledges the UK EPSRC for financial support, and Simon Wood for useful discussions.  Both authors thank David Borchers, who suggested the parametrisation for the mixture proportions (Web Appendix A), as well as the following people, who provided case study data: Rob Williams (B.C. marine mammals), Dan Pike (pilot whales), Kelly Borkin (wood ants) and Steve Fancy (Amakihi).
+DLM acknowledges the UK EPSRC for financial support during his PhD, and Simon Wood for useful discussions.  Both authors thank David Borchers, who suggested the parametrisation for the mixture proportions (Web Appendix A), as well as the following people, who provided case study data: Rob Williams (B.C. marine mammals), Dan Pike (pilot whales), Kelly Borkin (wood ants) and Steve Fancy (Amakihi).
 
 \bibliographystyle{chicago}
 \bibliography{dsmixtures}

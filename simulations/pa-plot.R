@@ -266,13 +266,13 @@ for(set in c("mmds","cds","combined")){
       pa.aic<-cbind(pa.res,aic.pick)
       this.p<-apply(pa.aic,1,function(x){x[x[pa.cols+1]]})
 
-      if(set!="mmds"){
-        baf<-rbind(baf,data.frame(pa=this.p,
-                                  n=rep(n.samps,length(this.p)),
-                                  id=rep(par.ind,length(this.p)),
-                                  model=rep("covar",length(this.p))
-                   ))
-      }else{
+#      if(set!="mmds"){
+#        baf<-rbind(baf,data.frame(pa=this.p,
+#                                  n=rep(n.samps,length(this.p)),
+#                                  id=rep(par.ind,length(this.p)),
+#                                  model=rep("covar",length(this.p))
+#                   ))
+#      }else{
         # covariates observed
         baf<-rbind(baf,data.frame(pa=pa.res[,1],
                                   n=rep(n.samps,length(this.p)),
@@ -286,24 +286,24 @@ for(set in c("mmds","cds","combined")){
                                   model=rep("covar",length(this.p))
                    ))
 
-      }
+#      }
     }
     true.pp<-c(true.pp,n.samps/dat$N[!is.na(dat$Nhat)])
     true.ps<-c(true.ps,median(true.pp))
   }
   # truth lines -- covar
-  if(set!="mmds"){
-    true.p<-rbind(true.p,data.frame(t=true.ps,
-                                    id=1:2,
-                                    model=rep("covar",2)))
-  }else{
+#  if(set!="mmds"){
+#    true.p<-rbind(true.p,data.frame(t=true.ps,
+#                                    id=1:2,
+#                                    model=rep("covar",2)))
+#  }else{
     true.p<-rbind(true.p,data.frame(t=rep(true.ps,c(2,2)),
                                     id=1:4,
                                     model=rep("covar",4)))
     baf$id[baf$model=="covar" & baf$id==2] <- 5
     baf$id[baf$model=="covar" & baf$id==3] <- 2
     baf$id[baf$model=="covar" & baf$id==5] <- 3
-  }
+#  }
 
   ##################################################################
   ### 3 point
@@ -621,15 +621,15 @@ for(set in c("mmds","cds","combined")){
 
 
   # make little circles with labels in them...
-  if(set!="mmds"){
-    circ.labs <- data.frame(model=rep(model.names,c(4,4,2,2,2)),
-                            id=c(1:4,1:4,1:2,1:2,1:2),
-                            circ.label=c(paste0("A",1:4),
-                                         paste0("B",1:4),
-                                         paste0("C",1:2),
-                                         paste0("D",1:2),
-                                         paste0("E",1:2)))
-  }else{
+#  if(set!="mmds"){
+#    circ.labs <- data.frame(model=rep(model.names,c(4,4,2,2,2)),
+#                            id=c(1:4,1:4,1:2,1:2,1:2),
+#                            circ.label=c(paste0("A",1:4),
+#                                         paste0("B",1:4),
+#                                         paste0("C",1:2),
+#                                         paste0("D",1:2),
+#                                         paste0("E",1:2)))
+#  }else{
     circ.labs <- data.frame(model=rep(model.names,c(4,4,2,4,2)),
                             id=c(1:4,1:4,1:2,1:4,1:2),
                             circ.label=c(paste0("A",1:4),
@@ -640,7 +640,7 @@ for(set in c("mmds","cds","combined")){
     nocov.labs <- data.frame(model=model.names[c(4,4)],
                             id=c(3,4),
                             circ.label=rep("No cov.",2))
-  }
+#  }
 
   #######################################
   # actually do the plotting here
