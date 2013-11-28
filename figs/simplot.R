@@ -2,7 +2,7 @@
 
 library(mmds)
 
-plotcomp<-function(pars,mix.terms,pt=FALSE,asp=1){
+plotcomp<-function(pars,mix.terms,pt=FALSE,asp=1,this.id){
    gp<-mmds:::getpars(pars,mix.terms)
    sigmas<-gp$key.scale
    pis<-gp$mix.prop
@@ -35,6 +35,7 @@ plotcomp<-function(pars,mix.terms,pt=FALSE,asp=1){
       yl<-c(0,max(c(1,ptotal,pv)))
    }else{
       yl<-c(0,max(c(ptotal,pv)))
+      asp <- 1/yl[2]
    }
    plot(x,ptotal,type="l",ylim=yl,xlim=c(0,1),
         asp=asp,axes=F)
@@ -48,12 +49,16 @@ plotcomp<-function(pars,mix.terms,pt=FALSE,asp=1){
    for(i in 1:mix.terms){
       lines(x,pv[i,],lty=2)
    }
+
+  # plot the id
+  points(x=1,y=yl[2]*0.85,cex=3.75)
+  text(x=1,y=yl[2]*0.85,label=this.id)
 }
 
 
 #postscript(file="sim-detfct.eps",width=9,height=9,
 #            paper="special",horizontal=FALSE)
-pdf(file="sim-detfct.pdf",width=9,height=9)
+pdf(file="sim-detfct.pdf",width=7,height=7.5)
 par(mfrow=c(5,4),mar=c(2,2.2,1.8,1.5),las=1,oma=c(2,2,0,0))
 
 ### plot for lt and pt
@@ -65,24 +70,27 @@ parmat[2,]<-c(log(0.6),log(0.1), inv.reparam.pi(1-0.3))
 parmat[3,]<-c(log(10),log(0.2), inv.reparam.pi(0.15))
 parmat[4,]<-c(log(0.7),log(0.05),inv.reparam.pi(0.6))
 
+ids <- c(paste0("A",1:4),paste0("B",1:4))
+k<-1
 for(pt in c(FALSE,TRUE)){
-#   if(pt) asp<-NA else asp<-1
-   asp<-NA 
+   if(pt) asp<-NA else asp<-1
    for(par.ind in 1:4){
-      pars<-parmat[par.ind,]  
-      plotcomp(pars,mix.terms,pt,asp)
+      pars<-parmat[par.ind,]
+      plotcomp(pars,mix.terms,pt,asp,ids[k])
+      k<-k+1
    }
 }
-   
+
 ### plot for 3-point
 parmat<-matrix(NA,2,5)
 parmat[1,]<-c(log(0.8),log(0.5),log(0.1),inv.reparam.pi(rep(1/3,3))[1:2])
 parmat[2,]<-c(log(15),log(.25),log(0.05),inv.reparam.pi(c(0.1,0.4,0.5))[1:2])
 mix.terms<-3
 
+ids <- c(paste0("C",1:2))
 for(par.ind in 1:2){
-   pars<-parmat[par.ind,]  
-   plotcomp(pars,mix.terms,FALSE,asp=NA)
+   pars<-parmat[par.ind,]
+   plotcomp(pars,mix.terms,FALSE,asp=1,ids[par.ind])
 }
 
 # two blank plots
@@ -97,13 +105,21 @@ model.formula<-"~as.factor(cov1)"
 pars<-c(log(c(0.1,0.75,0.6)),inv.reparam.pi(0.4))
 mix.terms<-2
 n.samples<-1000
-z<-list(matrix(c(rep(1,n.samples),rep(c(0,1),n.samples/2)),n.samples,2)) 
+z<-list(matrix(c(rep(1,n.samples),rep(c(0,1),n.samples/2)),n.samples,2))
 zdim<-2
 testdata<-sim.mix(pars,mix.terms,n.samples,width,zdim,z)
 names(testdata)[5]<-"cov1"
 fit<-try(fitmix(testdata,mix.terms=2,ftype="hn",
             width=width,model.formula=model.formula))
-plot(fit,nomf=T,hide.hist=T,style="comp",main=c(" "," "),x.axis=c(0,0.5,1))
+
+
+#source("~/current/mmds/R/plot.ds.mixture.R")
+source("plot.ds.mixture.R")
+switchpars <- mmds:::switchpars
+getpars <- mmds:::getpars
+integrate.hn <- mmds:::integrate.hn
+keyfct.hn <- mmds:::keyfct.hn
+plot(fit,nomf=TRUE,hide.hist=TRUE,style="comp",main=c(" "," "),x.axis=c(0,0.5,1),this.id="D1")
 
 # covsim2
 model.formula<-"~cov1"
@@ -114,7 +130,9 @@ testdata<-sim.mix(pars,mix.terms,n.samples,width,zdim,z)
 names(testdata)[5]<-"cov1"
 fit<-try(fitmix(testdata,mix.terms=2,ftype="hn",width=width,
                 model.formula=model.formula))
-plot(fit,nomf=T,hide.hist=T,style="comp",,main=c(" "," "),x.axis=c(0,0.5,1))
+
+
+plot(fit,nomf=TRUE,hide.hist=TRUE,style="comp",,main=c(" "," "),x.axis=c(0,0.5,1),this.id="D2")
 
 
 # hazard
@@ -130,7 +148,7 @@ haz<-function(pars){
   keyfct.hr<-function(x,keysc,hr.shape){
     return(1-exp(-(x/exp(keysc))^-hr.shape))
   }
-  
+
   mix.hr<-function(x,pars,hr.par){
     pis <- pars[3]
     keysc1<-pars[1]
@@ -145,32 +163,44 @@ haz<-function(pars){
   return(p1)#/int1)
 }
 
-plot(seq(0,1,len=1000),haz(pars[1,]),type="l", ylim=c(0,1), xlim=c(0,1),axes=F)
+plot(seq(0,1,len=1000),haz(pars[1,]),type="l", ylim=c(0,1), xlim=c(0,1),axes=F,asp=1)
 axis(1,c(0,0.5,1))
 axis(2,c(0,0.5,1))
 pars[1,3]<-0
 lines(seq(0,1,len=1000),haz(pars[1,]),type="l",lty=2)
 pars[1,3]<-1
 lines(seq(0,1,len=1000),haz(pars[1,]),type="l",lty=2)
+points(x=1,y=0.85,cex=3.75)
+text(x=1,y=0.85,label="E1")
 box()
 
-plot(seq(0,1,len=1000),haz(pars[2,]),type="l", ylim=c(0,1), xlim=c(0,1),axes=F)
+plot(seq(0,1,len=1000),haz(pars[2,]),type="l", ylim=c(0,1), xlim=c(0,1),axes=F,asp=1)
 axis(1,c(0,0.5,1))
 axis(2,c(0,0.5,1))
 pars[2,3]<-0
 lines(seq(0,1,len=1000),haz(pars[2,]),type="l",lty=2)
 pars[2,3]<-1
 lines(seq(0,1,len=1000),haz(pars[2,]),type="l",lty=2)
+points(x=1,y=0.85,cex=3.75)
+text(x=1,y=0.85,label="E2")
 box()
 
 
-text.y <- c(0.2,0.5,0.8)
+# y-axis labels
+#text.y <- c(0.2,0.5,0.8)
+#mtext("Probability of detection",side=2,outer=TRUE,at=text.y[1],las=3,cex=0.7)
+##mtext("Probability of detection",side=2,outer=TRUE,at=text.y[1],las=3,cex=0.7)
+#mtext("Probability density",side=2,outer=TRUE,at=text.y[2],las=3,cex=0.7)
+#mtext("Probability of detection",side=2,outer=TRUE,at=text.y[3],las=3,cex=0.7)
 
+text.y <- rev(c(0.1,0.3,0.5,0.7,0.9))
 mtext("Probability of detection",side=2,outer=TRUE,at=text.y[1],las=3,cex=0.7)
 #mtext("Probability of detection",side=2,outer=TRUE,at=text.y[1],las=3,cex=0.7)
 mtext("Probability density",side=2,outer=TRUE,at=text.y[2],las=3,cex=0.7)
-mtext("Probability of detection",side=2,outer=TRUE,at=text.y[3],las=3,cex=0.7)
+for(i in 3:5)
+mtext("Probability of detection",side=2,outer=TRUE,at=text.y[i],las=3,cex=0.7)
 
+# x-axis label
 mtext("Distance",side=1,outer=TRUE,at=c(0.5),cex=0.7)
 
 

@@ -18,7 +18,7 @@ c("n.samp","sim","aic","pa","Nhat","N","mixterms","model"),
 c("model","par.ind","n.samp","sim","ll","aic","pa","Nhat","N","mixterms")
 )
 
-todo<-1:5 
+todo<-5#1:5 
 
 for(combi in todo){
 
@@ -109,44 +109,44 @@ for(combi in todo){
 
     # now re-code the models so that we are just comparing mmds and (m)cds
     if(combi==1 | combi==2){
-      these.winners<-as.factor(these.winners)
-      levels(these.winners)[levels(these.winners)=="mmds-c"]<-"MMDS"
-      levels(these.winners)[levels(these.winners)=="mmds-2"]<-"MMDS"
-      levels(these.winners)[levels(these.winners)=="mmds-1"]<-"CDS"
-      levels(these.winners)[levels(these.winners)=="cds-hrp"]<-"CDS"
-      levels(these.winners)[levels(these.winners)=="cds-hrp-w"]<-"CDS"
-      levels(these.winners)[levels(these.winners)=="cds-hnc"]<-"CDS"
-      levels(these.winners)[levels(these.winners)=="cds-hnc-w"]<-"CDS"
+      these.winners[these.winners=="mmds-c"]<-"MMDS"
+      these.winners[these.winners=="mmds-2"]<-"MMDS"
+      these.winners[these.winners=="mmds-1"]<-"CDS"
+      these.winners[these.winners=="cds-hrp"]<-"CDS"
+      these.winners[these.winners=="cds-hrp-w"]<-"CDS"
+      these.winners[these.winners=="cds-hnc"]<-"CDS"
+      these.winners[these.winners=="cds-hnc-w"]<-"CDS"
     }else if(combi==3){
-      these.winners<-as.factor(these.winners)
       these.winners[these.winners=="mmds-MS" & 
                             (dat.mixterms==1)]<-"cds-hnc"
-      levels(these.winners)[levels(these.winners)=="mmds-MS"]<-"MMDS"
-      levels(these.winners)[levels(these.winners)=="mmds-1"]<-"CDS"
-      levels(these.winners)[levels(these.winners)=="cds-hrp"]<-"CDS"
-      levels(these.winners)[levels(these.winners)=="cds-hrp-w"]<-"CDS"
-      levels(these.winners)[levels(these.winners)=="cds-hnc"]<-"CDS"
-      levels(these.winners)[levels(these.winners)=="cds-hnc-w"]<-"CDS"
+      these.winners[these.winners=="mmds-MS"]<-"MMDS"
+      these.winners[these.winners=="mmds-1"]<-"CDS"
+      these.winners[these.winners=="cds-hrp"]<-"CDS"
+      these.winners[these.winners=="cds-hrp-w"]<-"CDS"
+      these.winners[these.winners=="cds-hnc"]<-"CDS"
+      these.winners[these.winners=="cds-hnc-w"]<-"CDS"
     }else if(combi==4){
-      these.winners<-as.factor(these.winners)
       these.winners[these.winners=="cov" & dat.mixterms!=2]<-"hn+cov1"
       these.winners[these.winners=="nocov" & dat.mixterms!=2]<-"hr+poly"
-      levels(these.winners)[levels(these.winners)=="cov"]<-"CMMDS"
-      levels(these.winners)[levels(these.winners)=="nocov"]<-"MMDS"
-      levels(these.winners)[levels(these.winners)=="hr+cov1"]<-"MCDS"
-      levels(these.winners)[levels(these.winners)=="hn+cov1"]<-"MCDS"
-      levels(these.winners)[levels(these.winners)=="hn+cos"]<-"CDS"
-      levels(these.winners)[levels(these.winners)=="hr+poly"]<-"CDS"
-      levels(these.winners)[levels(these.winners)=="hn+cos+cov1-width"]<-"MCDS"
-      levels(these.winners)[levels(these.winners)=="hr+poly+cov1-width"]<-"MCDS"
+      these.winners[these.winners=="cov"]<-"CMMDS"
+      these.winners[these.winners=="nocov"]<-"MMDS"
+      these.winners[these.winners=="hr+cov1"]<-"MCDS"
+      these.winners[these.winners=="hn+cov1"]<-"MCDS"
+      these.winners[these.winners=="hn+cos"]<-"CDS"
+      these.winners[these.winners=="hr+poly"]<-"CDS"
+      these.winners[these.winners=="hn+cos+cov1-width"]<-"MCDS"
+      these.winners[these.winners=="hr+poly+cov1-width"]<-"MCDS"
     }else if(combi==5){
-      these.winners<-as.factor(these.winners)
-      levels(these.winners)[levels(these.winners)=="mmds-MS"]<-"MMDS"
-      levels(these.winners)[levels(these.winners)=="cds-hrp"]<-"CDS"
-      levels(these.winners)[levels(these.winners)=="cds-hrp-w"]<-"CDS"
-      levels(these.winners)[levels(these.winners)=="cds-hnc"]<-"CDS"
-      levels(these.winners)[levels(these.winners)=="cds-hnc-w"]<-"CDS"
+      these.winners[these.winners=="mmds-MS" &
+                            (dat.mixterms==1)]<-"cds-hnc"
+      these.winners[these.winners=="mmds-MS"]<-"MMDS"
+      these.winners[these.winners=="cds-hrp"]<-"CDS"
+      these.winners[these.winners=="cds-hrp-w"]<-"CDS"
+      these.winners[these.winners=="cds-hnc"]<-"CDS"
+      these.winners[these.winners=="cds-hnc-w"]<-"CDS"
     }
+
+    these.winners<-as.factor(these.winners)
 
     # cheatcode to pull the winners out of the other data
     # bind the winners onto the end, then use the element 
@@ -154,7 +154,7 @@ for(combi in todo){
     this.N<-apply(cbind(dat.N,winners),1,function(x){x[x[length(x)]]})
     this.Nhat<-apply(cbind(dat.Nhat,winners),1,function(x){x[x[length(x)]]})
     this.n.samp<-apply(cbind(dat.n.samp,winners),1,function(x){x[x[length(x)]]})
-  
+
     pop<-data.frame(winner=these.winners,
                     pari=rep(pari,length(winners)),
                     type=rep(type,length(winners)),
@@ -164,7 +164,7 @@ for(combi in todo){
                     prb=(this.N-this.Nhat)/this.N,
                     p.prb=(1/this.Nhat-1/this.N)*this.N
                    )
-  
+
     big.pop <- rbind(big.pop,pop)
 
     this.win <- c()

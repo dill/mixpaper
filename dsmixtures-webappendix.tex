@@ -71,7 +71,9 @@ l(\bm{\theta}, \bm{\phi}; \mathbf{x},\mathbf{Z}) = \sum_{i=1}^n \Big( \log \sum_
 \end{equation}
 we derive the derivatives with respect to the optimisation parameters.
 
-\subsubsection*{With respect to $\beta_{0j*}$}. For the intercept terms (also considering in the non-covariate case, these are just the parameters), the parameters have no effect outside of their mixture (ie. $\beta_{0j*}$ only has an influence on mixture component $j*$), so we can write:
+\subsubsection*{With respect to $\beta_{0j*}$}
+
+For the intercept terms (also considering in the non-covariate case, these are just the parameters), the parameters have no effect outside of their mixture (ie. $\beta_{0j*}$ only has an influence on mixture component $j*$), so we can write:
 \begin{equation*}
 \frac{\partial l(\bm{\theta},\bm{\phi}; \mathbf{x},\mathbf{Z})}{\partial \beta_{0j*}} = \sum_{i=1}^n \frac{1}{g(x_i,\mathbf{Z}; \bm{\theta},\bm{\phi})} \phi_{j*} \frac{\partial}{\partial \beta_{0j*}} g_{j*}(x_i,\mathbf{Z}; \bm{\theta}_{j*})  - \frac{\phi_{j*}}{\mu_i}  \frac{\partial}{\partial \beta_{0j*}} \mu_{ij*}.
 \end{equation*}
@@ -142,7 +144,9 @@ The derivative is then:
 \frac{\partial l(\bm{\theta},\bm{\phi}; \mathbf{x},\mathbf{Z})}{\partial \beta_{k*}} = \sum_{i=1}^n \Big( \frac{1}{g(x_i,\mathbf{Z}; \bm{\theta},\bm{\phi})} \sum_{j=1}^J \phi_j  z_{k*} \Big( \frac{x_i}{\sigma_{j}}\Big)^2 g_j(x_i,\mathbf{Z}; \bm{\theta}_j) - \frac{1}{\mu_i} \sum_{j=1}^J \phi_j z_{ik*} ( \mu_{ij} - w g_j(x_i,\mathbf{Z}; \bm{\theta}_j) )\Big)
 \end{equation*}
 
-\subsubsection*{With respect to $\alpha_{j*}$}. First note that we can write the likelihood (\ref{lt-lik}) as:
+\subsubsection*{With respect to $\alpha_{j*}$}
+
+First note that we can write the likelihood (\ref{lt-lik}) as:
 \begin{align*}
 l(\bm{\theta},\bm{\phi}; \mathbf{x},\mathbf{Z}) = \sum_{i=1}^n\Big( &\log \Big( \sum_{j=1}^{J-1} \phi_j g_j(x_i,\mathbf{Z}; \bm{\theta}_j) + (1-\sum_{j=1}^{J-1} \phi_j) g_J(x_i,\mathbf{Z}; \bm{\theta}_J)\Big) \\
 &-  \log \Big(\sum_{j=1}^{J-1} \phi_j \mu_{ij} + (1-\sum_{j=1}^{J-1} \phi_j) \mu_{ij} \Big) \Big)
@@ -189,7 +193,9 @@ l(\bm{\theta}, \bm{\phi}; \mathbf{r},\mathbf{Z}) = n \log 2 \pi + \sum_{i=1}^n \
 \end{equation}
 
 
-\subsubsection*{With respect to $\beta_{0j}$}. From (\ref{pt-lik}), one can see that we obtain:
+\subsubsection*{With respect to $\beta_{0j}$}
+
+From (\ref{pt-lik}), one can see that we obtain:
 \begin{align*}
 \frac{\partial l(\bm{\theta}, \bm{\phi}; \mathbf{r},\mathbf{Z})}{\partial \beta_{0j*}}  &= \sum_{i=1}^n \Big( \frac{\partial}{\partial \beta_{0j*}} \log \sum_{j=1}^J \phi_j g_j(r_i,\mathbf{Z}; \bm{\theta}_j) - \frac{\partial}{\partial \beta_{0j*}}\log \sum_{j=1}^J \phi_j \nu_{ij}\Big)\\
 &= \sum_{i=1}^n \Big( \frac{ \phi_{j*} \frac{\partial}{\partial \beta_{0j*}}  g_{j*} (r_i,\mathbf{Z}; \bm{\theta}_j)}{g(r_i,\mathbf{Z}; \bm{\theta}, \bm{\phi})} - \frac{ \phi_{j*}\frac{\partial}{\partial \beta_{0j*}}  \nu_{ij*} }{ \sum_{j=1}^J \phi_j \nu_{ij}}\Big)
@@ -207,7 +213,9 @@ Substituting this into the above expression:
 \frac{\partial l(\bm{\theta}, \bm{\phi}; \mathbf{r},\mathbf{Z})}{\partial \beta_{0j*}}  = \sum_{i=1}^n \Big( \frac{ \phi_{j*} (r_i/\sigma_{j*})^2 g_{j*}(r_i,\mathbf{Z}; \bm{\theta}_{j*})}{g(r_i,\mathbf{Z}; \bm{\theta}, \bm{\phi})} - \frac{ \phi_{j*} 2 (\nu_{j*} + \pi w g_{j*}(w)) }{ \sum_{j=1}^J \phi_j \nu_{ij}}\Big)
 \end{equation*}
 
-\subsubsection*{With respect to $\beta_{k*}$}. Again working from (\ref{pt-lik}), we obtain:
+\subsubsection*{With respect to $\beta_{k*}$}
+
+Again working from (\ref{pt-lik}), we obtain:
 \begin{align*}
 \frac{\partial l(\bm{\theta}, \bm{\phi}; \mathbf{r},\mathbf{Z})}{\partial \beta_{k*}}  &= \sum_{i=1}^n \Big( \frac{\partial}{\partial \beta_{k*}} \log \sum_{j=1}^J \phi_j g_j(r_i,\mathbf{Z}; \bm{\theta}_j) - \frac{\partial}{\partial \beta_{k*}}\log \sum_{j=1}^J \phi_j \nu_{ij}\Big)\\
 &= \sum_{i=1}^n \Big( \frac{ \sum_{j=1}^J \phi_{j} \frac{\partial}{\partial \beta_{k*}}  g_{j} (r_i,\mathbf{Z}; \bm{\theta}_j)}{g(r_i,\mathbf{Z}; \bm{\theta}, \bm{\phi})} - \frac{ \sum_{j=1}^J \phi_{j}\frac{\partial}{\partial \beta_{k*}}  \nu_{ij} }{ \sum_{j=1}^J \phi_j \nu_{ij}}\Big)
@@ -221,43 +229,10 @@ Putting that together:
 \frac{\partial l(\bm{\theta}, \bm{\phi}; \mathbf{r},\mathbf{Z})}{\partial \beta_{k*}}  = \sum_{i=1}^n \Big( \frac{ \sum_{j=1}^J \phi_{j} z_{k*} \Big( \frac{x_i}{\sigma_{j}}\Big)^2 g_j(x_i,\mathbf{Z}; \bm{\theta}_j)}{g(r_i,\mathbf{Z}; \bm{\theta}, \bm{\phi})} - \frac{ \sum_{j=1}^J \phi_{j}2z_{ik*}(\nu_{ij} - \pi w^2 g_j(w)) }{ \sum_{j=1}^J \phi_j \nu_{ij}}\Big)
 \end{equation*}
 
-\section*{Web Appendix C - Simulation parameters}
 
-\begin{table}[htbp]
-\centering
-\caption{Parameters of the detection functions used in the simulations in Section 3 and the true average detection probability ($P_a$) for each model. Note that for covariate models, $\beta_1$ corresponds to the intercept of the first mixture component, $\beta_2$ to the intercept of the second mixture component and $\beta_3$ to the coefficient for(common) covariate effect. Number is as in Figures 2 and 3 in the main article.}
-\begin{tabular}{c c c c c c c c}\\
-\hline
-\hline
-Model & & $\beta_1$ & $\beta_2$ & $\beta_3$ & $\pi_1$ & $\pi_2$ & $P_a$ \\
-\hline
-\hline
-Line transect &1 & -0.223 & -1.897 & &  0.3 & &  0.369\\
- &2 & -0.511 & -2.303 & &  0.7 & &  0.514\\
- &3 &  2.303 & -1.609 & & 0.15 & &  0.363\\
- &4 & -0.357 & -2.996 & &  0.6 & &  0.471\\
-Point transect &1 & -0.223 & -1.897 & &  0.3 & &  0.24\\
- &2 & -0.511 & -2.303 & &  0.7 & &  0.384\\
- &3 &  2.303 & -1.609 & & 0.15 & &  0.218\\
- &4 & -0.357 & -2.996 & &  0.6 & &  0.378\\
-3-point & 1 &  -0.22 &  -0.69 &  -2.3 & 0.3 & 0.3 & 0.505\\
- & 2 &   2.71 &  -1.39 &  -3.0 & 0.1 & 0.4 & 0.257\\
-Covariate & 1 & -2.303 & -0.288 & -0.511 & 0.4 & & 0.422\\
- & 2 & -1.609 & -0.223 & -0.916 & 0.4 & & 0.389\\
-\hline
-\end{tabular}
-\label{partable}
-\bigskip
-\end{table}
+\section*{Web Appendix C - Variance estimation}
 
-\section*{Web Appendix D - Simulation results}
-
-Include bias in $p$ and in $N$.
-
-
-\section*{Web Appendix E - Variance estimation}
-
-Variances of both $\hat{N}$ and $\hat{P}_a$ were estimated for both non-covariate models and covariate models using standard methods (Borchers, Buckland and Zucchini, 2002, Appendix C; Marques and Buckland, 2004, Section 3.3.3; Borchers et al, 1998).
+Variances of both $\hat{N}$ and $\hat{P}_a$ can be estimated for both non-covariate models and covariate models using standard methods (Borchers, Buckland and Zucchini, 2002, Appendix C; Marques and Buckland, 2004, Section 3.3.3; Borchers et al, 1998).
 
 In the most general case, the variance of $\hat{N}$ is estimated by:
 \begin{equation*}
@@ -266,21 +241,81 @@ In the most general case, the variance of $\hat{N}$ is estimated by:
 where $\hat{\mathbf{I}}(\hat{\bm{\theta}})^{-1}$ is the inverse of the Fisher information matrix,  $\hat{\bm{\theta}}$ is a vector of all of the maximum likelihood estimates of the parameters of the detection function and all other notation is as in previous sections.
 
 Then for the average detectability:
+\begin{align*}
+\hat{\text{Var}}\left( \hat{P}_a \right) = \hat{P}_a^2\left\{ \vphantom{\frac{\frac{a}{b}^b}{b}} \frac{\hat{\text{Var}}(\hat{N})}{\hat{N}^2}\right. &+\left.\frac{\left(\frac{\partial \hat{P}_a}{\partial\bm{\hat{\theta}}}\right)^\text{T}\hat{\mathbf{I}}(\hat{\bm{\theta}})^{-1}\frac{\partial \hat{P}_a}{\partial\bm{\hat{\theta}}}+\sum_{i=1}^n (1-p_i)}{n^2} \right. \\
+ & \left. - \frac{2\left(\left(\frac{\partial \hat{N}}{\partial\bm{\hat{\theta}}}\right)^\text{T}\hat{\mathbf{I}}(\hat{\bm{\theta}})^{-1}\frac{\partial \hat{P}_a}{\partial\bm{\hat{\theta}}}+\sum_{i=1}^n\frac{(1-p_i)}{p_i^2}\right)}{n\hat{N}}\right\}.\\
+\end{align*}
+
+\section*{Web Appendix D - Simulation parameters}
+
+The formulation for the hazard-rate simulations (group E) was:
 \begin{equation*}
-\hat{\text{Var}}\left( \hat{P}_a \right) = \hat{P}_a^2\left\{ \frac{\hat{\text{Var}}(\hat{N})}{\hat{N}^2} + \frac{\left(\frac{\partial \hat{P}_a}{\partial\bm{\hat{\theta}}}\right)^\text{T}\hat{\mathbf{I}}(\hat{\bm{\theta}})^{-1}\frac{\partial \hat{P}_a}{\partial\bm{\hat{\theta}}}+\sum_{i=1}^n (1-p_i)}{n^2}-\frac{2\left(\left(\frac{\partial \hat{N}}{\partial\bm{\hat{\theta}}}\right)^\text{T}\hat{\mathbf{I}}(\hat{\bm{\theta}})^{-1}\frac{\partial \hat{P}_a}{\partial\bm{\hat{\theta}}}+\sum_{i=1}^n\frac{(1-p_i)}{p_i^2}\right)}{n\hat{N}}\right\}.
+g(y,\mathbf{z}; \bm{\theta}, \bm{\phi}) = \sum_{j=1}^J \phi_j (1-\exp(-(y/\sigma_j)^{-b_j}))
 \end{equation*}
+where $b_j$ is the \textit{shape parameter}.
 
-[[\textbf{LEN}: I think we might need to explain this a bit and there might be some simplification that we can do, but I didn't see it yet. I guess we can express this as something like $P_a^2(cv(N)^+cv(P_a)^2\text{ish}-2\text{(a cross term)}$), do you think that would make more sense?]]
-[[\textbf{DAVE}: Yes, I think this would be helpful.  Also, you'll need to split the equation across two lines (perhaps at the minus]] 
+\begin{table}[htbp]
+\centering
+\caption{Parameters of the detection functions used in the simulations in Section 3 and the true average detection probability ($P_a$) for each model. Note that for covariate models, $\beta_1$ corresponds to the intercept of the first mixture component, $\beta_2$ to the intercept of the second mixture component and $\beta_3$ to the coefficient for the (common) covariate effect. Numbering is as in Figures 2 and 3 in the main article.}
+\begin{tabular}{c c c c c c c c c c}\\
+\hline
+\hline
+Model & Scenario & $\beta_1$ & $\beta_2$ & $\beta_3$ & $\pi_1$ & $\pi_2$ & $b_1$ & $b_2$ & $P_a$ \\
+\hline
+\hline
+Line transect & A1 & -0.223 & -1.897 & &  0.3 & & & & 0.369\\
+ & A2 & -0.511 & -2.303 & &  0.7 & & & & 0.514\\
+ & A3 &  2.303 & -1.609 & & 0.15 & & & & 0.363\\
+ & A4 & -0.357 & -2.996 & &  0.6 & & & & 0.471\\
+Point transect &B1 & -0.223 & -1.897 & &  0.3 & & & & 0.24\\
+ & B2 & -0.511 & -2.303 & &  0.7 & & & & 0.384\\
+ & B3 &  2.303 & -1.609 & & 0.15 & & & & 0.218\\
+ & B4 & -0.357 & -2.996 & &  0.6 & & & & 0.378\\
+3-point & C1 &  -0.22 &  -0.69 &  -2.3 & 0.3 & 0.3 & & & 0.505\\
+ & C2 &   2.71 &  -1.39 &  -3.0 & 0.1 & 0.4 & & & 0.257\\
+Covariate & D1 & -2.303 & -0.288 & -0.511 & 0.4 & & & & 0.422\\
+ & D2 & -1.609 & -0.223 & -0.916 & 0.4 & & & & 0.389\\
+ Hazard-rate & E1 & -1.69 & -0.304 & & 0.5 & & 7 & 7 & 0.5\\
+  & E1 & -0.357 & -2.99 & & 0.4 & & 10.48 & 3.699 & 0.471\\
+\hline
+\end{tabular}
+\label{partable}
+\bigskip
+\end{table}
 
 
-\section*{Web Appendix F - Wood ants in the Abernethy forest}
 
-Borkin, Summers and Thomas (2012) analyse data on two species of wood ant (\textit{Formica aquilonia} and \textit{Formica lugubris}) in the Abernethy Forest in Strathspey Scotland over the period of August--September 2003. The number of nests sighted was 150 out to a distance of 72.04m from the track line, although 45\% of the nest sightings lay within 4m of the line. As part of their analysis several different truncation distances were used and larger truncation distances led to large variance in the encounter rate estimates and hence in overall abundance estimates (see Borkin et al., 2012). This is due to the spike caused by the large number of detections close to the line.
+\section*{Web Appendix E - Simulation results}
 
-As well as distances, three covariates were recorded: habitat type (\texttt{habitat}, a four level factor), the size (calculated as half-width multiplied by height) of each nest (\texttt{nest.size}, continuous variable) and whether \textit{Formica aquilonia} or \textit{Formica lugubris} were observed (\texttt{species}, a two level factor). In order to avoid numerical problems due to large values of the nest size, the variable was standardised.
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{simulations/pa-plot-combined.pdf}
+\caption{Simulation results: boxplots of the estimated average detection probabilities, $P_a$, for the best model (by AIC score) for both mixture and K+A models. In each case the best overall model was selected, reflecting the modelling approach undertaken in practice. Grey lines indicate the true value of the average detection probability. Numbers underneath each boxplot give the proportion of AIC best models that were of the same form as the model that the data was simulated from (e.g., in covariate scenario 1 the proportion of AIC best models that were 2-point mixtures that included the covariate in the model). Numbers above each model give the proportion of times that the AIC best model was a 2- or 3-point mixture model.}
+\label{sim-boxplots-combined}
+\end{figure}
 
-As can be seen from Table \ref{big-results-table}, the best model by AIC was a 2-point mixture with nest size and habitat as covariates. This is not that surprising given the best CDS model (selected by AIC) in Distance was a hazard-rate with the same covariates. What is rather surprising is that the best mixture model had a better AIC than the hazard-rate, even though it has 1 more parameter. This is particularly encouraging since one might expect that mixtures would give good fits but would not achieve lower AIC scores due to the number of parameters required.
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{simulations/pa-plot-cds.pdf}
+\caption{Simulation results: boxplots of the estimated average detection probabilities, $P_a$, for the best K+A model (by AIC score). Grey lines indicate the true value of the average detection probability.}
+\label{sim-boxplots-cds}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{simulations/bar-winners.pdf}
+\caption{Simulation results: stacked bar charts showing the number of models selected by AIC that fall into the given model classes}
+\label{sim-barplot}
+\end{figure}
+
+
+
+\section*{Web Appendix F - Case studies}
+
+Before analysing the wood ant data the nest size variable was standardised by
+
+*** Dave: I took out some text defining the variabels for wood ants, and also saying you standardized the nest size -- you might want to put it in here?  Ditto for Amakahi - the species codes and the fact that you standardized the minutes after sunrise.  These codes aren't used in the main text, which is why I took them out.  But I guess you need them here to make sense of the tables.
+ ***
 
 \begin{figure}
 \centering
@@ -290,11 +325,6 @@ As can be seen from Table \ref{big-results-table}, the best model by AIC was a 2
 \label{ants-nesthab}
 \end{figure}
 
-
-\section*{Web Appendix G - Amakihi}
-
-Marques et al. (2007) analyse data on the Hawaii Amakihi (\textit{Hemignathus virens}). The data consist of 1485 observations on the bird ($n=1243$ after truncation at 82.5m), collected at 41 point transect from July 1992 to April 1995. Data was also collected on three covariates: the observer (\texttt{obs} , a three level factor), minutes after sunrise (\texttt{mas}, continuous, standardised to prevent numerical issues) and hours after sunrise (\texttt{has}, a six level factor).
-
 \begin{figure}
 \centering
 \includegraphics[width=0.3333\textwidth, trim=0 0 7.133334in 0, clip=true]{analyses/amakihi-om.pdf}\includegraphics[width=0.6666\textwidth, trim=3.566667in 0 0 0, clip=true]{analyses/amakihi-om-hh.pdf}\\
@@ -303,43 +333,9 @@ Marques et al. (2007) analyse data on the Hawaii Amakihi (\textit{Hemignathus vi
 \label{amakihi}
 \end{figure}
 
-Best mixture model according to AIC was a two point mixture with observer and minutes after sunrise as covariates (shown in Figure \ref{amakihi}), closely followed by the model with only observer as a covariate (see Table \ref{big-results-table}). In this case a hazard-rate with observer and minutes after sunrise as covariates beat the mixtures in AIC terms. This is not too surprising given that the mixtures use one more parameter than a hazard-rate in this situation. It is encouraging that there is such a small difference in AIC, and that covariate mixture models were selected despite the large number of parameters that such models entail.
 
 
-\begin{table}
-\caption{Results from ($i$) the wood ant data from Borkin \textit{et al.} (2012) with truncation at 25m and ($ii$) the amakihi data from Marques et al. (2007) with truncation at 82.5m. Bold indicates lowest AIC for each set. In each set the final model is the lowest AIC model reported in the original analysis (using \texttt{mrds}). Kolmogorov-Smirnov test $p$-values (KS $p$) are also given as in Section 11.11 of Buckland \textit{et al.} (2004). }
-\centering
-\begin{tabular}{c l c c c c}
-\hline \hline
-Model & Covariates & AIC & $\hat{P_a}$ & $\% CV \hat{P_a}$ & K-S $p$\\
-\hline
- & ($i$) \textit{Ants} & & & & \\
-Hn 2-pt  &  None  &  754.61  &  0.184  &  15.46  &  0.96 \\
-Hn 2-pt  &   \texttt{habitat} &  751.27  &  0.188  &  14.85  &  0.97 \\
-Hn 2-pt  &   \texttt{species} &  756.59  &  0.184  &  15.48  &  0.94 \\
-Hn 2-pt  &  \texttt{nest.size} &  741.64  &  0.214  &  15.19  &  0.76 \\
-Hn 2-pt  &  \texttt{habitat} + \texttt{species} &  753.23  &  0.186  &  14.94  &  0.99 \\
-Hn 2-pt  &  \texttt{habitat} + \texttt{nest.size}  &  \textbf{737.27}  &  0.179  &  17.55  &  0.72 \\
-Hn 2-pt  & \texttt{nest.size} + \texttt{species}   &  741.92  &  0.21  &  15.84  &  0.77 \\
-Hn 2-pt  &  \texttt{nest.size} + \texttt{species} + \texttt{habitat}  &  739.08  &  0.178  &  18.09  &  0.83 \\
-% Hr & \texttt{nest.size} + \texttt{habitat} & 745.2 & 0.194 & 10.6 & 0.95\\  % Distance result 
-Hr & \texttt{nest.size} + \texttt{habitat} & 743.56 & 0.195  & 21.72 & 0.89\\ % mrds result
- & ($ii$) \textit{Amakihi} & & & & \\
-Hn 2-pt  &  None  &  10805.48  &  0.283  &  6.21  &  0.12 \\
-Hn 2-pt  & \texttt{obs} &  10778.69  &  0.279  &  5.86  &  0.04 \\
-Hn 2-pt  &  \texttt{has}  &  10807.19  &  0.282  &  6.95  &  0.33 \\
-Hn 2-pt  &  \texttt{mas}  &  10805.11  &  0.284  &  6.52  &  0.31 \\
-Hn 2-pt  &  \texttt{obs} +\texttt{has}  &  10782.53  &  0.283  &  6.21  &  0.23 \\
-Hn 2-pt  &  \texttt{obs} +\texttt{mas}  &  \textbf{10778.07}  &  0.279  &  6.1  &  0.14 \\
-Hn 2-pt  &  \texttt{mas} +\texttt{has}  &  10809.17  &  0.282  &  6.97  &  0.43 \\
-Hn 2-pt  &  \texttt{mas} +\texttt{has}+\texttt{obs}  &  10784.5  &  0.282  &  6.33  &  0.35 \\
-% Hr & \texttt{obs} + \texttt{mas} & \textbf{10777.72} & 0.3 & 2.65 & 0.036 \\ % Distance result 
-Hr & \texttt{obs} + \texttt{mas} & \textbf{10777.38} &  0.319 & 5.11 & 0.076\\ % mrds
-\hline
-\hline
-\end{tabular}
-\label{big-results-table}
-\end{table}
+
 
 
 \begin{thebibliography}{}
@@ -348,23 +344,17 @@ Hr & \texttt{obs} + \texttt{mas} & \textbf{10777.38} &  0.319 & 5.11 & 0.076\\ %
 
 \bibitem{} Borchers, D. L., and Buckland, S. T. and Zucchini, W. (2002). \textit{Estimating Animal Abundance: Closed Populations}. Springer.
 
-\bibitem{ } Borkin, K.M., Summers, R.W. and Thomas, L. (2012). Distribution, density and stand-type preferences of wood ant Formica spp. nest mounts in a Scots pinewood. \textit{European Journal of Entomology} \textbf{109}: 47--53.
-
 \bibitem{ }  Buckland, S. T., Anderson, D. R., Burnham, K. P., Laake, J. L., Borchers, D. L., and Thomas, L.  (2001). \textit{Distance Sampling}. Oxford University Press. Oxford, UK.
 
 \bibitem{ } Dempster, A.P., Laird,  N. M. and Rubin, D. B. (1977). Maximum Likelihood from Incomplete Data via the EM Algorithm. \textit{Journal of the Royal Statistical Society: Series B (Methodological)} \textbf{39}(1), 1--38.
 
 \bibitem{ }  Gelman, A., Carlin, J. B., Stern, H. S., and Rubin, D. B. (2004). \textit{Bayesian Data Analysis}. CRC Press.
 
-%\bibitem{ } Innes, S., Heide-J\o rgensen, M. P., Laake, J. L., Laidre, K. L., Cleator, H. J., Richard, P. and Stewart, R. E. A. (2002). Surveys of belugas and narwhals in the {C}anadian {H}igh {A}rctic in 1996. \textit{NAMMCO Scientific Publications} \textbf{4}, 169--190.
-
 \bibitem{} Borchers, D. L., Buckland, S. T., Goedhart, P. W., Clarke, E. D. and Hedley, S. L. (1998). Horvitz-Thompson Estimators for Double-Platform Line Transect Surveys. \textit{Biometrics} \textbf{54}(4), 1221--1237.
 
 \bibitem{ } Marin, J. M., Mengersen, K. and Robert, C. P. (2005). Bayesian modelling and inference on mixtures of distributions. \textit{Handbook of Statistics 25} D. Dey and C.R. Rao (eds). Elsevier-Sciences.
 
 \bibitem{ } Marques, F. F. C. and Buckland, S. T. (2004). Covariate models for the detection function. In \textit{Advanced Distance Sampling}, pp. 31--47. S. T. Buckland, D. R. Anderson, K. P. Burnham, J. L. Laake, D. L. Borchers and L. Thomas (eds). Oxford University Press, Oxford.
-
-\bibitem{ } Marques, T. A., Thomas, L., Fancy, S. G., Buckland, S. T. (2007). Improving estimates of bird density using multiple-covariate distance sampling. \textit{The Auk} \textbf{124}(9), 1229--1243.
 
 \bibitem{ } Press, W. H., Teukolsky, S. A., Vetterling, W. T., Flannery, B. P. (1992). \textit{Numerical Recipes: The Art of Scientific Computing}. Cambridge University Press. 
 

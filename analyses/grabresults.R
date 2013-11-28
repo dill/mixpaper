@@ -1,6 +1,6 @@
 # Model & Covariates & AIC & $\hat{P_a}$ & $\% CV \hat{P_a}$ & K-S $p$\\
 grab_results<-function(model){
-   
+
    mod<-paste("Hn ",model$mix.terms,"-pt",sep="")
    covars<-model$model.formula   
 

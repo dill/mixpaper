@@ -1,0 +1,10 @@
+Still needs editing...
+
+Dear xx,
+
+Please find enclosed our manuscript "Mixture models for distance sampling detection functions", which we hereby submit for publication in Biometrics.  In the manuscript, we propose a new class of models for fitting distance sampling detection functions; we show that the new class has both theoretical advantages over the current standard approach as well as practical benifits when applied to both simulated and real data.  Regarding the appropriate section of Biometrics, we feel it best fits into the Biometric Practice section, based on the online guidance that this section is appropriate for papers that "re-examine from a new perspective statistical practices that are widely used in biometric applications, providing useful alternatives to the current standard."  However, we're quite happy to follow the co-editor's recommendation on this.  We look forward to hearing your opinion of our manuscript.
+
+Sincerely yours
+
+David Miller and Len Thomas
+
