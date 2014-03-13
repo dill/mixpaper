@@ -15,8 +15,11 @@ aics<-c(aics,fin.best$aic)
 
 # covariate models
 
+# recode the one observation of BSS=3.5 as 4
+fin$BSS5 <- as.character(fin$BSS)
+fin$BSS5[fin$BSS5=="3,5"] <- "4"
 # BSS
-fin.fit1.BSS<-fitmix(fin,mix.terms=1,width=3000,model.formula="~as.factor(BSS)",opt.method="BFGS+SANN")
+fin.fit1.BSS<-fitmix(fin,mix.terms=1,width=3000,model.formula="~as.factor(BSS5)",opt.method="BFGS+SANN")
 fin.BSS.best<-step.ds.mixture(fin.fit1.BSS)
 aics<-c(aics,fin.BSS.best$aic)
 
@@ -83,3 +86,7 @@ grab_results(fin.BSSc.best)
 #cat(round(fin.BSS2.best$ks$p,2),"\n")
 #cat(round(fin.BSS3.best$ks$p,2),"\n")
 #cat(round(fin.BSSc.best$ks$p,2),"\n")
+
+
+
+
