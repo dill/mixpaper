@@ -135,6 +135,19 @@ fit<-try(fitmix(testdata,mix.terms=2,ftype="hn",width=width,
 plot(fit,nomf=TRUE,hide.hist=TRUE,style="comp",,main=c(" "," "),x.axis=c(0,0.5,1),this.id="D2")
 
 
+# eps
+pars<-c(1.5,0.586)
+g.eps <- function(pars){
+  exp(-(seq(0,1,len=1000)/pars[2])^pars[1])
+}
+plot(seq(0,1,len=1000),g.eps(pars),type="l", ylim=c(0,1), xlim=c(0,1),axes=F,asp=1)
+axis(1,c(0,0.5,1))
+axis(2,c(0,0.5,1))
+points(x=1,y=0.85,cex=3.75)
+text(x=1,y=0.85,label="E1")
+box()
+
+
 # hazard
 pars<-matrix(NA,2,5)
 
@@ -171,19 +184,19 @@ lines(seq(0,1,len=1000),haz(pars[1,]),type="l",lty=2)
 pars[1,3]<-1
 lines(seq(0,1,len=1000),haz(pars[1,]),type="l",lty=2)
 points(x=1,y=0.85,cex=3.75)
-text(x=1,y=0.85,label="E1")
-box()
-
-plot(seq(0,1,len=1000),haz(pars[2,]),type="l", ylim=c(0,1), xlim=c(0,1),axes=F,asp=1)
-axis(1,c(0,0.5,1))
-axis(2,c(0,0.5,1))
-pars[2,3]<-0
-lines(seq(0,1,len=1000),haz(pars[2,]),type="l",lty=2)
-pars[2,3]<-1
-lines(seq(0,1,len=1000),haz(pars[2,]),type="l",lty=2)
-points(x=1,y=0.85,cex=3.75)
 text(x=1,y=0.85,label="E2")
 box()
+
+#plot(seq(0,1,len=1000),haz(pars[2,]),type="l", ylim=c(0,1), xlim=c(0,1),axes=F,asp=1)
+#axis(1,c(0,0.5,1))
+#axis(2,c(0,0.5,1))
+#pars[2,3]<-0
+#lines(seq(0,1,len=1000),haz(pars[2,]),type="l",lty=2)
+#pars[2,3]<-1
+#lines(seq(0,1,len=1000),haz(pars[2,]),type="l",lty=2)
+#points(x=1,y=0.85,cex=3.75)
+#text(x=1,y=0.85,label="E2")
+#box()
 
 
 # y-axis labels

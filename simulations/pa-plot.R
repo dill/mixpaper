@@ -10,7 +10,7 @@
 library(ggplot2)
 
 model.names <- c("A. No covariates","B. Point transect",
-                 "C. 3-point","D. Covariate","E. Hazard mixture")
+                 "C. 3-point","D. Covariate","E. Other")
 
 samp.sizes<-c(30,60,120,480,960)
 
@@ -409,15 +409,19 @@ for(set in c("mmds","cds","combined")){
                      id=1:2,
                      model=rep("3pt",2)))
 
+
+
   ##################################
-  # hazard rate mixtures
-  for(par.ind in 1:2){
+  # hazard rate mixtures and eps (counted as hazard for simplicity of this code)
+  for(par.ind in 2:1){
     for(n.samps in samp.sizes){
 
       n.samps<-as.integer(n.samps)
 
       dat<-read.csv(file=paste("hazard/hr-",par.ind,
                                "-results.csv",sep=""))
+
+      par.ind <- ifelse(par.ind==1,2,1)
 
       dat<-dat[,-1]
       names(dat)<-c("mod","par.ind","n.samp","sim","ll","AIC",
@@ -479,12 +483,10 @@ for(set in c("mmds","cds","combined")){
       true.ps<-c(true.ps,n.samps/dat$N[!is.na(dat$N)])
     }
   }
-  # truth lines 
+  # truth lines
   true.p<-rbind(true.p,
-#                data.frame(t=unique(round(true.ps,2)),
-#                data.frame(t=rep(0.5,2),
-                data.frame(t=c(0.5,0.4708531),
-                           id=1:2,
+                data.frame(t=c(0.5,0.5000914),
+                           id=2:1,
                            model=rep("haz",2)))
 
 
