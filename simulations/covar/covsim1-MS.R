@@ -52,30 +52,29 @@ for(n.samples in n.samps){
 
      testdata<-sim.mix(true.pars,mix.terms,n.samples,width,zdim,z)
      names(testdata)[5]<-"cov1"
+     # calculate the true N
+     gp<-mmds:::getpars(true.pars,mix.terms,zdim,z)
+     sigma<-gp$key.scale
+     pis<-gp$mix.prop
+     mu<-apply(sigma,1,mmds:::integrate.hn,width)
+     mus<-mu%*%matrix(pis,length(pis),1)
+     pas<-mus/width
+     true.N<-sum(1/pas)
 
 
      # because SANN changes the seed, save it first
      seed <- get(".Random.seed",envir=.GlobalEnv) ## store RNG seed
-   
+
      fit<-try(fitmix(testdata,initialvalues=starting.vals,mix.terms=1,ftype="hn",
                  showit=showit,width=width,model.formula=model.formula,
                  usegrad=TRUE,opt.method=opt.method))
 
      fit<-step.ds.mixture(fit)
 
-     # restore the seed   
+     # restore the seed
      assign(".Random.seed",seed,envir=.GlobalEnv)
 
      if(class(fit)!="try-error"){
-       # calculate the true N
-       gp<-mmds:::getpars(true.pars,mix.terms,zdim,z)
-       sigma<-gp$key.scale
-       pis<-gp$mix.prop
-       mu<-apply(sigma,1,mmds:::integrate.hn,width)
-       mus<-mu%*%matrix(pis,length(pis),1)
-       pas<-mus/width
-       true.N<-sum(1/pas)
-
        # results...
        res<-c(n.samples,sim,fit$aic,fit$pa,fit$N,
                     true.N,fit$mix.terms,"cov")
@@ -88,7 +87,7 @@ for(n.samples in n.samps){
      # with no covariates
      # because SANN changes the seed, save it first
      seed <- get(".Random.seed",envir=.GlobalEnv) ## store RNG seed
-   
+
      fit<-try(fitmix(testdata,initialvalues=starting.vals,mix.terms=1,ftype="hn",
                  showit=showit,width=width,model.formula="~1",
                  usegrad=TRUE,opt.method=opt.method))
@@ -99,15 +98,6 @@ for(n.samples in n.samps){
      assign(".Random.seed",seed,envir=.GlobalEnv)
 
      if(class(fit)!="try-error"){
-       # calculate the true N
-       gp<-mmds:::getpars(true.pars,mix.terms,zdim,z)
-       sigma<-gp$key.scale
-       pis<-gp$mix.prop
-       mu<-apply(sigma,1,mmds:::integrate.hn,width)
-       mus<-mu%*%matrix(pis,length(pis),1)
-       pas<-mus/width
-       true.N<-sum(1/pas)
-
        # results...
        res<-rbind(res,c(n.samples,sim,fit$aic,fit$pa,fit$N,
                     true.N,fit$mix.terms,"nocov"))
@@ -143,21 +133,6 @@ for(n.samples in n.samps){
        res<-rbind(res,c(n.samples,sim,NA,NA,NA,NA,NA,"hr+poly"))
      }
 
-     ######################################################### 
-     ## CDS - unif+cos
-
-     #fit<-try(ds(testdata,width,monotonicity="strict",key="unif",
-     #            adjustment="cos"))
-     #if(class(fit$ddf)!="try-error"){
-     #  res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
-     #                   n.samples/sum(1/fitted(fit$ddf)),
-     #                   fit$ddf$Nhat,true.N,NA,"unif+cos"))
-     #}else{
-     #  res<-rbind(res,c(n.samples,sim,NA,NA,NA,NA,NA,"unif+cos"))
-     #}
-
-     # MCDS analyses
-     
      ######################################################## 
      # MCDS - hn+cos + as.factor(cov1)
 
@@ -182,20 +157,6 @@ for(n.samples in n.samps){
      }else{
        res<-rbind(res,c(n.samples,sim,NA,NA,NA,NA,NA,"hr+poly+cov1"))
      }
-
-     ######################################################### 
-     ## MCDS - unif+cos + as.factor(cov1)
-
-     #fit<-try(ds(testdata,width,formula=as.formula(model.formula),key="unif",
-     #            adjustment="cos",scale="width"))
-     #if(class(fit$ddf)!="try-error"){
-     #  res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
-     #                   n.samples/sum(1/fitted(fit$ddf)),
-     #                   fit$ddf$Nhat,true.N,NA,"unif+cos+cov1-width"))
-     #}else{
-     #  res<-rbind(res,c(n.samples,sim,NA,NA,NA,NA,NA,"unif+cos+cov1-width"))
-     #}
-
 
      ######################################################## 
      # MCDS - hn+cos + as.factor(cov1) width scaling

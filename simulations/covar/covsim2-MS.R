@@ -1,7 +1,5 @@
-# covariate sim 1
-# 1 factor
-# mix 1, sigma=exp(beta_00+beta_1*{0,1})
-# mix 2, sigma=exp(beta_01+beta_1*{0,1})
+# covariate sim 2
+# continuous
 library(mmds)
 library(msm)
 library(Distance)
