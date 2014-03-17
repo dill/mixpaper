@@ -1,5 +1,7 @@
 # pilot whale analysis
 
+# in Dan Pike's file, BSS3 has only 2 levels and BSS2 has 3!!!
+
 library(mmds)
 
 set.seed(125)
@@ -24,13 +26,13 @@ fin.BSS.best<-step.ds.mixture(fin.fit1.BSS)
 aics<-c(aics,fin.BSS.best$aic)
 
 
-# BSS2
+# BSS2 -- NOTE THAT THIS IS 3 LEVEL DATA
 fin.fit1.BSS2<-fitmix(fin,mix.terms=1,width=3000,model.formula="~as.factor(BSS2)",opt.method="BFGS+SANN")
 fin.BSS2.best<-step.ds.mixture(fin.fit1.BSS2)
 aics<-c(aics,fin.BSS2.best$aic)
 
 
-# BSS3
+# BSS3 -- NOTE THAT THIS IS 2 LEVEL DATA
 fin.fit1.BSS3<-fitmix(fin,mix.terms=1,width=3000,model.formula="~as.factor(BSS3)",opt.method="BFGS+SANN")
 fin.BSS3.best<-step.ds.mixture(fin.fit1.BSS3)
 aics<-c(aics,fin.BSS3.best$aic)

@@ -58,7 +58,7 @@ aics<-c(aics,ants.nesthabspecies.best$aic)
 
 # plot nest+hab model
 pdf(file="ants-nesthab-1.pdf",width=8.6,height=3.4)
-plot(ants.nesthab.best,breaks=c(seq(0,5,len=10),seq(6,25,1)),main=c("Detection function","Quantiles of nest size","Levels of habitat"))
+plot(ants.nesthab.best,breaks=c(seq(0,5,len=10),seq(6,25,1)),main=c("Detection function","Quantiles of nest size","Levels of habitat"),style="comp")
 #dev.copy2eps(file="ants-nesthab-1.eps",width=8.6,height=3.4)
 dev.off()
 
