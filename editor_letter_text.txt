@@ -13,20 +13,3 @@ Sincerely yours,
 
 David Miller and Len Thomas
 
-
-
-
-Alternative, depricated version:
-
-Dear Professor Hanhart,
-
-Please find attached our manuscript, "Mixture models for distance sampling detection functions," which we wish to submit for consideration in the Biometrics Practice section.  Our work represents an innovative adaptation of an existing technique (mixture modelling) to a new area (distance sampling surveys of wildlife populations). We believe the resulting suite of methods will see wide use since, as we demonstrate through simulation and application to four case study datasets, it improves inference when combined with the current standard approach.  To facilitate use, we provide an R package (mmds), and will also incorporate the approach in the next major release of our free software Distance.  
-
-We look forward to hearing the editors' opinion on our work.
-
-Yours sincerely,
-
-David Miller and Len Thomas
-
-
-

@@ -251,11 +251,21 @@ Then for the average detectability:
 
 \section*{Web Appendix D - Simulation parameters}
 
-The formulation for the hazard-rate simulations (group E) was:
+The formulation used for the exponential power series (EPS) detection function in simulation E1 was:
 \begin{equation*}
-g(y,\mathbf{z}; \bm{\theta}, \bm{\phi}) = \sum_{j=1}^J \phi_j (1-\exp(-(y/\sigma_j)^{-b_j}))
+g(y,\mathbf{z}; \lambda, b_1) =  \exp(-(y/\lambda)^{-b_1})),
 \end{equation*}
-where $b_j$ is the \textit{shape parameter} associated with the $j^\text{th}$ mixture component.
+which has the following pdf:
+\begin{equation*}
+f(y,\mathbf{z}; \lambda, b_1) =  \frac{\exp(-(y/\lambda)^{-b_1})),}{\lambda\Gamma(1+\frac{1}{b_1})}
+\end{equation*}
+where $\lambda=\exp(\beta_1)$ is a scale parameter and $b_1$ is a \textit{shape parameter}.
+
+The formulation for the hazard-rate mixture in simulation E2 was:
+\begin{equation*}
+g(y,\mathbf{z}; \bm{\theta}, \bm{\phi}) = \sum_{j=1}^J \phi_j (1-\exp(-(y/\sigma_j)^{-b_j})),
+\end{equation*}
+where $b_j$ is the shape parameter associated with the $j^\text{th}$ mixture component.
 
 \begin{table}[htbp]
 \centering
@@ -278,8 +288,8 @@ Point transect &B1 & -0.223 & -1.897 & &  0.3 & & & & 0.24\\
  & C2 &   2.71 &  -1.39 &  -3.0 & 0.1 & 0.4 & & & 0.257\\
 Covariate & D1 & -2.303 & -0.288 & -0.511 & 0.4 & & & & 0.422\\
  & D2 & -1.609 & -0.223 & -0.916 & 0.4 & & & & 0.389\\
- Hazard-rate & E1 & -1.69 & -0.304 & & 0.5 & & 7 & 7 & 0.5\\
-  & E1 & -0.357 & -2.99 & & 0.4 & & 10.48 & 3.699 & 0.471\\
+ EPS & E1 & -0.534 & & & & & 1.5& & 0.5 \\
+ Hazard-rate & E2 & -1.69 & -0.304 & & 0.5 & & 7 & 7 & 0.5\\
 \hline
 \end{tabular}
 \label{partable}
