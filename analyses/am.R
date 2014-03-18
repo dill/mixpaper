@@ -8,8 +8,6 @@ amakihi<-read.csv(file="amakihi.csv")
 
 amakihi$mas2<-amakihi$mas
 mas.sd <- sd(amakihi$mas)
-mas.m <- mean(amakihi$mas)
-#amakihi$mas<-(amakihi$mas-mean(amakihi$mas))/mas.sd
 amakihi$mas<-(amakihi$mas)/mas.sd
 
 
@@ -56,11 +54,14 @@ amakihi.omh.best<-step.ds.mixture(amakihi.fit1.omh)
 aics<-c(aics,amakihi.omh.best$aic)
 
 #############
+# observer + mas is best model
 
-#pdf(file="amakihi-om-pdf.pdf",width=4.2,height=3.9)
-#par(cex.lab=1.2)
-#plot(amakihi.om.best,breaks=c(seq(0,82.5,len=20)),main="PDF of distances",style="comp",pdf=TRUE)
-#dev.off()
+
+# plot pdf
+pdf(file="amakihi-om-pdf.pdf",width=4.2,height=3.9)
+par(cex.lab=1.2)
+plot(amakihi.om.best,breaks=c(seq(0,82.5,len=20)),main="PDF of distances",style="comp",pdf=TRUE)
+dev.off()
 
 # load a custom plot.ds.mixutre
 switchpars <- mmds:::switchpars
@@ -92,13 +93,11 @@ dat<-data.frame(object=1:3,
                 distance=c(20,41,61),
                 obs=factor(c("SGF","TJS","TKP"),levels=levels(amakihi.om.best$data$obs)),
                 mas=rep(105,3)/sd(amakihi$mas2),
-                #mas=(rep(105,3)-mean(amakihi$mas2))/sd(amakihi$mas2),
                 observed=rep(1,3))
 amakihi.om.best$data<-dat
 z <- amakihi.om.best$z[[1]]
 z <- z[1:3,]
 z[,4] <- (rep(105,3))/sd(amakihi$mas2)
-#z[,4] <- (rep(105,3)-mean(amakihi$mas2))/sd(amakihi$mas2)
 z[,2] <- c(0,1,0)
 z[,3] <- c(0,0,1)
 amakihi.om.best$z[[1]]<-z
@@ -115,12 +114,10 @@ dat<-data.frame(object=1:6,
                 distance=c(1,21,30,60,70,80),
                 obs=factor(rep("TJS",6),levels=levels(amakihi.om.best$data$obs)),
                 mas=(seq(0,300,by=60))/sd(amakihi$mas2),
-                #mas=(seq(0,300,by=60)-mean(amakihi$mas2))/sd(amakihi$mas2),
                 observed=rep(1,6))
 amakihi.om.best$data<-dat
 z <- amakihi.om.best$z[[1]]
 z <- z[1:6,]
-#z[,4] <- (seq(0,300,by=60)-mean(amakihi$mas2))/sd(amakihi$mas2)
 z[,4] <- (seq(0,300,by=60))/sd(amakihi$mas2)
 z[,2] <- rep(1,6)
 z[,3] <- rep(0,6)
@@ -129,12 +126,14 @@ amakihi.om.best$z[[1]]<-z
 
 plot(amakihi.om.best,breaks=c(seq(0,82.5,len=20)),main=c("Detection function","Levels of observer","Minutes after sunrise 0-300"),style="comp",hide.hist=TRUE,pseq=3,nomf=TRUE,lty=rep(1,6),lcol=rep("black",6))
 
-text(22,0.56,"mas=0",cex=1.5)
-text(57,0.5,"mas=300",cex=1.5)
+text(17,0.56,"mas=300",cex=1.5)
+text(57,0.5,"mas=0",cex=1.5)
 
 dev.off()
 
 
+# generate results table output
+# needs to be processed for delta AIC
 source("grabresults.R")
 
 grab_results(amakihi.best)
