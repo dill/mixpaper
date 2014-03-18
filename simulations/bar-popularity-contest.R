@@ -200,7 +200,7 @@ big.pop$n.samp <- as.factor(big.pop$n.samp)
 
 # give things nice names... 
 model.names <- c("A. No covariates","B. Point transect",
-                 "C. 3-point","D. Covariate","E. Hazard mixture")
+                 "C. 3-point","D. Covariate","E. Other")
 big.pop$type <- factor(big.pop$type,
                        levels=c("nocov","pt","3point","covar","hazard"))
 levels(big.pop$type) <- model.names
