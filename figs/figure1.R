@@ -17,7 +17,7 @@ hb.plot<-read.table("humpback.txt")
 
 # make the histogram
 plot(hb.plot$V1,hb.plot$V2,type="l",axes=F,xlab="Distance (m)",
-     ylab="Probability of detection",main="Humpback")
+     ylab="Probability of detection",main="Humpback whale")
 axis(2,at=c(0,0.5,1))
 axis(1,at=c(0,1000,2000))
 # add in the baseline and the first bar line

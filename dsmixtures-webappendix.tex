@@ -3,11 +3,15 @@
 \usepackage{amsmath, bm}
 \usepackage[pdftex]{graphicx}
 \usepackage{url}
+\usepackage{float}
 
 \def\bSig\mathbf{\Sigma}
 \newcommand{\VS}{V\&S}
 \newcommand{\tr}{\mbox{tr}}
 
+\usepackage{caption}
+\captionsetup[figure]{name=Web Figure}
+\captionsetup[table]{name=Web Table}
 
 \begin{document}
 
@@ -24,12 +28,12 @@ This Web Appendix contains technical details of for the paper ``Mixture models f
 \section*{Web Appendix A - Optimization}
 \label{s:optimization}
 
-In practice, maximization is performed on the $\log$-likelihood. However, as noted in the literature (e.g. Gelman et al, 2004; Marin, Mengersen, Robert, 2005), mixture model likelihoods can be notoriously multimodal. This can cause problems when finding MLEs of the parameters. Here simulated annealing (SANN; Press et al., 1992, Chapter 10) was used to explore the parameter space (for 500 iterations) then after that the Broyden-Fletcher-Goldfarb-Shanno method (BFGS; Press et al., 1992, Chapter 10) was used to find the maxima (the implementations in the \textsf{R} function \texttt{optim()} were used). These two steps were run 5 times. This two step approach appears to be satisfactory in most cases. The EM algorithm (Dempster, Laird and Rubin, 1977) was also used although there was no significant performance increase (in terms of computational time or parameter precision) over using BFGS with SANN. To aid the optimization, analytic derivatives were also used; these can are given in Web Appendix B.
+In practice, maximization is performed on the $\log$-likelihood. However, as noted in the literature (e.g. Gelman et al, 2004; Marin, Mengersen, Robert, 2005), mixture model likelihoods can be notoriously multimodal. This can cause problems when finding MLEs of the parameters. Here simulated annealing (SANN; Press et al., 1992, Chapter 10) was used to explore the parameter space (for 500 iterations) then after that the Broyden-Fletcher-Goldfarb-Shanno method (BFGS; Press et al., 1992, Chapter 10) was used to find the maxima (the implementations in the \textsf{R} function \texttt{optim()} were used). These two steps were run 5 times. This two step approach appears to be satisfactory in most cases. The EM algorithm (Dempster, Laird and Rubin, 1977) was tested although there was no significant performance increase (in terms of computational time or parameter precision) over using BFGS with SANN. To aid the optimization, analytic derivatives were also used; these are given in Web Appendix B.
 
 \subsection*{Starting values}
-Beavers and Ramsay (1998) give a method for estimating starting values for the scale parameter of a half-normal detection function. In the non-covariate case, the estimate is given as the intercept parameter from intercept only regression on $\log(x+\frac{w}{1000})$ (where $w$ denotes the truncation distance, as above). For covariate models, the equation used for the $\sigma$ is used in the regression and the estimated parameters from the linear regression are used as the starting values for the $\beta$s.
+Beavers and Ramsay (1998) give a method for estimating starting values for the scale parameter of a half-normal detection function. In the non-covariate case, the estimate is given as the intercept parameter from intercept only regression on $\log(y+\frac{w}{1000})$ (where $w$ denotes the truncation distance, as above). For covariate models, the equation used for the $\sigma$ is used in the regression and the estimated parameters from the linear regression are used as the starting values for the $\beta$s.
 
-A similar approach can be use in the mixture case by dividing the sorted distances into $J$ equal parts. For each of these parts a Beavers and Ramsay-type estimate is used for the $\beta$s. The $\phi_j$ had starting values of $1/J$ since there is no reason \textit{a priori} to believe anything else.
+A similar approach can be use in the mixture case by dividing the sorted distances into $J$ equal parts. For each of these parts a Beavers and Ramsay-type estimate is used for the $\beta$s. The mixture weight $\phi_j$ had starting values of $1/J$ since there is no reason \textit{a priori} to believe anything else.
 
 \subsection*{Parametrisation of the mixture proportions}
 
@@ -43,7 +47,7 @@ and
 \begin{equation*}
 \phi_J = 1-\sum_{j=1}^{J-1} \phi_j
 \end{equation*}
-where $F$ is any continuous CDF on $(0,\infty]$. Exponentiation ensures that $e^{\alpha_p}\geq0$, so $\alpha_p$ may lie anywhere on the real line, allowing unconstrained optimisation. Summing these orders the $\phi_j$s, since only offsets are estimated. Finally, using the cumulative density function ensures that the $\phi_j$s sum to $1$. In practise the $\text{Gamma}(3,2)$ CDF is (somewhat arbitrarily) used. Figure \ref{mmds-phifig} illustrates the relationship.
+where $F$ is any continuous CDF on $(0,\infty]$. Exponentiation ensures that $e^{\alpha_p}\geq0$, so $\alpha_p$ may lie anywhere on the real line, allowing unconstrained optimisation. Summing these orders the $\phi_j$s, since only offsets are estimated. Finally, using the cumulative density function ensures that the $\phi_j$s sum to $1$. In practise the $\text{Gamma}(3,2)$ CDF is (somewhat arbitrarily) used. Web Figure \ref{mmds-phifig} illustrates the relationship.
 
 \begin{figure*}
 \centering
@@ -60,7 +64,7 @@ Note that we only need as many $\alpha_p$s as we had $\phi_j$s, so we do not req
 
 \section*{Web Appendix B - Derivatives}
 
-As mentioned above, maximization is performed on the $\log$-likelihood. In this section we give the derivations of the derivates of the $\log$-likelihood, which were used to aid optimization. To avoid confusion distances in the line transect case are denoted by $x$ and in the point transect case are denoted by $r$.
+As mentioned above, maximization is performed on the $\log$-likelihood. In this section we give the derivations of the derivatives of the $\log$-likelihood, which were used to aid optimization. In the main paper we used the symbol $y$ to denote the distance from transect to object.  In practice, this distance is a perpendicular distance in the case of line transects and a radial distance for point transects.  Here, to avoid confusion, perpendicular distances in the line transect case are denoted by $x$ and radial distances in the point transect case are denoted by $r$.
 
 \subsection*{Line transects}
 
@@ -77,7 +81,7 @@ For the intercept terms (also considering in the non-covariate case, these are j
 \begin{equation*}
 \frac{\partial l(\bm{\theta},\bm{\phi}; \mathbf{x},\mathbf{Z})}{\partial \beta_{0j*}} = \sum_{i=1}^n \frac{1}{g(x_i,\mathbf{Z}; \bm{\theta},\bm{\phi})} \phi_{j*} \frac{\partial}{\partial \beta_{0j*}} g_{j*}(x_i,\mathbf{Z}; \bm{\theta}_{j*})  - \frac{\phi_{j*}}{\mu_i}  \frac{\partial}{\partial \beta_{0j*}} \mu_{ij*}.
 \end{equation*}
-Now, to first fine $\frac{\partial}{\partial \beta_{0j*}} g_{j*}(x_i,\mathbf{Z}; \bm{\theta}_{j*})$:
+Now, to first find $\frac{\partial}{\partial \beta_{0j*}} g_{j*}(x_i,\mathbf{Z}; \bm{\theta}_{j*})$:
 \begin{equation*}
 \frac{\partial g_{j*}(x_i,\mathbf{Z}; \bm{\theta}_{j*})}{\partial \beta_{0j*}} = \frac{\partial}{\partial \beta_{0j*}} \exp\Big( -\frac{x_i^2}{2\sigma_{j*}^2} \Big),
 \end{equation*}
@@ -86,7 +90,7 @@ applying the chain rule and remembering that $\sigma_{j*}$ is a (trivial) functi
 \frac{\partial g_{j*}(x_i,\mathbf{Z}; \bm{\theta}_{j*})}{\partial \beta_{0j*}} = \Big( \frac{x_i}{\sigma_{j*}}\Big)^2 \exp \Big(-\frac{x_i^2}{2 \sigma_{j*}^2}\Big)
 \end{equation*}
 
-Expressing $\mu_{ij*}$ in terms of the error function:
+Expressing $\mu_{ij*}$ in terms of the error function, $\text{Erf}$:
 \begin{align}
 \frac{\partial \mu_{ij*}}{\partial \beta_{0j*}} &= \frac{\partial}{\partial \beta_{0j*}} \Big( \sqrt{\frac{\pi}{2}} \sigma_{j*} \text{Erf}\Big(\frac{w}{\sqrt{2\sigma_{j*}^2}}\Big) \Big) \notag \\
 &= \text{Erf}\Big(\frac{w}{\sqrt{2\sigma_{j*}^2}}\Big) \frac{\partial}{\partial \beta_{0j*}} \Big( \sqrt{\frac{\pi}{2}} \sigma_{j*} \Big) + \sqrt{\frac{\pi}{2}} \sigma_{j*} \frac{\partial}{\partial \beta_{0j*}} \Big(\text{Erf}\Big(\frac{w}{\sqrt{2\sigma_{j*}^2}}\Big) \Big)\label{app-mu-erf}
@@ -104,7 +108,7 @@ Their derivatives being
 \begin{align*}
 \frac{\partial S(u)}{\partial u} = \frac{2}{\sqrt{\pi}} \exp(-u^2) \text{,} \quad \frac{\partial u(\sigma_{j*})}{\partial \sigma_{j*}} = -\frac{w}{\sqrt{2}}\sigma_{j*}^{-2}.
 \end{align*}
-Given these terms, it's just a case of multiplying them:
+Given these terms, it is just a case of multiplying them:
 \begin{align*}
 \frac{\partial S(u)}{\partial u} \frac{\partial u(\sigma_{j*})}{\partial \sigma_{j*} } \frac{\partial \sigma_{j*}}{\partial \beta_{0j*}} = - \sqrt{\frac{2}{\pi}} \frac{w}{\sigma_{j*}} \exp\Big( -\frac{w^2}{2\sigma_{j*}^2} \Big)
 \end{align*}
@@ -116,7 +120,6 @@ Finally, the derivative is:
 \begin{equation*}
 \frac{\partial l(\bm{\theta}, \bm{\phi}; \mathbf{x},\mathbf{Z})}{\partial \beta_{0j*}} = \sum_{i=1}^n \Big( \frac{x_i}{\sigma_{j*}}\Big)^2 \phi_{j*} \frac{g_{j*}(x_i,\mathbf{Z}; \bm{\theta}_{j*})}{g(x_i,\mathbf{Z}; \bm{\theta},\bm{\phi})}  - \frac{\phi_{j*}}{\mu_i} (\mu_{ij*} - w g_{j*}(w,\mathbf{Z}; \bm{\theta}_{j*})).
 \end{equation*}
-
 
 
 \subsection*{With respect to $\beta_{k*}$}
@@ -252,7 +255,7 @@ The formulation for the hazard-rate simulations (group E) was:
 \begin{equation*}
 g(y,\mathbf{z}; \bm{\theta}, \bm{\phi}) = \sum_{j=1}^J \phi_j (1-\exp(-(y/\sigma_j)^{-b_j}))
 \end{equation*}
-where $b_j$ is the \textit{shape parameter}.
+where $b_j$ is the \textit{shape parameter} associated with the $j^\text{th}$ mixture component.
 
 \begin{table}[htbp]
 \centering
@@ -287,21 +290,23 @@ Covariate & D1 & -2.303 & -0.288 & -0.511 & 0.4 & & & & 0.422\\
 
 \section*{Web Appendix E - Simulation results}
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{simulations/pa-plot-combined.pdf}
-\caption{Simulation results: boxplots of the estimated average detection probabilities, $P_a$, for the best model (by AIC score) for both mixture and K+A models. In each case the best overall model was selected, reflecting the modelling approach undertaken in practice. Grey lines indicate the true value of the average detection probability. Numbers underneath each boxplot give the proportion of AIC best models that were of the same form as the model that the data was simulated from (e.g., in covariate scenario 1 the proportion of AIC best models that were 2-point mixtures that included the covariate in the model). Numbers above each model give the proportion of times that the AIC best model was a 2- or 3-point mixture model.}
-\label{sim-boxplots-combined}
-\end{figure}
+Figure 3 in the main paper gives boxplots showing the distribution of estimated probability of detection, $P_a$ obtained if only the mixture models are included in the candidate model set.  Here, we show the the distribution of estimates when only K+A models are used (Web Figure \ref{sim-boxplots-cds}), the distribution of estimates when both mixture and K+A models are included (Web Figure \ref{sim-boxplots-combined}), and the proportion of time each model is chosen using the combined modelling strategy (Web Figure \ref{sim-barplot}).
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{simulations/pa-plot-cds.pdf}
 \caption{Simulation results: boxplots of the estimated average detection probabilities, $P_a$, for the best K+A model (by AIC score). Grey lines indicate the true value of the average detection probability.}
 \label{sim-boxplots-cds}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{simulations/pa-plot-combined.pdf}
+\caption{Simulation results: boxplots of the estimated average detection probabilities, $P_a$, for the best model (by AIC score) for both mixture and K+A models. In each case the best overall model was selected, reflecting the modelling approach undertaken in practice. Grey lines indicate the true value of the average detection probability. Numbers underneath each boxplot give the proportion of AIC best models that were of the same form as the model that the data was simulated from (e.g., in scenario D1, the proportion of AIC best models that were 2-point mixtures that included the covariate in the model). Numbers above each model give the proportion of times that the AIC best model was a 2- or 3-point mixture model.}
+\label{sim-boxplots-combined}
+\end{figure}
+
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{simulations/bar-winners.pdf}
 \caption{Simulation results: stacked bar charts showing the number of models selected by AIC that fall into the given model classes. Layout is as in Web Figure 3, above. ``hn'' is a half-normal detection function and ``hr'' is a hazard-rate detection function (no adjustments/1-point mixture). K+A indicates a key function plus adjustment term model where ``cos'' is cosine and ``poly'' are simple polynomial adjustments. MMDS is a mixture model with 2 or 3 components (``2-pt'' or ``3-pt'', respectively). ``(cov)'' indicates that covariates were included in the model (no adjustments were allowed when covariates were used).}
@@ -309,23 +314,25 @@ Covariate & D1 & -2.303 & -0.288 & -0.511 & 0.4 & & & & 0.422\\
 \end{figure}
 
 
-
+\newpage
 \section*{Web Appendix F - Case studies}
 
-Before analysing the wood ant and amakahi data the variables nest size (for ants) and minutes after sunrise (for amakahi) were standardised by dividing the variable by its standard error. Below are plots of the best mixture detection functions for these two analysis.
+Before analysing the wood ant and amakihi data the variables nest size (for ants) and minutes after sunrise (for amakihi) were standardised by dividing the variable by its standard error. 
 
-\begin{figure}
+Plots of the best mixture detection function for the wood ant case study are given in Web Figure \ref{ants-nesthab} and for the amakihi in Web Figure \ref{amakihi}.
+
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.3333\textwidth, trim=0 0 5.73228347in 0, clip=true]{analyses/ants-nesthab-1.pdf}\includegraphics[width=0.6666\textwidth, trim=2.86614173in 0 0 0, clip=true]{analyses/ants-nesthab-2.pdf}
-\caption{Plot of the detection functions for the AIC best model for the ants data set (2-point mixture with nest size and habitat as covariates). The first panel shows the average detection function (dashed lines are the two mixture components of the detection function, averaged over covariate values). The second and third panels show the quantiles (25\%, 50\% and 75\%) of nest size and the levels of habitat type respectively.}
+\caption{Plot of the detection functions for the AIC best model for the ants data set (2-point mixture with nest size and habitat as covariates). The first panel shows the average detection function (dashed lines are the two mixture components of the detection function, averaged over covariate values). The second and third panels show the quartiles of nest size and the levels of habitat type respectively.}
 \label{ants-nesthab}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.3333\textwidth, trim=0 0 7.133334in 0, clip=true]{analyses/amakihi-om.pdf}\includegraphics[width=0.6666\textwidth, trim=3.566667in 0 0 0, clip=true]{analyses/amakihi-om-hh.pdf}\\
 \includegraphics[width=0.4\textwidth]{analyses/amakihi-om-pdf.pdf}
-\caption{Plots of the (AIC) best mixture model for the amakihi data: a 2-point mixture with observer and minutes after sunrise as covariates. Top row: detection function averaged over covariates (dashed lines are each mixture component averaged over covariates), marginal detection function showing the levels of observer (averaged over the values of minutes after sunrise) and marginal detection function for the quantiles minutes after sunrise (averaged over the levels of observer). Bottom row: pdf of distances averaged over the covariate values.}
+\caption{Plots of the (AIC) best mixture model for the Amakihi data: a 2-point mixture with observer and minutes after sunrise as covariates. Top row: detection function averaged over covariates (dashed lines are each mixture component averaged over covariates), marginal detection function showing the levels of observer (averaged over the values of minutes after sunrise) and marginal detection function for minutes after sunrise ranging between 0 and 300 minutes (averaged over the levels of observer), as in Marques et al (2007). Bottom row: pdf of distances averaged over the covariate values.}
 \label{amakihi}
 \end{figure}
 
@@ -338,21 +345,23 @@ Before analysing the wood ant and amakahi data the variables nest size (for ants
 
 \bibitem{ } Beavers, S. C., and Ramsey, F. L. (1998). Detectability analysis in transect surveys. \textit{Journal of Wildlife Management} \textbf{62}(3), pp. 948--957.
 
-\bibitem{} Borchers, D. L., and Buckland, S. T. and Zucchini, W. (2002). \textit{Estimating Animal Abundance: Closed Populations}. Springer.
+\bibitem{} Borchers, D. L., and Buckland, S. T. and Zucchini, W. (2002). \textit{Estimating animal abundance: closed populations}. Springer.
 
-\bibitem{ }  Buckland, S. T., Anderson, D. R., Burnham, K. P., Laake, J. L., Borchers, D. L., and Thomas, L.  (2001). \textit{Distance Sampling}. Oxford University Press. Oxford, UK.
+\bibitem{ }  Buckland, S. T., Anderson, D. R., Burnham, K. P., Laake, J. L., Borchers, D. L., and Thomas, L.  (2001). \textit{Distance sampling}. Oxford University Press. Oxford, UK.
 
-\bibitem{ } Dempster, A.P., Laird,  N. M. and Rubin, D. B. (1977). Maximum Likelihood from Incomplete Data via the EM Algorithm. \textit{Journal of the Royal Statistical Society: Series B (Methodological)} \textbf{39}(1), 1--38.
+\bibitem{ } Dempster, A.P., Laird,  N. M. and Rubin, D. B. (1977). Maximum likelihood from incomplete data via the EM algorithm. \textit{Journal of the Royal Statistical Society: Series B (Methodological)} \textbf{39}(1), 1--38.
 
-\bibitem{ }  Gelman, A., Carlin, J. B., Stern, H. S., and Rubin, D. B. (2004). \textit{Bayesian Data Analysis}. CRC Press.
+\bibitem{ }  Gelman, A., Carlin, J. B., Stern, H. S., and Rubin, D. B. (2004). \textit{Bayesian data analysis}. CRC Press.
 
-\bibitem{} Borchers, D. L., Buckland, S. T., Goedhart, P. W., Clarke, E. D. and Hedley, S. L. (1998). Horvitz-Thompson Estimators for Double-Platform Line Transect Surveys. \textit{Biometrics} \textbf{54}(4), 1221--1237.
+\bibitem{} Borchers, D. L., Buckland, S. T., Goedhart, P. W., Clarke, E. D. and Hedley, S. L. (1998). Horvitz-Thompson estimators for double-platform line transect surveys. \textit{Biometrics} \textbf{54}(4), 1221--1237.
 
 \bibitem{ } Marin, J. M., Mengersen, K. and Robert, C. P. (2005). Bayesian modelling and inference on mixtures of distributions. \textit{Handbook of Statistics 25} D. Dey and C.R. Rao (eds). Elsevier-Sciences.
 
 \bibitem{ } Marques, F. F. C. and Buckland, S. T. (2004). Covariate models for the detection function. In \textit{Advanced Distance Sampling}, pp. 31--47. S. T. Buckland, D. R. Anderson, K. P. Burnham, J. L. Laake, D. L. Borchers and L. Thomas (eds). Oxford University Press, Oxford.
 
-\bibitem{ } Press, W. H., Teukolsky, S. A., Vetterling, W. T., Flannery, B. P. (1992). \textit{Numerical Recipes: The Art of Scientific Computing}. Cambridge University Press. 
+\bibitem{ } Marques, T.A.,Thomas, L., Fancy, S.G., and Buckland, S.T. (2007) Improving Estimates of Bird Density Using Multiple-Covariate Distance Sampling. \textit{The Auk} \textbf{124},(4), 1229--1243.
+
+\bibitem{ } Press, W. H., Teukolsky, S. A., Vetterling, W. T., Flannery, B. P. (1992). \textit{Numerical recipes: the art of scientific computing}. Cambridge University Press. 
 
 \end{thebibliography}
 

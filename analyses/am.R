@@ -127,7 +127,7 @@ z[,3] <- rep(0,6)
 amakihi.om.best$z[[1]]<-z
 
 
-plot(amakihi.om.best,breaks=c(seq(0,82.5,len=20)),main=c("Detection function","Levels of observer","Quartiles of minutes after sunrise"),style="comp",hide.hist=TRUE,pseq=3,nomf=TRUE,lty=rep(1,6),lcol=rep("black",6))
+plot(amakihi.om.best,breaks=c(seq(0,82.5,len=20)),main=c("Detection function","Levels of observer","Minutes after sunrise 0-300"),style="comp",hide.hist=TRUE,pseq=3,nomf=TRUE,lty=rep(1,6),lcol=rep("black",6))
 
 text(22,0.56,"mas=0",cex=1.5)
 text(57,0.5,"mas=300",cex=1.5)

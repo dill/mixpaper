@@ -119,6 +119,7 @@ switchpars <- mmds:::switchpars
 getpars <- mmds:::getpars
 integrate.hn <- mmds:::integrate.hn
 keyfct.hn <- mmds:::keyfct.hn
+fit$pars <- pars
 plot(fit,nomf=TRUE,hide.hist=TRUE,style="comp",main=c(" "," "),x.axis=c(0,0.5,1),this.id="D1")
 
 # covsim2
@@ -131,7 +132,7 @@ names(testdata)[5]<-"cov1"
 fit<-try(fitmix(testdata,mix.terms=2,ftype="hn",width=width,
                 model.formula=model.formula))
 
-
+fit$pars <- pars
 plot(fit,nomf=TRUE,hide.hist=TRUE,style="comp",,main=c(" "," "),x.axis=c(0,0.5,1),this.id="D2")
 
 

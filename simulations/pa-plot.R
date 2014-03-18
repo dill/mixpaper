@@ -8,18 +8,24 @@
 # type.
 
 library(ggplot2)
+library(plyr)
+library(reshape2)
+options(stringsAsFactors=FALSE)
+
 
 model.names <- c("A. No covariates","B. Point transect",
                  "C. 3-point","D. Covariate","E. Other")
 
 samp.sizes<-c(30,60,120,480,960)
 
-#for(set in c("mmds")){#,"cds","combined")){
+#for(set in c("mmds")){
 #for(set in c("combined")){
+#for(set in c("cds")){
 for(set in c("mmds","cds","combined")){
   baf<-data.frame(pa=NA,n=NA,id=NA,model=NA)
   aic.winners<-data.frame(mix.terms=0,n=0,model=NA,id=0)
   true.ps<-c()
+  true.p<-c()
 
   ### nocov
   for(par.ind in 1:4){
@@ -177,133 +183,132 @@ for(set in c("mmds","cds","combined")){
     true.pp<-c()
     for(n.samps in samp.sizes){
 
+      ## read in the data
       dat<-read.csv(file=paste("covar/covsim",par.ind,"-BFGS+SANN.csv",sep=""))
       dat<-dat[,-1]
       names(dat)<-c("n","sim","AIC","pa","Nhat","N","mix.terms","mod")
-
       # load the covar data with no adjustments
       dat2<-read.csv(file=paste("covar/covsim",par.ind,
                                 "-noadj-BFGS+SANN.csv",sep=""))
       dat2<-dat2[,-1]
       names(dat2)<-c("n","sim","AIC","pa","Nhat","N","mix.terms","mod")
-
       # bind that on the end and delete the data
       dat<-rbind(dat,dat2)
       rm(dat2)
 
+      # select only data with sample size n.samps
       dat<-dat[dat$n==n.samps,]
 
+      # which models are we interested in?
       if(set == "mmds"){
         models<-c("nocov","cov")
       }else if(set=="cds"){
-        #models<-c("hn+cos","hr+poly","hn+cos+cov1","hr+poly+cov1",
-        #          "hn+cos+cov1-width","hr+poly+cov1-width")
         models<-c("hn+cos","hr+poly","hn+cov1","hr+cov1")
       }else{
-        #models<-c("nocov","cov","hn+cos","hr+poly","hn+cos+cov1","hr+poly+cov1",
-        #          "hn+cos+cov1-width","hr+poly+cov1-width")
         models<-c("nocov","cov","hn+cos","hr+poly","hn+cov1","hr+cov1")
+
+        # drop mixture models with 1 term -- just a hn+cos model
+        dat <- dat[!(dat$mod=="cov" & dat$mix.terms==1),]
+        dat <- dat[!(dat$mod=="nocov" & dat$mix.terms==1),]
       }
 
-      pa.res<-matrix(NA,200,length(models))
-      aic.res<-matrix(NA,200,length(models))
+      # write a function to do this!
+      get.best.p <- function(dat,models){
+        # reduce the data to only be the set of models we're interested in
+        dat <- dat[dat$mod %in% models,]
+        # remove NAs
+        dat <- dat[!(is.na(dat$AIC) | is.na(dat$pa)),]
+        # remove the n, N, pa and mix.terms columns
+        dat$n <- NULL
+        dat$N <- NULL
+        dat$mix.terms <- NULL
+        dat$pa <- NULL
 
-      for(modi in seq_along(models)){
-        if(sum(dat$mod==models[modi])>0){
-          pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
-                                              dat$Nhat[dat$mod==models[modi]]
-          aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
-                                              dat$AIC[dat$mod==models[modi]]
-        }
+        # recalculate pa
+        dat$pa <- n.samps/dat$Nhat
+        # drop Nhat
+        dat$Nhat <- NULL
+
+        # grab AIC data
+        dat.aic <- dat[,c("sim","AIC","mod")]
+        # make AIC the measured variable
+        dat.aic <- melt(dat.aic,measure.vars="AIC")
+        # remove variable column
+        dat.aic$variable <- NULL
+        # make table with sim as rows, models as columns, entries AIC
+        dat.aic <- dcast(dat.aic,sim~mod)
+        # drop sim now, don't need it since rows index the simulations
+        dat.aic$sim <- NULL
+
+        # as above for pa
+        dat.pa <- dat[,c("sim","pa","mod")]
+        dat.pa <- melt(dat.pa,measure.vars="pa")
+        dat.pa$variable <- NULL
+        dat.pa <- dcast(dat.pa,sim~mod)
+        dat.pa$sim <- NULL
+
+        # pick AIC best model
+        aic.pick <- apply(dat.aic,1,which.min)
+        # find the p associated with it
+        this.p <- dat.pa[cbind(1:nrow(dat.aic),aic.pick)]
+        # best models
+        best.model <- colnames(dat.aic)[aic.pick]
+        return(list(this.p=this.p,
+                    best.model = best.model,
+                    aic.pick=aic.pick))
       }
 
-      aic.pick<-apply(aic.res,1,which.min)
+      # run the above and extract best aic and ps
+      gbp <- get.best.p(dat,models)
+      this.p <- gbp$this.p
+      aic.pick <- gbp$aic.pick
 
-      if(set=="mmds" | set=="combined"){
+#      if(set=="mmds" | set=="combined"){
+
+#        aic.winners<-rbind(aic.winners,
+#                       data.frame(mix.terms=aic.pick,
+#                                  n=rep(n.samps,length(aic.pick)),
+#                                  model=rep("covar-norecode",length(aic.pick)),
+#                                  id=rep(par.ind,length(aic.pick))))
+#
+###!##      }
 
 
-        if(set=="combined"){
-          # actually do a recode here...
-          # models where # mixtures >1 cov and nocov
-          ind.aic<-aic.pick==2
-          dat.cov<-dat[dat$mod=="cov",]
-          mt <- as.numeric(dat.cov$mix.terms[ind.aic])
-          mt[mt==1]<-4
-          aic.pick[ind.aic]<-mt
+      baf<-rbind(baf,data.frame(pa=this.p,
+                                n=rep(n.samps,length(this.p)),
+                                id=rep(par.ind,length(this.p)),
+                                model=rep("covar",length(this.p))
+                 ))
+      # make AIC winners table
+      aic.winners<-rbind(aic.winners,
+                         #data.frame(mix.terms=models[aic.pick],
+                         data.frame(mix.terms=gbp$best.model,
+                                    n=rep(n.samps,length(aic.pick)),
+                                    model=rep("covar",length(aic.pick)),
+                                    id=rep(par.ind,length(aic.pick))))
 
-          ind.aic<-aic.pick==1
-          dat.cov<-dat[dat$mod=="nocov",]
-          mt<- as.numeric(dat.cov$mix.terms[ind.aic])
-          mt[mt==1]<-3
-          aic.pick[ind.aic]<-mt
-        }
-
-        aic.winners<-rbind(aic.winners,
-                       data.frame(mix.terms=aic.pick,
-                                  n=rep(n.samps,length(aic.pick)),
-                                  model=rep("covar-norecode",length(aic.pick)),
-                                  id=rep(par.ind,length(aic.pick))))
-
-        # make aic.winners be right vs wrong model...
-        # recode cov model when the number of mix terms != 2 
-        # to be "1"
-        ind.aic<-aic.pick==2
-        dat.cov<-dat[dat$mod=="cov",]
-        mt<-dat.cov$mix.terms[ind.aic]
-        mt[mt!=2]<-1
-        aic.pick[ind.aic]<-mt
-
-        aic.winners<-rbind(aic.winners,
-                       data.frame(mix.terms=aic.pick,
-                                  n=rep(n.samps,length(aic.pick)),
-                                  model=rep("covar",length(aic.pick)),
-                                  id=rep(par.ind,length(aic.pick))))
+      ## separate plot for when covariates are not included
+      if(set == "mmds"){
+        gbp <- get.best.p(dat,c("nocov","cov"))
+      }else if(set=="cds"){
+        gbp <- get.best.p(dat,c("hn+cos","hr+poly"))
+      }else{
+        gbp <- get.best.p(dat,c("nocov","hn+cos","hr+poly"))
       }
+      baf<-rbind(baf,data.frame(pa=gbp$this.p,
+                                n=rep(n.samps,length(gbp$this.p)),
+                                id=rep(par.ind+2,length(gbp$this.p)),
+                                model=rep("covar",length(gbp$this.p))))
 
 
-      # pick the best -- I really like this idiom
-      pa.cols<-ncol(pa.res)
-      pa.aic<-cbind(pa.res,aic.pick)
-      this.p<-apply(pa.aic,1,function(x){x[x[pa.cols+1]]})
-
-#      if(set!="mmds"){
-#        baf<-rbind(baf,data.frame(pa=this.p,
-#                                  n=rep(n.samps,length(this.p)),
-#                                  id=rep(par.ind,length(this.p)),
-#                                  model=rep("covar",length(this.p))
-#                   ))
-#      }else{
-        # covariates observed
-        baf<-rbind(baf,data.frame(pa=pa.res[,1],
-                                  n=rep(n.samps,length(this.p)),
-                                  id=rep(par.ind,length(this.p)),
-                                  model=rep("covar",length(this.p))
-                   ))
-        # covariates not observed
-        baf<-rbind(baf,data.frame(pa=pa.res[,2],
-                                  n=rep(n.samps,length(this.p)),
-                                  id=rep(par.ind+2,length(this.p)),
-                                  model=rep("covar",length(this.p))
-                   ))
-
-#      }
     }
     true.pp<-c(true.pp,n.samps/dat$N[!is.na(dat$Nhat)])
     true.ps<-c(true.ps,median(true.pp))
   }
   # truth lines -- covar
-#  if(set!="mmds"){
-#    true.p<-rbind(true.p,data.frame(t=true.ps,
-#                                    id=1:2,
-#                                    model=rep("covar",2)))
-#  }else{
-    true.p<-rbind(true.p,data.frame(t=rep(true.ps,c(2,2)),
-                                    id=1:4,
-                                    model=rep("covar",4)))
-    baf$id[baf$model=="covar" & baf$id==2] <- 5
-    baf$id[baf$model=="covar" & baf$id==3] <- 2
-    baf$id[baf$model=="covar" & baf$id==5] <- 3
-#  }
+  true.p<-rbind(true.p,data.frame(t=rep(true.ps,c(2,2)),
+                                  id=1:4,
+                                  model=rep("covar",4)))
 
   ##################################################################
   ### 3 point
@@ -432,6 +437,12 @@ for(set in c("mmds","cds","combined")){
       dat$pa<-as.double(as.character(dat$pa))
       dat$N<-as.double(as.character(dat$N))
 
+      # since we used model selection recode
+      #if(set=="mmds" | set=="combined"){
+      if(set=="combined"){
+        dat$mod[dat$mod=="mmds-MS" & dat$mixterms==1]<-"cds-hnc-w"
+      }
+
       if(set=="mmds"){
         models<-c("mmds-MS")
       }else if(set=="cds"){
@@ -452,21 +463,13 @@ for(set in c("mmds","cds","combined")){
 
       aic.res[is.na(aic.res)]<-Inf
 
-      # CDS has two outliers
-      if(set=="cds"){
-        rem.ind <- which(pa.res>2,arr.ind=TRUE)[,1]
-        if(length(rem.ind)>0){
-          pa.res<-pa.res[-rem.ind,]
-          aic.res<-aic.res[-rem.ind,]
-        }
-      }
-
       aic.pick<-apply(aic.res,1,which.min)
       pa.cols<-ncol(pa.res)
       pa.aic<-cbind(pa.res,aic.pick)
       this.p<-apply(pa.aic,1,function(x){x[x[pa.cols+1]]})
 
       if(set=="mmds" | set=="combined"){
+
         aic.winners<-rbind(aic.winners,
                        data.frame(mix.terms=aic.pick,
                                   n=rep(n.samps,length(aic.pick)),
@@ -501,7 +504,7 @@ for(set in c("mmds","cds","combined")){
 
   # make the annotations of the proportion of results that had
   # the true number of mixture terms
-  if(set=="mmds" | set=="combined"){  
+  if(set=="mmds" | set=="combined"){
     aic.winners<-aic.winners[-1,]
 
     # (time) in true model
@@ -529,7 +532,7 @@ for(set in c("mmds","cds","combined")){
     # covar
     for(i in 1:2){
        # calculate the proportions
-       this.prop<-table(aic.winners)[2,,"covar",i]/200
+       this.prop<-table(aic.winners)["cov",,"covar",i]/200
        itm<-rbind(itm,cbind(n=samp.sizes,
                             prop=round(this.prop,2),
                             model=rep("covar",5),
@@ -579,7 +582,8 @@ for(set in c("mmds","cds","combined")){
     # covar
     for(i in 1:2){
        # calculate the proportions
-       this.prop<-colSums(table(aic.winners)[1:2,,"covar-norecode",i]/200)
+       #this.prop<-colSums(table(aic.winners)[1:2,,"covar-norecode",i]/200)
+       this.prop<-colSums(table(aic.winners)[c("cov","nocov"),,"covar",i]/200)
        immds<-rbind(immds,cbind(n=samp.sizes,
                             prop=round(this.prop,2),
                             model=rep("covar",5),
@@ -612,6 +616,7 @@ for(set in c("mmds","cds","combined")){
 
 
 
+
   #######################################
   # reorder the models
   baf$model<-factor(baf$model,levels=c("nocov","pt","3pt","covar","haz"))
@@ -623,26 +628,19 @@ for(set in c("mmds","cds","combined")){
 
 
   # make little circles with labels in them...
-#  if(set!="mmds"){
-#    circ.labs <- data.frame(model=rep(model.names,c(4,4,2,2,2)),
-#                            id=c(1:4,1:4,1:2,1:2,1:2),
-#                            circ.label=c(paste0("A",1:4),
-#                                         paste0("B",1:4),
-#                                         paste0("C",1:2),
-#                                         paste0("D",1:2),
-#                                         paste0("E",1:2)))
-#  }else{
-    circ.labs <- data.frame(model=rep(model.names,c(4,4,2,4,2)),
-                            id=c(1:4,1:4,1:2,1:4,1:2),
-                            circ.label=c(paste0("A",1:4),
-                                         paste0("B",1:4),
-                                         paste0("C",1:2),
-                                         paste0("D",c(1:2,1:2)),
-                                         paste0("E",1:2)))
-    nocov.labs <- data.frame(model=model.names[c(4,4)],
-                            id=c(3,4),
-                            circ.label=rep("No cov.",2))
-#  }
+  circ.labs <- data.frame(model=rep(model.names,c(4,4,2,4,2)),
+                          id=c(1:4,1:4,1:2,1:4,1:2),
+                          circ.label=c(paste0("A",1:4),
+                                       paste0("B",1:4),
+                                       paste0("C",1:2),
+                                       paste0("D",c(1:2,1:2)),
+                                       paste0("E",1:2)))
+  nocov.labs <- data.frame(model=factor(rep(model.names[4],2),
+                                        levels(baf$model)),
+                          id=c(3,4),
+                          circ.label=rep("No cov.",2))
+
+  circ.labs$model <- factor(circ.labs$model,model.names)
 
   #######################################
   # actually do the plotting here
@@ -650,21 +648,23 @@ for(set in c("mmds","cds","combined")){
   p<-p+geom_boxplot(outlier.size=1)
   p<-p+facet_grid(model~id)
 
+  # add the annotations for time in true model (itm) and
+  # time in >1pt mixture (immds)
   if(set=="mmds" | set=="combined"){
     p<-p+geom_text(aes(x=factor(n),y=-0.1,label=prop),size=3,data=itm)
   }
   if(set=="combined"){
     p<-p+geom_text(aes(x=factor(n),y=1.1,label=prop),size=3,data=immds)
   }
-  if(set=="mmds"){
-    p <- p + geom_text(aes(x=3.5,y=0.85,label=circ.label),size=3,data=nocov.labs)
-  }
+
+  # label the covariate sims where the covariates were not included
+  p <- p + geom_text(aes(x=3.5,y=0.85,label=circ.label),size=3,data=nocov.labs)
 
 
   # plot the label and circle
-  p <- p + geom_point(aes(x=5,y=0.87),colour="black",
-                      size=7,data=circ.labs,shape=1)
-  p <- p + geom_text(aes(x=5,y=0.87,label=circ.label),size=3,data=circ.labs)
+  p <- p + geom_point(aes(x=5,y=0.88),colour="black",
+                      size=5,data=circ.labs,shape=1)
+  p <- p + geom_text(aes(x=5,y=0.88,label=circ.label),size=2,data=circ.labs)
 
   p<-p+labs(x="Sample size",
             y=substitute(paste(lab, hat(P[a])),
@@ -676,6 +676,9 @@ for(set in c("mmds","cds","combined")){
             strip.text.x = element_blank(),
             strip.background = element_blank(),
             panel.background=element_blank())
+
+  # add a scale, limits and nice breaks
+  p <- p + scale_y_continuous(breaks=c(0,0.5,1),limits=c(-0.1,1.1))
 
   # transparency not supported by eps!
   p<-p+geom_hline(aes(yintercept=t),true.p,col="grey")
