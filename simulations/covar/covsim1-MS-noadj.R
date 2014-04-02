@@ -67,7 +67,7 @@ for(n.samples in n.samps){
 
      fit<-try(ds(testdata,width,formula=as.formula(model.formula),
                  adjustment=NULL))
-     if(class(fit$ddf)!="try-error"){
+     if(class(fit)!="try-error"){
        res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
                         n.samples/sum(1/fitted(fit$ddf)),
                         fit$ddf$Nhat,true.N,NA,"hn+cov1"))
@@ -80,7 +80,7 @@ for(n.samples in n.samps){
 
      fit<-try(ds(testdata,width,formula=as.formula(model.formula),key="hr",
                  adjustment=NULL))
-     if(class(fit$ddf)!="try-error"){
+     if(class(fit)!="try-error"){
        res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
                         n.samples/sum(1/fitted(fit$ddf)),
                         fit$ddf$Nhat,true.N,NA,"hr+cov1"))

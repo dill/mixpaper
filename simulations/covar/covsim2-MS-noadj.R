@@ -62,7 +62,7 @@ for(n.samples in n.samps){
 
      fit<-try(ds(testdata,width,formula=as.formula(model.formula),
                  adjustment=NULL))
-     if(all(class(fit$ddf)!="try-error")){
+     if(all(class(fit)!="try-error")){
        res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
                         n.samples/sum(1/fitted(fit$ddf)),
                         fit$ddf$Nhat,true.N,NA,"hn+cov1"))
@@ -75,7 +75,7 @@ for(n.samples in n.samps){
 
      fit<-try(ds(testdata,width,formula=as.formula(model.formula),key="hr",
                  adjustment=NULL))
-     if(all(class(fit$ddf)!="try-error")){
+     if(all(class(fit)!="try-error")){
        res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
                         n.samples/sum(1/fitted(fit$ddf)),
                         fit$ddf$Nhat,true.N,NA,"hr+cov1"))
@@ -84,9 +84,10 @@ for(n.samples in n.samps){
      }
 
 
-write.table(res,file=paste("covsim2-noadj",n.samples,"-",opt.method,".csv",sep=""),append=TRUE,col.names=FALSE)
+#write.table(res,file=paste("covsim2-noadj",n.samples,"-",opt.method,".csv",sep=""),append=TRUE,col.names=FALSE)
      return(res)
   }
 
   big.res<-rbind(big.res,results)
 }
+write.csv(big.res,file=paste("covsim2-noadj",opt.method,".csv",sep=""))
