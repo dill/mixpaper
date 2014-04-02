@@ -66,7 +66,7 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
       # CDS - hn+cos (scale scaling)
 
       fit<-try(ds(sim.data,width,monotonicity="strict"))
-      if(all(class(fit$ddf)!="try-error")){
+      if(all(class(fit)!="try-error")){
         res<-rbind(res,c("cds-hnc",par.ind,n.samp,sim,"ll",fit$ddf$criterion,
                           fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
       }else{
@@ -78,7 +78,7 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
 
       fit<-try(ds(sim.data,width,monotonicity="strict",key="hr",
                   adjustment="poly"))
-      if(all(class(fit$ddf)!="try-error")){
+      if(all(class(fit)!="try-error")){
         res<-rbind(res,c("cds-hnc",par.ind,n.samp,sim,"ll",fit$ddf$criterion,
                           fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
       }else{
@@ -88,7 +88,7 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
       # CDS - hn+cos (width scaling)
 
       fit<-try(ds(sim.data,width,monotonicity="strict",scale="width"))
-      if(all(class(fit$ddf)!="try-error")){
+      if(all(class(fit)!="try-error")){
         res<-rbind(res,c("cds-hnc-w",par.ind,n.samp,sim,"ll",fit$ddf$criterion,
                           fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
       }else{
@@ -100,7 +100,7 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
 
       fit<-try(ds(sim.data,width,monotonicity="strict",key="hr",
                   adjustment="poly",scale="width"))
-      if(all(class(fit$ddf)!="try-error")){
+      if(all(class(fit)!="try-error")){
         res<-rbind(res,c("cds-hnc-w",par.ind,n.samp,sim,"ll",fit$ddf$criterion,
                           fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
       }else{
@@ -112,7 +112,7 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
 
       #fit<-try(ds(sim.data,width,monotonicity="strict",key="unif",
       #            adjustment="cos"))
-      #if(all(class(fit$ddf)!="try-error")){
+      #if(all(class(fit)!="try-error")){
       #  res<-rbind(res,c("cds-uc",par.ind,n.samp,sim,rep(NA,3),
       #                   fitted(fit$ddf)[1],fit$ddf$criterion,
       #                   true.N,fit$ddf$Nhat))
