@@ -1,11 +1,11 @@
 # pilot whale analysis
 
-# in Dan Pike's file, BSS3 has only 2 levels and BSS2 has 3!!!
 
 library(mmds)
 
 set.seed(125)
 
+# in Dan Pike's file, BSS3 has only 2 levels and BSS2 has 3!!!
 fin<-read.csv(file="danpike.csv")
 
 aics<-c()
