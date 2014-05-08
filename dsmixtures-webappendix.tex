@@ -39,7 +39,7 @@ A similar approach can be use in the mixture case by dividing the sorted distanc
 
 When using 2-point mixtures, the constraint that the mixture proportions must sum to unity is enforced by definition (since $\phi_2=1-\phi_1$). However, in $J$-point mixtures when $J>2$ ensuring that the proportions sum to 1 is not guaranteed. The obvious way to get around this would be to penalise the likelihood, should the optimisation procedure propose values for the $\phi_j$s that are not in accordance with this condition. This is, of course, inefficient and ugly. Instead, a parametrisation is used for the mixture proportions which yields $\phi_j$s that comply.
 
-Rather than estimating the $\phi_j$s, estimate $\alpha_p$s, where the relationship between the two is:
+Rather than estimating the $\phi_j$s, estimate $\alpha_p$s ($p=1,\ldots,J$), where the relationship between the two is:
 \begin{equation*}
 \phi_j = F(\sum_{p=1}^j e^{\alpha_p}) - F(\sum_{p=1}^{j-1} e^{\alpha_p}) \qquad \text{for } 1\leq j \leq J-1
 \end{equation*}
@@ -239,14 +239,14 @@ Variances of both $\hat{N}$ and $\hat{P}_a$ can be estimated for both non-covari
 
 In the most general case, the variance of $\hat{N}$ is estimated by:
 \begin{equation*}
-\hat{\text{Var}}\left( \hat{N} \right) = \left(\frac{\partial \hat{N}}{\partial\hat{\bm{\theta}}}\right)^\text{T}\hat{\mathbf{I}}(\hat{\bm{\theta}})^{-1}\frac{\partial \hat{N}}{\partial\hat{\bm{\theta}}} + \sum_{i=1}^n \frac{(1-p_i)}{p_i^2}
+\hat{\text{Var}}\left( \hat{N} \right) = \left(\frac{\partial \hat{N}}{\partial\hat{\bm{\Theta}}}\right)^\text{T}\hat{\mathbf{I}}(\hat{\bm{\Theta}})^{-1}\frac{\partial \hat{N}}{\partial\hat{\bm{\Theta}}} + \sum_{i=1}^n \frac{(1-p_i)}{p_i^2}
 \end{equation*}
-where $\hat{\mathbf{I}}(\hat{\bm{\theta}})^{-1}$ is the inverse of the Fisher information matrix,  $\hat{\bm{\theta}}$ is a vector of all of the maximum likelihood estimates of the parameters of the detection function and all other notation is as in previous sections.
+where $\hat{\mathbf{I}}(\hat{\bm{\Theta}})^{-1}$ is the inverse of the Fisher information matrix,  $\hat{\bm{\Theta}}$ is a vector of all of the maximum likelihood estimates of the parameters of the detection function ($\hat{\bm{\Theta}}=(\hat{\bm{\theta}},\hat{\bm{\phi}})$) and all other notation is as in previous sections.
 
 Then for the average detectability:
 \begin{align*}
-\hat{\text{Var}}\left( \hat{P}_a \right) = \hat{P}_a^2\left\{ \vphantom{\frac{\frac{a}{b}^b}{b}} \frac{\hat{\text{Var}}(\hat{N})}{\hat{N}^2}\right. &+\left.\frac{\left(\frac{\partial \hat{P}_a}{\partial\bm{\hat{\theta}}}\right)^\text{T}\hat{\mathbf{I}}(\hat{\bm{\theta}})^{-1}\frac{\partial \hat{P}_a}{\partial\bm{\hat{\theta}}}+\sum_{i=1}^n (1-p_i)}{n^2} \right. \\
- & \left. - \frac{2\left(\left(\frac{\partial \hat{N}}{\partial\bm{\hat{\theta}}}\right)^\text{T}\hat{\mathbf{I}}(\hat{\bm{\theta}})^{-1}\frac{\partial \hat{P}_a}{\partial\bm{\hat{\theta}}}+\sum_{i=1}^n\frac{(1-p_i)}{p_i^2}\right)}{n\hat{N}}\right\}.\\
+\hat{\text{Var}}\left( \hat{P}_a \right) = \hat{P}_a^2\left\{ \vphantom{\frac{\frac{a}{b}^b}{b}} \frac{\hat{\text{Var}}(\hat{N})}{\hat{N}^2}\right. &+\left.\frac{\left(\frac{\partial \hat{P}_a}{\partial\bm{\hat{\Theta}}}\right)^\text{T}\hat{\mathbf{I}}(\hat{\bm{\Theta}})^{-1}\frac{\partial \hat{P}_a}{\partial\bm{\hat{\Theta}}}+\sum_{i=1}^n (1-p_i)}{n^2} \right. \\
+ & \left. - \frac{2\left(\left(\frac{\partial \hat{N}}{\partial\bm{\hat{\Theta}}}\right)^\text{T}\hat{\mathbf{I}}(\hat{\bm{\Theta}})^{-1}\frac{\partial \hat{P}_a}{\partial\bm{\hat{\Theta}}}+\sum_{i=1}^n\frac{(1-p_i)}{p_i^2}\right)}{n\hat{N}}\right\}.\\
 \end{align*}
 
 \section*{Web Appendix D - Simulation parameters}
