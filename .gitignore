@@ -1,0 +1,6 @@
+*.bbl
+*.log
+*.blg
+*.synctex.gz
+*.aux
+.DS_Store
