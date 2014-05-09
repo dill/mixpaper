@@ -1,9 +1,7 @@
 # pilot whale analysis
 
 
-#library(mmds)
-library(devtools)
-load_all("~/current/mmds")
+library(mmds)
 
 set.seed(125)
 
