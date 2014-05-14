@@ -1,0 +1,116 @@
+\documentclass[10pt]{article}
+
+% amsmath package, useful for mathematical formulas
+\usepackage{amsmath}
+% amssymb package, useful for mathematical symbols
+\usepackage{amssymb}
+
+% graphicx package, useful for including eps and pdf graphics
+% include graphics with the command \includegraphics
+\usepackage{graphicx}
+
+% cite package, to clean up citations in the main text. Do not remove.
+\usepackage{cite}
+
+\usepackage{color} 
+
+% Use doublespacing - comment out for single spacing
+%\usepackage{setspace} 
+%\doublespacing
+
+
+% Text layout
+\topmargin 0.0cm
+\oddsidemargin 0.5cm
+\evensidemargin 0.5cm
+\textwidth 16cm 
+\textheight 21cm
+
+% Bold the 'Figure #' in the caption and separate it with a period
+% Captions will be left justified
+\usepackage[labelfont=bf,labelsep=period,justification=raggedright]{caption}
+
+% Use the PLoS provided bibtex style
+\bibliographystyle{plos2009}
+
+% Remove brackets from numbering in List of References
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+
+% Leave date blank
+\date{}
+
+\pagestyle{myheadings}
+%% ** EDIT HERE **
+%\usepackage{bm}
+
+%% ** EDIT HERE **
+%% PLEASE INCLUDE ALL MACROS BELOW
+
+%% END MACROS SECTION
+
+\begin{document}
+
+% Title must be 150 characters or less
+\begin{flushleft}
+{\Large
+\textbf{Appendix S2: Simulation parameters}
+}
+% Insert Author names, affiliations and corresponding author email.
+\\
+David L. Miller$^{1,\ast}$,
+Len Thomas$^{1}$
+\\
+\bf{1} School of Mathematics and Statistics, and Centre for Research into Ecological and Environmental Modelling, University of St Andrews, St Andrews KY16 9LZ, Scotland
+\\
+$\ast$ E-mail: dave@ninepointeightone.net
+\end{flushleft}
+
+The formulation used for the exponential power series (EPS) detection function in simulation E1 was:
+\begin{equation*}
+g(y,\mathbf{z}; \lambda, b_1) =  \exp(-(y/\lambda)^{-b_1})),
+\end{equation*}
+which has the following pdf:
+\begin{equation*}
+f(y,\mathbf{z}; \lambda, b_1) =  \frac{\exp(-(y/\lambda)^{-b_1})),}{\lambda\Gamma(1+\frac{1}{b_1})}
+\end{equation*}
+where $\lambda=\exp(\beta_1)$ is a scale parameter and $b_1$ is a \textit{shape parameter}.
+
+The formulation for the hazard-rate mixture in simulation E2 was:
+\begin{equation*}
+g(y,\mathbf{z}; \mathbf{\theta}, \mathbf{\phi}) = \sum_{j=1}^J \phi_j (1-\exp(-(y/\sigma_j)^{-b_j})),
+\end{equation*}
+where $b_j$ is the shape parameter associated with the $j^\text{th}$ mixture component.
+
+\begin{table}[htbp]
+\centering
+\caption{Parameters of the detection functions used in the simulations in Section 3 and the true average detection probability ($P_a$) for each model. Note that for covariate models, $\beta_1$ corresponds to the intercept of the first mixture component, $\beta_2$ to the intercept of the second mixture component and $\beta_3$ to the coefficient for the (common) covariate effect. Numbering is as in Figures 2 and 3 in the main article.}
+\begin{tabular}{c c c c c c c c c c}\\
+Model & Scenario & $\beta_1$ & $\beta_2$ & $\beta_3$ & $\pi_1$ & $\pi_2$ & $b_1$ & $b_2$ & $P_a$ \\
+\hline
+Line transect & A1 & -0.223 & -1.897 & &  0.3 & & & & 0.369\\
+ & A2 & -0.511 & -2.303 & &  0.7 & & & & 0.514\\
+ & A3 &  2.303 & -1.609 & & 0.15 & & & & 0.363\\
+ & A4 & -0.357 & -2.996 & &  0.6 & & & & 0.471\\
+Point transect &B1 & -0.223 & -1.897 & &  0.3 & & & & 0.24\\
+ & B2 & -0.511 & -2.303 & &  0.7 & & & & 0.384\\
+ & B3 &  2.303 & -1.609 & & 0.15 & & & & 0.218\\
+ & B4 & -0.357 & -2.996 & &  0.6 & & & & 0.378\\
+3-point & C1 &  -0.22 &  -0.69 &  -2.3 & 0.3 & 0.3 & & & 0.505\\
+ & C2 &   2.71 &  -1.39 &  -3.0 & 0.1 & 0.4 & & & 0.257\\
+Covariate & D1 & -2.303 & -0.288 & -0.511 & 0.4 & & & & 0.422\\
+ & D2 & -1.609 & -0.223 & -0.916 & 0.4 & & & & 0.389\\
+ EPS & E1 & -0.534 & & & & & 1.5& & 0.5 \\
+ Hazard-rate & E2 & -1.69 & -0.304 & & 0.5 & & 7 & 7 & 0.5\\
+\hline
+\end{tabular}
+\label{partable}
+\bigskip
+\end{table}
+
+
+\bibliography{dsmixtures-appendix}
+
+\end{document}
