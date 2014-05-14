@@ -1,0 +1,89 @@
+\documentclass[10pt]{article}
+
+% amsmath package, useful for mathematical formulas
+\usepackage{amsmath}
+% amssymb package, useful for mathematical symbols
+\usepackage{amssymb}
+
+% graphicx package, useful for including eps and pdf graphics
+% include graphics with the command \includegraphics
+\usepackage{graphicx}
+
+% cite package, to clean up citations in the main text. Do not remove.
+\usepackage{cite}
+
+\usepackage{color} 
+
+% Use doublespacing - comment out for single spacing
+%\usepackage{setspace} 
+%\doublespacing
+
+
+% Text layout
+\topmargin 0.0cm
+\oddsidemargin 0.5cm
+\evensidemargin 0.5cm
+\textwidth 16cm 
+\textheight 21cm
+
+% Bold the 'Figure #' in the caption and separate it with a period
+% Captions will be left justified
+\usepackage[labelfont=bf,labelsep=period,justification=raggedright]{caption}
+
+% Use the PLoS provided bibtex style
+\bibliographystyle{plos2009}
+
+% Remove brackets from numbering in List of References
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+
+% Leave date blank
+\date{}
+
+\pagestyle{myheadings}
+%% ** EDIT HERE **
+%\usepackage{bm}
+
+%% ** EDIT HERE **
+%% PLEASE INCLUDE ALL MACROS BELOW
+
+%% END MACROS SECTION
+
+\begin{document}
+
+% Title must be 150 characters or less
+\begin{flushleft}
+{\Large
+\textbf{Text S2: Variance estimation for mixture model detection functions}
+}
+% Insert Author names, affiliations and corresponding author email.
+\\
+David L. Miller$^{1,\ast}$,
+Len Thomas$^{1}$
+\\
+\bf{1} School of Mathematics and Statistics, and Centre for Research into Ecological and Environmental Modelling, University of St Andrews, St Andrews KY16 9LZ, Scotland
+\\
+$\ast$ E-mail: dave@ninepointeightone.net
+\end{flushleft}
+
+
+Variances of both $\hat{N}$ and $\hat{P}_a$ can be estimated for both non-covariate models and covariate models using standard methods \cite{Borchers:2002vc, Marques:2003vb,Borchers:1998uwa}.
+
+In the most general case, the variance of $\hat{N}$ is estimated by:
+\begin{equation*}
+\hat{\text{Var}}\left( \hat{N} \right) = \left(\frac{\partial \hat{N}}{\partial\hat{\mathbf{\Theta}}}\right)^\text{T}\hat{\mathbf{I}}(\hat{\mathbf{\Theta}})^{-1}\frac{\partial \hat{N}}{\partial\hat{\mathbf{\Theta}}} + \sum_{i=1}^n \frac{(1-p_i)}{p_i^2}
+\end{equation*}
+where $\hat{\mathbf{I}}(\hat{\mathbf{\Theta}})^{-1}$ is the inverse of the Fisher information matrix,  $\hat{\mathbf{\Theta}}$ is a vector of all of the maximum likelihood estimates of the parameters of the detection function ($\hat{\mathbf{\Theta}}=(\hat{\mathbf{\theta}},\hat{\mathbf{\phi}})$) and all other notation is as in previous sections.
+
+Then for the average detectability:
+\begin{align*}
+\hat{\text{Var}}\left( \hat{P}_a \right) = \hat{P}_a^2\left\{ \vphantom{\frac{\frac{a}{b}^b}{b}} \frac{\hat{\text{Var}}(\hat{N})}{\hat{N}^2}\right. &+\left.\frac{\left(\frac{\partial \hat{P}_a}{\partial\mathbf{\hat{\Theta}}}\right)^\text{T}\hat{\mathbf{I}}(\hat{\mathbf{\Theta}})^{-1}\frac{\partial \hat{P}_a}{\partial\mathbf{\hat{\Theta}}}+\sum_{i=1}^n (1-p_i)}{n^2} \right. \\
+ & \left. - \frac{2\left(\left(\frac{\partial \hat{N}}{\partial\mathbf{\hat{\Theta}}}\right)^\text{T}\hat{\mathbf{I}}(\hat{\mathbf{\Theta}})^{-1}\frac{\partial \hat{P}_a}{\partial\mathbf{\hat{\Theta}}}+\sum_{i=1}^n\frac{(1-p_i)}{p_i^2}\right)}{n\hat{N}}\right\}.\\
+\end{align*}
+
+
+\bibliography{dsmixtures-appendix}
+
+\end{document}

@@ -112,7 +112,7 @@ for(n.samples in n.samps){
      # CDS - hn+cos
 
      fit<-try(ds(testdata,width,monotonicity="strict"))
-     if(class(fit$ddf)!="try-error"){
+     if(class(fit)!="try-error"){
        res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
                         n.samples/sum(1/fitted(fit$ddf)),
                         fit$ddf$Nhat,true.N,NA,"hn+cos"))
@@ -121,11 +121,25 @@ for(n.samples in n.samps){
      }
 
      ######################################################## 
+     # MCDS - hn + as.factor(cov1)
+
+     fit<-try(ds(testdata,width,formula=as.formula(model.formula),
+                 adjustment=NULL))
+     if(class(fit)!="try-error"){
+       res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
+                        n.samples/sum(1/fitted(fit$ddf)),
+                        fit$ddf$Nhat,true.N,NA,"hn+cov1"))
+     }else{
+       res<-rbind(res,c(n.samples,sim,NA,NA,NA,NA,NA,"hn+cov1"))
+     }
+
+
+     ######################################################## 
      # CDS - hr+poly
 
      fit<-try(ds(testdata,width,monotonicity="strict",key="hr",
                  adjustment="poly"))
-     if(class(fit$ddf)!="try-error"){
+     if(class(fit)!="try-error"){
        res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
                         n.samples/sum(1/fitted(fit$ddf)),
                         fit$ddf$Nhat,true.N,NA,"hr+poly"))
@@ -134,10 +148,23 @@ for(n.samples in n.samps){
      }
 
      ######################################################## 
+     # MCDS - hr + as.factor(cov1)
+
+     fit<-try(ds(testdata,width,formula=as.formula(model.formula),key="hr",
+                 adjustment=NULL))
+     if(class(fit)!="try-error"){
+       res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
+                        n.samples/sum(1/fitted(fit$ddf)),
+                        fit$ddf$Nhat,true.N,NA,"hr+cov1"))
+     }else{
+       res<-rbind(res,c(n.samples,sim,NA,NA,NA,NA,NA,"hr+cov1"))
+     }
+
+     ######################################################## 
      # MCDS - hn+cos + as.factor(cov1)
 
      fit<-try(ds(testdata,width,formula=as.formula(model.formula)))
-     if(class(fit$ddf)!="try-error"){
+     if(class(fit)!="try-error"){
        res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
                         n.samples/sum(1/fitted(fit$ddf)),
                         fit$ddf$Nhat,true.N,NA,"hn+cos+cov1"))
@@ -150,7 +177,7 @@ for(n.samples in n.samps){
 
      fit<-try(ds(testdata,width,formula=as.formula(model.formula),key="hr",
                  adjustment="poly"))
-     if(class(fit$ddf)!="try-error"){
+     if(class(fit)!="try-error"){
        res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
                         n.samples/sum(1/fitted(fit$ddf)),
                         fit$ddf$Nhat,true.N,NA,"hr+poly+cov1"))
@@ -162,7 +189,7 @@ for(n.samples in n.samps){
      # MCDS - hn+cos + as.factor(cov1) width scaling
 
      fit<-try(ds(testdata,width,formula=as.formula(model.formula),scale="width"))
-     if(class(fit$ddf)!="try-error"){
+     if(class(fit)!="try-error"){
        res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
                         n.samples/sum(1/fitted(fit$ddf)),
                         fit$ddf$Nhat,true.N,NA,"hn+cos+cov1-width"))
@@ -175,7 +202,7 @@ for(n.samples in n.samps){
 
      fit<-try(ds(testdata,width,formula=as.formula(model.formula),key="hr",
                  adjustment="poly",scale="width"))
-     if(class(fit$ddf)!="try-error"){
+     if(class(fit)!="try-error"){
        res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
                         n.samples/sum(1/fitted(fit$ddf)),
                         fit$ddf$Nhat,true.N,NA,"hr+poly+cov1-width"))

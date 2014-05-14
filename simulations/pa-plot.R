@@ -40,8 +40,8 @@ for(set in c("mmds","cds","combined")){
 
       dat<-dat[dat$n==n.samps,]
 
-      dat$Nhat<-as.double(as.character(dat$Nhat))
-      dat$N<-as.double(as.character(dat$N))
+      dat$Nhat<-as.double(dat$Nhat)
+      dat$N<-as.double(dat$N)
 
       if(set=="mmds"){
         models<-c("mmds-1","mmds-c")
@@ -55,11 +55,11 @@ for(set in c("mmds","cds","combined")){
       aic.res<-matrix(NA,200,length(models))
 
       for(modi in seq_along(models)){
-        if(sum(dat$mod==models[modi])>0){
-          pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
-                                              dat$Nhat[dat$mod==models[modi]]
-          aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
-                                              dat$AIC[dat$mod==models[modi]]
+        if(sum(dat$model==models[modi])>0){
+          pa.res[,modi][dat$sim[dat$model==models[modi]]]<-n.samps/
+                                              dat$Nhat[dat$model==models[modi]]
+          aic.res[,modi][dat$sim[dat$model==models[modi]]]<-
+                                              dat$AIC[dat$model==models[modi]]
         }
       }
 
@@ -115,8 +115,8 @@ for(set in c("mmds","cds","combined")){
                     "par3","pall","AIC","N","Nhat")
 
       dat<-dat[dat$n==n.samps,]
-      dat$Nhat<-as.double(as.character(dat$Nhat))
-      dat$N<-as.double(as.character(dat$N))
+      dat$Nhat<-as.numeric(dat$Nhat)
+      dat$N<-as.numeric(dat$N)
 
       if(set=="mmds"){
         models<-c("mmds-1","mmds-2")
@@ -130,11 +130,11 @@ for(set in c("mmds","cds","combined")){
       aic.res<-matrix(NA,200,length(models))
 
       for(modi in seq_along(models)){
-        if(sum(dat$mod==models[modi])>0){
-          pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
-                                              dat$Nhat[dat$mod==models[modi]]
-          aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
-                                              dat$AIC[dat$mod==models[modi]]
+        if(sum(dat$model==models[modi])>0){
+          pa.res[,modi][dat$sim[dat$model==models[modi]]]<-n.samps/
+                                              dat$Nhat[dat$model==models[modi]]
+          aic.res[,modi][dat$sim[dat$model==models[modi]]]<-
+                                              dat$AIC[dat$model==models[modi]]
         }
       }
 
@@ -186,18 +186,20 @@ for(set in c("mmds","cds","combined")){
       ## read in the data
       dat<-read.csv(file=paste("covar/covsim",par.ind,"-BFGS+SANN.csv",sep=""))
       dat<-dat[,-1]
-      names(dat)<-c("n","sim","AIC","pa","Nhat","N","mix.terms","mod")
-      # load the covar data with no adjustments
-      dat2<-read.csv(file=paste("covar/covsim",par.ind,
-                                "-noadj-BFGS+SANN.csv",sep=""))
-      dat2<-dat2[,-1]
-      names(dat2)<-c("n","sim","AIC","pa","Nhat","N","mix.terms","mod")
-      # bind that on the end and delete the data
-      dat<-rbind(dat,dat2)
-      rm(dat2)
+      names(dat)<-c("n","sim","AIC","pa","Nhat","N","mix.terms","model")
+##!##      # load the covar data with no adjustments
+##!##      dat2<-read.csv(file=paste("covar/covsim",par.ind,
+##!##                                "-noadj-BFGS+SANN.csv",sep=""))
+##!##      dat2<-dat2[,-1]
+##!##      names(dat2)<-c("n","sim","AIC","pa","Nhat","N","mix.terms","mod")
+##!##      # bind that on the end and delete the data
+##!##      dat<-rbind(dat,dat2)
+##!##      rm(dat2)
 
       # select only data with sample size n.samps
       dat<-dat[dat$n==n.samps,]
+      dat$Nhat <- as.numeric(dat$Nhat)
+      dat$N <- as.numeric(dat$N)
 
       # which models are we interested in?
       if(set == "mmds"){
@@ -208,14 +210,14 @@ for(set in c("mmds","cds","combined")){
         models<-c("nocov","cov","hn+cos","hr+poly","hn+cov1","hr+cov1")
 
         # drop mixture models with 1 term -- just a hn+cos model
-        dat <- dat[!(dat$mod=="cov" & dat$mix.terms==1),]
-        dat <- dat[!(dat$mod=="nocov" & dat$mix.terms==1),]
+        dat <- dat[!(dat$model=="cov" & dat$mix.terms==1),]
+        dat <- dat[!(dat$model=="nocov" & dat$mix.terms==1),]
       }
 
       # write a function to do this!
       get.best.p <- function(dat,models){
         # reduce the data to only be the set of models we're interested in
-        dat <- dat[dat$mod %in% models,]
+        dat <- dat[dat$model %in% models,]
         # remove NAs
         dat <- dat[!(is.na(dat$AIC) | is.na(dat$pa)),]
         # remove the n, N, pa and mix.terms columns
@@ -230,21 +232,21 @@ for(set in c("mmds","cds","combined")){
         dat$Nhat <- NULL
 
         # grab AIC data
-        dat.aic <- dat[,c("sim","AIC","mod")]
+        dat.aic <- dat[,c("sim","AIC","model")]
         # make AIC the measured variable
         dat.aic <- melt(dat.aic,measure.vars="AIC")
         # remove variable column
         dat.aic$variable <- NULL
         # make table with sim as rows, models as columns, entries AIC
-        dat.aic <- dcast(dat.aic,sim~mod)
+        dat.aic <- dcast(dat.aic,sim~model)
         # drop sim now, don't need it since rows index the simulations
         dat.aic$sim <- NULL
 
         # as above for pa
-        dat.pa <- dat[,c("sim","pa","mod")]
+        dat.pa <- dat[,c("sim","pa","model")]
         dat.pa <- melt(dat.pa,measure.vars="pa")
         dat.pa$variable <- NULL
-        dat.pa <- dcast(dat.pa,sim~mod)
+        dat.pa <- dcast(dat.pa,sim~model)
         dat.pa$sim <- NULL
 
         # pick AIC best model
@@ -262,17 +264,6 @@ for(set in c("mmds","cds","combined")){
       gbp <- get.best.p(dat,models)
       this.p <- gbp$this.p
       aic.pick <- gbp$aic.pick
-
-#      if(set=="mmds" | set=="combined"){
-
-#        aic.winners<-rbind(aic.winners,
-#                       data.frame(mix.terms=aic.pick,
-#                                  n=rep(n.samps,length(aic.pick)),
-#                                  model=rep("covar-norecode",length(aic.pick)),
-#                                  id=rep(par.ind,length(aic.pick))))
-#
-###!##      }
-
 
       baf<-rbind(baf,data.frame(pa=this.p,
                                 n=rep(n.samps,length(this.p)),
@@ -303,7 +294,7 @@ for(set in c("mmds","cds","combined")){
 
     }
     true.pp<-c(true.pp,n.samps/dat$N[!is.na(dat$Nhat)])
-    true.ps<-c(true.ps,median(true.pp))
+    true.ps<-c(true.ps,median(true.pp,na.rm=TRUE))
   }
   # truth lines -- covar
   true.p<-rbind(true.p,data.frame(t=rep(true.ps,c(2,2)),
@@ -327,8 +318,8 @@ for(set in c("mmds","cds","combined")){
                     "pa","Nhat","N","mix.terms")
 
       dat<-dat[dat$n==n.samps,]
-      dat$Nhat<-as.double(as.character(dat$Nhat))
-      dat$N<-as.double(as.character(dat$N))
+      dat$Nhat<-as.numeric(dat$Nhat)
+      dat$N<-as.numeric(dat$N)
 
       if(set=="mmds"){
         dat1<-dat[dat$model=="mmds-MS",]
@@ -343,11 +334,11 @@ for(set in c("mmds","cds","combined")){
         aic.res<-matrix(NA,200,length(models))
 
         for(modi in seq_along(models)){
-          if(sum(dat$mod==models[modi])>0){
-            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
-                                                dat$Nhat[dat$mod==models[modi]]
-            aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
-                                                dat$AIC[dat$mod==models[modi]]
+          if(sum(dat$model==models[modi])>0){
+            pa.res[,modi][dat$sim[dat$model==models[modi]]]<-n.samps/
+                                                dat$Nhat[dat$model==models[modi]]
+            aic.res[,modi][dat$sim[dat$model==models[modi]]]<-
+                                                dat$AIC[dat$model==models[modi]]
           }
         }
       }else{
@@ -358,11 +349,11 @@ for(set in c("mmds","cds","combined")){
         aic.res<-matrix(NA,200,length(models))
 
         for(modi in seq_along(models)){
-          if(sum(dat$mod==models[modi])>0){
-            pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-n.samps/
-                                                dat$Nhat[dat$mod==models[modi]]
-            aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
-                                                dat$AIC[dat$mod==models[modi]]
+          if(sum(dat$model==models[modi])>0){
+            pa.res[,modi][dat$sim[dat$model==models[modi]]]<-n.samps/
+                                                dat$Nhat[dat$model==models[modi]]
+            aic.res[,modi][dat$sim[dat$model==models[modi]]]<-
+                                                dat$AIC[dat$model==models[modi]]
           }
         }
       }
@@ -387,7 +378,7 @@ for(set in c("mmds","cds","combined")){
         # since we used model selection, recode mix.terms!=3
         # as the wrong model
         mt<-rep(NA,200)
-        mt[dat$sim[dat$mod=="mmds-MS"]] <- dat$mix.terms[dat$mod=="mmds-MS"]
+        mt[dat$sim[dat$model=="mmds-MS"]] <- dat$mix.terms[dat$model=="mmds-MS"]
         aic.pick2<-aic.pick
         aic.pick2[mt!=3 & aic.pick==1]<-4
 
@@ -424,23 +415,23 @@ for(set in c("mmds","cds","combined")){
       n.samps<-as.integer(n.samps)
 
       dat<-read.csv(file=paste("hazard/hr-",par.ind,
-                               "-results.csv",sep=""))
+                               "-results.csv",sep=""),header=FALSE)
 
       par.ind <- ifelse(par.ind==1,2,1)
 
       dat<-dat[,-1]
-      names(dat)<-c("mod","par.ind","n.samp","sim","ll","AIC",
+      names(dat)<-c("model","par.ind","n.samp","sim","ll","AIC",
                     "pa","Nhat","N","mixterms")
 
       dat<-dat[dat$n==n.samps,]
-      dat$Nhat<-as.double(as.character(dat$Nhat))
-      dat$pa<-as.double(as.character(dat$pa))
-      dat$N<-as.double(as.character(dat$N))
+      dat$Nhat<-as.double(dat$Nhat)
+      dat$pa<-as.double(dat$pa)
+      dat$N<-as.double(dat$N)
 
       # since we used model selection recode
       #if(set=="mmds" | set=="combined"){
       if(set=="combined"){
-        dat$mod[dat$mod=="mmds-MS" & dat$mixterms==1]<-"cds-hnc-w"
+        dat$model[dat$model=="mmds-MS" & dat$mixterms==1]<-"cds-hnc-w"
       }
 
       if(set=="mmds"){
@@ -454,10 +445,10 @@ for(set in c("mmds","cds","combined")){
       aic.res<-matrix(NA,200,length(models))
 
       for(modi in seq_along(models)){
-        if(sum(dat$mod==models[modi])>0){
-          pa.res[,modi][dat$sim[dat$mod==models[modi]]]<-dat$pa[dat$mod==models[modi]]
-          aic.res[,modi][dat$sim[dat$mod==models[modi]]]<-
-                                              dat$AIC[dat$mod==models[modi]]
+        if(sum(dat$model==models[modi])>0){
+          pa.res[,modi][dat$sim[dat$model==models[modi]]] <- dat$pa[dat$model==models[modi]]
+          aic.res[,modi][dat$sim[dat$model==models[modi]]]<-
+                                              dat$AIC[dat$model==models[modi]]
         }
       }
 

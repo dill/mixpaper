@@ -1,7 +1,7 @@
 # this file actually runs the simulation
 
 # source in the settings
-source("settings.R") 
+source("settings.R")
 
 # let's do this in parallel
 library(foreach)
@@ -30,21 +30,21 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
     prefer<-c()
     ## loop over number of replicates
     for(sim in 1:n.sims){
-  
+
       # simulate the data
       sim.data<-sim.mix(parmat[par.ind,],mix.terms,n.samp,width)
       true.N<-n.samp*width/mmds:::mu.calc(parmat[par.ind,],mix.terms,width)
 
       ######################################################## 
-      # fit the "correct" model 
+      # fit the "correct" model
       # because SANN changes the seed, save it first
       seed <- get(".Random.seed",envir=.GlobalEnv) ## store RNG seed
 
       fit<-try(fitmix(sim.data,initialvalues=starting.vals,mix.terms=mix.terms,
                  ftype="hn",width=width,model.formula=model.formula,
                  usegrad=TRUE,opt.method=opt.method,showit=showit))
-    
-      # restore the seed   
+
+      # restore the seed
       assign(".Random.seed",seed,envir=.GlobalEnv) 
 
       if(class(fit)!="try-error"){
@@ -63,9 +63,9 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
       fit<-try(fitmix(sim.data,initialvalues=starting.vals,mix.terms=1,
                  ftype="hn",width=width,model.formula=model.formula,
                  usegrad=TRUE,opt.method=opt.method,showit=showit))
-    
-      # restore the seed   
-      assign(".Random.seed",seed,envir=.GlobalEnv) 
+
+      # restore the seed
+      assign(".Random.seed",seed,envir=.GlobalEnv)
 
       # result vector - as above but with 1 par
       if(class(fit)!="try-error"){
@@ -79,7 +79,7 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
       # CDS - hn+cos (scale scaling)
 
       fit<-try(ds(sim.data,width,monotonicity="strict"))
-      if(all(class(fit$ddf)!="try-error")){
+      if(all(class(fit)!="try-error")){
         res<-rbind(res,c("cds-hnc",par.ind,n.samp,sim,rep(NA,3),
                          fitted(fit$ddf)[1],fit$ddf$criterion,
                          fit$ddf$Nhat,true.N))
@@ -92,7 +92,7 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
 
       fit<-try(ds(sim.data,width,monotonicity="strict",key="hr",
                   adjustment="poly"))
-      if(all(class(fit$ddf)!="try-error")){
+      if(all(class(fit)!="try-error")){
         res<-rbind(res,c("cds-hrp",par.ind,n.samp,sim,rep(NA,3),
                          fitted(fit$ddf)[1],fit$ddf$criterion,
                          fit$ddf$Nhat,true.N))
@@ -104,7 +104,7 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
       # CDS - hn+cos (width scaling)
 
       fit<-try(ds(sim.data,width,monotonicity="strict",scale="width"))
-      if(all(class(fit$ddf)!="try-error")){
+      if(all(class(fit)!="try-error")){
         res<-rbind(res,c("cds-hnc-w",par.ind,n.samp,sim,rep(NA,3),
                          fitted(fit$ddf)[1],fit$ddf$criterion,
                          fit$ddf$Nhat,true.N))
@@ -117,7 +117,7 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
 
       fit<-try(ds(sim.data,width,monotonicity="strict",key="hr",
                   adjustment="poly",scale="width"))
-      if(all(class(fit$ddf)!="try-error")){
+      if(all(class(fit)!="try-error")){
         res<-rbind(res,c("cds-hrp-w",par.ind,n.samp,sim,rep(NA,3),
                          fitted(fit$ddf)[1],fit$ddf$criterion,
                          fit$ddf$Nhat,true.N))

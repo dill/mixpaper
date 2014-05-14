@@ -50,10 +50,9 @@ calc.true.N<-function(pars,hr.par,n.samples){
 nsim<-200
 
 #for(pari in 1:nrow(pars)){
-pari <- 2
+pari <- 1
 
   these.pars<-pars[pari,]
-#  hr.par<-these.pars[4]
   hr.par<-these.pars[4:5]
   these.pars<-these.pars[1:3]
 
@@ -61,14 +60,11 @@ pari <- 2
 
     true.N<-calc.true.N(these.pars,hr.par,n.samples)
 
-#    these.sims <- 1:nsim
-
-these.sims <- c(129,136)
+    these.sims <- 1:nsim
 
 
     results<-foreach(sim = these.sims, .combine=rbind,
                   .inorder=FALSE, .init=c()) %dopar% {
-#sim<-1
       res<-c()
 
       # generate some data
