@@ -6,7 +6,7 @@ library(Distance)
 # let's do this in parallel
 library(foreach)
 library(doMC)
-options(cores=6)
+options(cores=8)
 registerDoMC()
 
 ### SETUP

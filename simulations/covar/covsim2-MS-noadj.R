@@ -90,4 +90,4 @@ for(n.samples in n.samps){
 
   big.res<-rbind(big.res,results)
 }
-write.csv(big.res,file=paste("covsim2-noadj",opt.method,".csv",sep=""))
+write.csv(big.res,file=paste("covsim2-noadj-",opt.method,".csv",sep=""))
