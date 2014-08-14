@@ -1,6 +1,6 @@
 # settings for the no-covar sims - line transect
-library(mmds)
 library(Distance)
+library(mmds)
 
 parmat<-matrix(NA,4,3)
 parmat[1,]<-c(log(0.8),log(0.15), inv.reparam.pi(0.3))

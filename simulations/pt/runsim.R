@@ -135,24 +135,22 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
         res<-rbind(res,c("cds-hrp-w",par.ind,n.samp,sim,rep(NA,7)))
       }
 
-      ######################################################## 
-      # CDS - unif+cos
+      ######################################################### 
+      ## CDS - unif+cos
 
-      fit<-try(ds(sim.data,width,monotonicity="strict",key="unif",
-                  adjustment="cos",transect="point"))
-      if(all(class(fit)!="try-error")){
-        res<-rbind(res,c("cds-uc",par.ind,n.samp,sim,rep(NA,3),
-                         fitted(fit$ddf)[1],fit$ddf$criterion,
-                         true.N,fit$ddf$Nhat))
-      }else{
-        res<-rbind(res,c("cds-uc",par.ind,n.samp,sim,rep(NA,7)))
-      }
+      #fit<-try(ds(sim.data,width,monotonicity="strict",key="unif",
+      #            adjustment="cos",transect="point"))
+      #if(all(class(fit)!="try-error")){
+      #  res<-rbind(res,c("cds-uc",par.ind,n.samp,sim,rep(NA,3),
+      #                   fitted(fit$ddf)[1],fit$ddf$criterion,
+      #                   true.N,fit$ddf$Nhat))
+      #}else{
+      #  res<-rbind(res,c("cds-uc",par.ind,n.samp,sim,rep(NA,7)))
+      #}
 
     }
-
-
   }
   # write them out
-  write.csv(res,file=paste("width-",opt.method,"-",par.ind,"-pt-results.csv",sep=""))
+  write.csv(res,file=paste(opt.method,"-",par.ind,"-pt-results.csv",sep=""))
   return(1)
 }

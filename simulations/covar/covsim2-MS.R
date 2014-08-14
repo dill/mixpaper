@@ -6,7 +6,7 @@ library(Distance)
 # let's do this in parallel
 library(foreach)
 library(doMC)
-options(cores=6)
+options(cores=8)
 registerDoMC()
 
 ### SETUP
@@ -34,7 +34,6 @@ big.res<-c()
 # loop over sample sizes
 for(n.samples in n.samps){
   # loop over sims
-  #for(sim in 1:n.sims){
   results<-foreach(sim = 1:n.sims, .combine=rbind,
                    .inorder=FALSE, .init=c()) %dopar% {
 
@@ -171,7 +170,7 @@ for(n.samples in n.samps){
 
      #fit<-try(ds(testdata,width,monotonicity="strict",key="unif",
      #            adjustment="cos"))
-     #if(all(class(fit$ddf)!="try-error")){
+     #if(all(class(fit)!="try-error")){
      #  res<-rbind(res,c(n.samples,sim,fit$ddf$criterion,
      #                   n.samples/sum(1/fitted(fit$ddf)),
      #                   fit$ddf$Nhat,true.N,NA,"unif+cos"))

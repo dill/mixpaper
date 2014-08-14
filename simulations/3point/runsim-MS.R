@@ -112,7 +112,7 @@ results<-foreach(par.ind = 1:dim(parmat)[1], .combine=rbind,
 
       #fit<-try(ds(sim.data,width,monotonicity="strict",key="unif",
       #            adjustment="cos"))
-      #if(all(class(fit$ddf)!="try-error")){
+      #if(all(class(fit)!="try-error")){
       #  res<-rbind(res,c("cds-uc",par.ind,n.samp,sim,rep(NA,3),
       #                   fitted(fit$ddf)[1],fit$ddf$criterion,
       #                   true.N,fit$ddf$Nhat))

@@ -3,24 +3,24 @@ library(mmds)
 library(Distance)
 library(foreach)
 library(doMC)
-options(cores=2)
+options(cores=5)
 registerDoMC()
 
-#set.seed(1233)
+set.seed(123)
 
-pars<-matrix(NA,2,5)
+# only doing sim 1 now
+pars<-matrix(NA,1,5)
 
 pars[1,] <- c(-1.6940326, -0.3037095, inv.reparam.pi(0.5),7,7)
 #pars[2,] <- c(-1.814902, -0.8734648, inv.reparam.pi(0.5),1)
-pars[2,] <- c(-0.3566749, -2.995732, 0.439975, 10.47956, 3.699274)
+#pars[2,] <- c(-0.3566749, -2.995732, 0.439975, 10.47956, 3.699274)
 
 # set the width
 width<-1
 # number of realisations
 n.sims<-200
 # sample sizes
-#n.samps<-c(30,60,120,480,960)
-n.samps<-c(30)
+n.samps<-c(30,60,120,480,960)
 # number of mixture components
 mix.terms<-2
 # no covariates
@@ -36,8 +36,8 @@ calc.true.N<-function(pars,hr.par,n.samples){
   }
 
   mix.hr<-function(x,pars,hr.par){
-#    pis<-rep(0.5,2) # for sim 1
-    pis<-c(0.6,0.4) # for sim 2
+    pis<-rep(0.5,2) # for sim 1
+#    pis<-c(0.6,0.4) # for sim 2
     keysc1<-pars[1]
     keysc2<-pars[2]
     pis[1]*keyfct.hr(x,keysc1,hr.par[1])+pis[2]*keyfct.hr(x,keysc2,hr.par[2])
@@ -61,7 +61,6 @@ pari <- 1
     true.N<-calc.true.N(these.pars,hr.par,n.samples)
 
     these.sims <- 1:nsim
-
 
     results<-foreach(sim = these.sims, .combine=rbind,
                   .inorder=FALSE, .init=c()) %dopar% {
@@ -91,7 +90,7 @@ pari <- 1
       ######################################################## 
       # CDS - hn+cos
       fit<-try(ds(sim.data,width,monotonicity="strict",scale="scale"))
-      if(all(class(fit$ddf)!="try-error")){
+      if(all(class(fit)!="try-error")){
         res<-rbind(res,c("cds-hnc",pari,n.samples,sim,"ll",fit$ddf$criterion,
                           fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
       }else{
@@ -103,7 +102,7 @@ pari <- 1
 
       fit<-try(ds(sim.data,width,monotonicity="strict",key="hr",
                   adjustment="poly",scale="scale"))
-      if(all(class(fit$ddf)!="try-error")){
+      if(all(class(fit)!="try-error")){
         res<-rbind(res,c("cds-hrp",pari,n.samples,sim,"ll",fit$ddf$criterion,
                           fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
       }else{
@@ -112,7 +111,7 @@ pari <- 1
       ######################################################## 
       # CDS - hn+cos (width)
       fit<-try(ds(sim.data,width,monotonicity="strict",scale="width"))
-      if(all(class(fit$ddf)!="try-error")){
+      if(all(class(fit)!="try-error")){
         res<-rbind(res,c("cds-hnc-w",pari,n.samples,sim,"ll",fit$ddf$criterion,
                           fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
       }else{
@@ -124,17 +123,17 @@ pari <- 1
 
       fit<-try(ds(sim.data,width,monotonicity="strict",key="hr",
                   adjustment="poly",scale="width"))
-      if(all(class(fit$ddf)!="try-error")){
+      if(all(class(fit)!="try-error")){
         res<-rbind(res,c("cds-hrp-w",pari,n.samples,sim,"ll",fit$ddf$criterion,
                           fitted(fit$ddf)[1],fit$ddf$Nhat,true.N,"mt"))
       }else{
         res<-rbind(res,c("cds-hrp-w",pari,n.samples,sim,rep(NA,6)))
       }
-#      write.table(res,file=paste("hr-all-",pari,"-results.csv",
-#                                 sep=""),append=TRUE,col.names=FALSE,sep=",")
-
-      write.table(res,file=paste("hr-",n.samples,"-",pari,"-results.csv",
+      write.table(res,file=paste("hr-all-",pari,"-results.csv",
                                  sep=""),append=TRUE,col.names=FALSE,sep=",")
+
+      #write.table(res,file=paste("hr-",n.samples,"-",pari,"-results.csv",
+      #                           sep=""),append=TRUE,col.names=FALSE,sep=",")
 
     }
   }
