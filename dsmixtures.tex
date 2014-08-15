@@ -89,7 +89,7 @@ A key part of distance sampling, therefore, is specification of the detection fu
 \item flat at zero distance (i.e., $g'(0;\boldsymbol{\theta})=0$), indicating that objects in the immediate vicinity of the observer are equally detectable; and,
 \item monotonic non-increasing with increasing distance (i.e., $g'(y;\boldsymbol{\theta}) \leq 0$ for $0<y\leq w$), as it is typically unrealistic for objects to become more detectable with increasing distance.
 \end{enumerate}
-The semiparametric ``key function plus series adjustment'' (K+A) modelling approach developed by Buckland \cite{Buckland:1992wy} has become by far the most popular in practice, partly due to its inclusion in the industry-standard distance sampling analysis software Distance \cite{Thomas:2010cf} and the \textsf{R} package \texttt{mrds} \cite{mrds} (available on the Comprehensive R Archive Network, CRAN; http://cran.r- project.org/).  However, as we demonstrate below, the approach has some drawbacks; in particular, although it meets criteria 1-3, it does not necessarily meet the 4$^\text{th}$.  Our purpose in this article is to propose an alternative class of models, based on mixtures, that meet all 4 criteria and to evaluate its utility.  
+The semiparametric ``key function plus series adjustment'' (K+A) modelling approach developed by Buckland \cite{Buckland:1992wy} has become by far the most popular in practice, partly due to its inclusion in the industry-standard distance sampling analysis software Distance \cite{Thomas:2010cf} and the R \cite{Team:2013wf} package mrds \cite{mrds} (available on the Comprehensive R Archive Network, CRAN; http://cran.r- project.org/).  However, as we demonstrate below, the approach has some drawbacks; in particular, although it meets criteria 1-3, it does not necessarily meet the 4$^\text{th}$.  Our purpose in this article is to propose an alternative class of models, based on mixtures, that meet all 4 criteria and to evaluate its utility.  
 
 The approach of Buckland \cite{Buckland:1992wy} was extended by Marques and Buckland \cite{Marques:2003vb} to allow covariates in addition to distance to be included in the detection function, and, for maximum generality, it is this K+A formulation that we describe here.  The detection function is thus denoted $g(y, \mathbf{z};\boldsymbol{\theta})$ where $\mathbf{z}$ is an observation-specific vector of covariates; the formulation of Buckland \cite{Buckland:1992wy} is simply a special case of this model where there are no additional covariates. 
 
@@ -99,13 +99,13 @@ g(y, \mathbf{z}; \boldsymbol{\theta}) = \frac{k(y, \mathbf{z}; \boldsymbol{\thet
 \end{equation*}
 where $k$ may be a half-normal, hazard-rate or uniform function and $s$ may be zero (i.e., there are no adjustment terms), cosine, simple even polynomial or Hermite polynomial series (though note a uniform detection function may not include covariates). The denominator ensures that detection function evaluates to 1 at zero distance (i.e., $g(0, \mathbf{z};\boldsymbol{\theta})=1$). Model parameters are estimated using maximum likelihood.  The recommended strategy for most situations is to choose a small set of key function and adjustment combinations, and for each combination to choose the number of adjustment terms using forward selection, i.e., start with no adjustment terms and fit an increasing number of terms, stopping when the Akaike Information Criterion (AIC) fails to decrease \cite{Thomas:2010cf}. The combination with the lowest AIC is then selected as the best model. This strategy works well in practice in many cases: the key functions cover a range of realistic shapes for the detection function, so that often zero or one adjustments are sufficient to provide a good fit to the data, resulting in flexible and yet efficient estimation. 
 
-The resulting detection functions are capable of being flat at zero distance and the key functions are non-increasing. However, adding adjustment terms can result in non-monotonic functions. Further, when both covariates and adjustments are included in the model the range of the resulting detection function may not be [0,1]. When there are no additional covariates, one solution is to use constrained maximization, e.g. taking $M$ equally spaced distances $y_1=0, \ldots , y_{M}=w$ and ensuring that $g(y_i;\boldsymbol{\hat{\theta}})\geq g(y_{i+1}; \boldsymbol{\hat{\theta}})$ and that $g(y_{i+1};\boldsymbol{\hat{\theta}})\geq 0$ for $i=1,\ldots,M-1$. In Distance this constraint is implemented using the NLPQL routine \cite{Schittkowski:1986wj} and in the \textsf{R} package \texttt{mrds}, the SOLNP algorithm \cite{Ye:1987wt} is used.
+The resulting detection functions are capable of being flat at zero distance and the key functions are non-increasing. However, adding adjustment terms can result in non-monotonic functions. Further, when both covariates and adjustments are included in the model the range of the resulting detection function may not be [0,1]. When there are no additional covariates, one solution is to use constrained maximization, e.g. taking $M$ equally spaced distances $y_1=0, \ldots , y_{M}=w$ and ensuring that $g(y_i;\boldsymbol{\hat{\theta}})\geq g(y_{i+1}; \boldsymbol{\hat{\theta}})$ and that $g(y_{i+1};\boldsymbol{\hat{\theta}})\geq 0$ for $i=1,\ldots,M-1$. In Distance this constraint is implemented using the NLPQL routine \cite{Schittkowski:1986wj} and in the R package mrds, the SOLNP algorithm \cite{Ye:1987wt} is used.
 
-A constrained optimisation solution presents a number of problems. First, constrained maximization is a more complex optimization problem than unconstrained maximization; this means that in practice optimization algorithms may fail to find the constrained maximum.  Second, constrained maximum likelihood estimates do not have the same appealing properties as their unconstrained relatives -- for example the usual estimator of the standard error of the parameters (square root of the inverse of the information matrix) can be biased.  Third, constraints can only be applied at a finite number of points ($M=10$ is used in Distance and $M=20$ in \texttt{mrds} by default), which can lead to the constraint points missing non-monotonic parts of the function. Though increasing the number of points is an option, this incurs additional computational cost. An example of constrained maximisation failing is shown in the left panel of Figure \ref{fig1}. Finally, it is not clear how to implement the constraints in the case where there are additional covariates, particularly continuous covariates. One computationally expensive option would be to apply the constraints at every observed covariate combination (at present both Distance and \texttt{mrds} use unconstrained optimization when additional covariates are in the model). The central and right panels of Figure \ref{fig1} from Pike et al. \cite{Pike:2003ug} show an example of covariate models fitted using unconstrained optimisation: a strongly non-monotonic function has been fitted for some covariate values. Detection probability estimates outside the range $[0,1]$ are sometimes encountered during maximization when models include covariates. Given the above issues, it seems appealing to use a formulation that guarantees monotonicity from the outset.
+A constrained optimisation solution presents a number of problems. First, constrained maximization is a more complex optimization problem than unconstrained maximization; this means that in practice optimization algorithms may fail to find the constrained maximum.  Second, constrained maximum likelihood estimates do not have the same appealing properties as their unconstrained relatives -- for example the usual estimator of the standard error of the parameters (square root of the inverse of the information matrix) can be biased.  Third, constraints can only be applied at a finite number of points ($M=10$ is used in Distance and $M=20$ in mrds by default), which can lead to the constraint points missing non-monotonic parts of the function. Though increasing the number of points is an option, this incurs additional computational cost. An example of constrained maximisation failing is shown in the left panel of Figure \ref{fig1}. Finally, it is not clear how to implement the constraints in the case where there are additional covariates, particularly continuous covariates. One computationally expensive option would be to apply the constraints at every observed covariate combination (at present both Distance and mrds use unconstrained optimization when additional covariates are in the model). The central and right panels of Figure \ref{fig1} from Pike et al. \cite{Pike:2003ug} show an example of covariate models fitted using unconstrained optimisation: a strongly non-monotonic function has been fitted for some covariate values. Detection probability estimates outside the range $[0,1]$ are sometimes encountered during maximization when models include covariates. Given the above issues, it seems appealing to use a formulation that guarantees monotonicity from the outset.
 
 Mixture models have been applied in the capture-recapture literature \cite{Pledger:2000tc, Dorazio:2003uf, Pledger:2005wy, Morgan:2008wy}. The main utility of mixture models in capture-recapture is in better accounting for between-individual heterogeneity, which can cause severe bias if unmodelled \cite{Link:2003wo}. Unmodelled heterogeneity is not generally considered an issue in distance sampling, provided that detection at zero distance is certain, heterogeneity is not extreme and a flexible detection function model is used \cite[Section 11.12]{Buckland:2004ts}. Mixture models offer the potential for flexible modelling since the individual parts of the mixture model (the \textit{mixture components}) can be combined to obtain flexible detection functions, and provided each component is monotonic non-increasing, the resulting combination will also be monotonic non-increasing. In addition, mixture models are potentially well suited to deal with highly heterogeneous detection probabilities, where some part of the population is only observable at close distances while others are readily detected almost regardless of distance (for example bird species where males are more vocal than females). Such a situation results in a ``spiked'' detection function with a long flat tail -- Figure \ref{fig1} shows relatively mild examples. In a mixture model, different parts of the sample could be represented by different components, providing a good fit to spiked data and an appealing conceptual explanation for the underlying data.
 
-Here we introduce a new class of distance sampling detection function models, based on mixtures of simple parametric key functions.  In the next section, we describe the models.  We then illustrate their use and explore their performance by applying them to simulated data, and to real data from a number of studies. We also compare results with those obtained from the current standard K+A approach, and by using a combined approach where both the mixtures and K+A models are fitted and a final model selected using AIC. An \textsf{R} \cite{Team:2013wf} package, \texttt{mmds} \cite{mmds} (Mixture Model Distance Sampling), implementing the methods is available from CRAN.
+Here we introduce a new class of distance sampling detection function models, based on mixtures of simple parametric key functions.  In the next section, we describe the models.  We then illustrate their use and explore their performance by applying them to simulated data, and to real data from a number of studies. We also compare results with those obtained from the current standard K+A approach, and by using a combined approach where both the mixtures and K+A models are fitted and a final model selected using AIC. An R package, mmds \cite{mmds} (Mixture Model Distance Sampling), implementing the methods is available from CRAN.
 
 \section*{Methods}
 
@@ -187,7 +187,7 @@ Estimators for the variances of $\hat{N}$ and $\hat{P_a}$ are given in Text S2.
 \textbf{Simulated data.} Extensive simulations were carried out to investigate performance (in terms of the accuracy of estimation of $P_a$) when the true detection function model is not known to the estimation procedure. 
  Buckland et al. \cite{Buckland:2001vm} show that accurate results are readily obtained in situations where there is a wide ``shoulder'' of high detection probability at small and medium distances: in such situations, the dependence on having a good detection function model is only slight.  Hence, we focus here on a variety of more challenging scenarios.
 
-Each simulation involved generating 200 replicate datasets from a specified detection function model (assuming the entire study area was included within the surveyed transects, i.e., $A=a$ in equation (\ref{e:popsize}), and a truncation distance of $w=1$), fitting each dataset with a range of mixture and key series plus series adjustment (K+A) models, and in each case recording estimated parameter values and abundance from the model with the lowest AIC in each of: mixture models, K+A models, and both combined.  Mixture models with 1-, 2-, and 3-point half-normal components were fitted to the data along with two K+A models: half-normal plus cosine adjustments and hazard rate plus simple polynomial adjustments, both with monotonicity constraints implemented as described above and with a maximum of 3 adjustments. Mixture models and K+A models were fitted using the R packages \texttt{mmds} (version 1.1) and \texttt{Distance} \cite{Distance} (a simplified interface to \texttt{mrds}; version 0.6.1) respectively, both written by the authors.
+Each simulation involved generating 200 replicate datasets from a specified detection function model (assuming the entire study area was included within the surveyed transects, i.e., $A=a$ in equation (\ref{e:popsize}), and a truncation distance of $w=1$), fitting each dataset with a range of mixture and key series plus series adjustment (K+A) models, and in each case recording estimated parameter values and abundance from the model with the lowest AIC in each of: mixture models, K+A models, and both combined.  Mixture models with 1-, 2-, and 3-point half-normal components were fitted to the data along with two K+A models: half-normal plus cosine adjustments and hazard rate plus simple polynomial adjustments, both with monotonicity constraints implemented as described above and with a maximum of 3 adjustments. Mixture models and K+A models were fitted using the R packages mmds (version 1.1) and Distance \cite{Distance} (a simplified interface to mrds; version 0.6.1) respectively, both written by the authors.
 
 Fourteen different simulation scenarios were investigated, in five groups, as described below and illustrated in Figure \ref{sim-detfcts}, one line per group. True parameter values and summary statistics are given in Appendix S2.  For each scenario, a simulation was performed at each of five sample sizes (number of observations, $n$): 30 (low), 60 (recommended minimum for line transects \cite{Buckland:2001vm}), 120 (adequate), 480 (large) and 960 (very large).  We anticipated performance would depend upon sample size, because: the methods are likelihood-based and hence only asymptotically unbiased even if the correct model is fitted; the use of AIC to select model complexity meant that more flexible (and hence accurate) models could be expected to be selected given larger sample sizes. Mixture models are ``parameter hungry'' compared with K+A models, in the sense that each additional mixture component requires 2 extra parameters, while each additional adjustment term requires only one and hence, given the use of AIC for model selection, the relative performance of the two approaches may change at different sample sizes. 
 
@@ -264,7 +264,7 @@ g(x) = \int_\mathbb{R} \varphi(\kappa) g_\kappa(x,\mathbf{Z}; \theta, \kappa) \t
 \end{equation*}
 where $\varphi(\kappa)$ is a weighting function that controls the mixing of $g_\kappa$. Provided that an appropriate function can be chosen for $\varphi$, more flexible models could be used whilst keeping the number of parameters low. In addition, a combination of both finite and continuous mixtures could be used, echoing the work in capture-recapture \cite{Morgan:2008wy}.
 
-Mixture model detection functions based on half-normal components are available as an \textsf{R} package, \texttt{mmds}, which is available on CRAN. These models will be added to the next version of the Distance software and the \textsf{R} package \texttt{Distance}.
+Mixture model detection functions based on half-normal components are available as an R package, mmds, which is available on CRAN. These models will be added to the next version of the Distance for Windows software and the R package Distance.
 
 \section*{Supporting Information}
 
@@ -316,56 +316,56 @@ Humpback whale & Hn + $\cos(2)$ & 0 & 0.386 & 12.64 & 0.67 \\
 \hline
  & Hn 2-pt & 2.88 & 0.381 & 18.48 & 0.64 \\
 \hline
-Long-finned pilot whales  & Hn + $\cos(2)$ \texttt{BSS} (cont.) & 1.94 & 0.452 & 8.69 & 0.48\\ % mrds
+Long-finned pilot whales  & Hn + $\cos(2)$ BSS (cont.) & 1.94 & 0.452 & 8.69 & 0.48\\ % mrds
 \hline
 & Hn 2-pt          &  13.86  &  0.295  &  17.17  &  0.95 \\
 \hline
- & Hn 2-pt \texttt{BSS5}         &  0.29   &  0.208  &  28.84  &  0.82 \\
+ & Hn 2-pt BSS5         &  0.29   &  0.208  &  28.84  &  0.82 \\
  \hline
- & Hn 2-pt  \texttt{BSS2}        &  0.43  &  0.211  &  23.39  &  0.95 \\
+ & Hn 2-pt  BSS2        &  0.43  &  0.211  &  23.39  &  0.95 \\
  \hline
- & Hn 2-pt  \texttt{BSS3}        &  11.71 &  0.270  &  17.46  &  0.99 \\
+ & Hn 2-pt  BSS3        &  11.71 &  0.270  &  17.46  &  0.99 \\
  \hline
- & Hn 2-pt  \texttt{BSS} (cont.) & 0  &  0.216  &  24.17  &  0.67 \\
+ & Hn 2-pt  BSS (cont.) & 0  &  0.216  &  24.17  &  0.67 \\
  \hline
-Wood ants & Hr \texttt{nest.size} + \texttt{habitat} & 6.29 & 0.195  & 21.72 & 0.89\\ % mrds result
+Wood ants & Hr nest.size + habitat & 6.29 & 0.195  & 21.72 & 0.89\\ % mrds result
 \hline
  & Hn 2-pt  None                                                     &  17.34 &  0.184  &  15.46  &  0.96 \\
  \hline
- & Hn 2-pt \texttt{habitat}                                          &  14     &  0.188  &  14.85  &  0.97 \\
+ & Hn 2-pt habitat                                          &  14     &  0.188  &  14.85  &  0.97 \\
  \hline
- & Hn 2-pt \texttt{species}                                          &  19.32  &  0.184  &  15.48  &  0.94 \\
+ & Hn 2-pt species                                          &  19.32  &  0.184  &  15.48  &  0.94 \\
  \hline
- & Hn 2-pt \texttt{nest.size}                                        &  4.37   &  0.214  &  15.19  &  0.76 \\
+ & Hn 2-pt nest.size                                        &  4.37   &  0.214  &  15.19  &  0.76 \\
  \hline
- & Hn 2-pt \texttt{habitat} + \texttt{species}                       &  15.96  &  0.186  &  14.94  &  0.99 \\
+ & Hn 2-pt habitat + species                       &  15.96  &  0.186  &  14.94  &  0.99 \\
  \hline
- & Hn 2-pt \texttt{habitat} + \texttt{nest.size}                     &  0      &  0.179  &  17.55  &  0.72 \\
+ & Hn 2-pt habitat + nest.size                     &  0      &  0.179  &  17.55  &  0.72 \\
  \hline
- & Hn 2-pt \texttt{nest.size} + \texttt{species}                     &  4.65   &  0.210  &  15.84  &  0.77 \\
+ & Hn 2-pt nest.size + species                     &  4.65   &  0.210  &  15.84  &  0.77 \\
  \hline
- & Hn 2-pt \texttt{nest.size} + \texttt{species} + \texttt{habitat}  &  1.81   &  0.178  &  18.09  &  0.83 \\
+ & Hn 2-pt nest.size + species + habitat  &  1.81   &  0.178  &  18.09  &  0.83 \\
 \hline
-Amakihi  & Hr \texttt{obs} + \texttt{mas} & 0 &  0.319 & 5.11 & 0.08\\ % mrds
+Amakihi  & Hr obs + mas & 0 &  0.319 & 5.11 & 0.08\\ % mrds
 \hline
  & Hn 2-pt None                                    &  28.1   &  0.283  &  6.21  &  0.12 \\
 \hline
- & Hn 2-pt \texttt{obs}                            &  1.31   &  0.279  &  5.86  &  0.04 \\
+ & Hn 2-pt obs                            &  1.31   &  0.279  &  5.86  &  0.04 \\
 \hline
- & Hn 2-pt \texttt{has}                            &  29.81  &  0.282  &  6.95  &  0.33 \\
+ & Hn 2-pt has                            &  29.81  &  0.282  &  6.95  &  0.33 \\
 \hline
- & Hn 2-pt \texttt{mas}                            &  27.73  &  0.284  &  6.52  &  0.31 \\
+ & Hn 2-pt mas                            &  27.73  &  0.284  &  6.52  &  0.31 \\
 \hline
- & Hn 2-pt \texttt{obs}+\texttt{has}               &  5.15   &  0.283  &  6.21  &  0.23 \\
+ & Hn 2-pt obs+has               &  5.15   &  0.283  &  6.21  &  0.23 \\
 \hline
- & Hn 2-pt \texttt{obs}+\texttt{mas}               &  0.69   &  0.279  &  6.1  &  0.14 \\
+ & Hn 2-pt obs+mas               &  0.69   &  0.279  &  6.1  &  0.14 \\
 \hline
- & Hn 2-pt \texttt{mas}+\texttt{has}               &  31.79  &  0.282  &  6.97  &  0.43 \\
+ & Hn 2-pt mas+has               &  31.79  &  0.282  &  6.97  &  0.43 \\
 \hline
- & Hn 2-pt \texttt{mas}+\texttt{has}+\texttt{obs}  &  7.12  &  0.282  &  6.33  &  0.35 \\
+ & Hn 2-pt mas+has+obs  &  7.12  &  0.282  &  6.33  &  0.35 \\
 \hline
 \end{tabular}
-\begin{flushleft}Comparison of results from Williams and Thomas \cite{Williams:2007tc}, Pike et al. \cite{Pike:2003ug}, Borkin et al. \cite{Borkin:2012vj} and Marques et al. \cite{Marques:2007vm} with results from fitting mixture model detection functions. In each case the first line for each data set is the model from the original article. Mixture model components were selected by AIC ($\Delta$AIC from best model is listed). In the table ``(cont.)'' denotes that the covariate was included in the model as continuous, otherwise covariates entered the model as factors (\texttt{BBSn} indicates Beaufort sea state with \texttt{n} factors). $\cos(x)$ indicates a Cosine adjustment of order $x$. K-S $p$ is the $p$-value from a Kolmogorov-Smirnov goodness-of-fit test.
+\begin{flushleft}Comparison of results from Williams and Thomas \cite{Williams:2007tc}, Pike et al. \cite{Pike:2003ug}, Borkin et al. \cite{Borkin:2012vj} and Marques et al. \cite{Marques:2007vm} with results from fitting mixture model detection functions. In each case the first line for each data set is the model from the original article. Mixture model components were selected by AIC ($\Delta$AIC from best model is listed). In the table ``(cont.)'' denotes that the covariate was included in the model as continuous, otherwise covariates entered the model as factors (BBSn indicates Beaufort sea state with $n$ factors). $\cos(x)$ indicates a Cosine adjustment of order $x$. K-S $p$ is the $p$-value from a Kolmogorov-Smirnov goodness-of-fit test.
 \end{flushleft}
 \label{williams-pike-table}
 \end{table}

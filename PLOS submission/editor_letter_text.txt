@@ -1,0 +1,13 @@
+
+Dear Editor,
+
+Please find attached our manuscript "Mixture models for distance sampling detection functions", which we hereby submit for publication in PLoS ONE.  In the manuscript, we propose a new class of models for the analysis of distance sampling surveys of wildlife populations (specifically for fitting the detection function); we show that the new class has both theoretical advantages over the current standard approach as well as practical benifits when applied to both simulated and real data.  We suggest the new class of models be used alongside the current standard method, with standard model selection techniques used to select the best model for inference.  To facilitate this, we provide an R package (mmds), and will also incorporate the approach in the next major release of our industry-standard software Distance.  Given the demonstrated advantages of the new approach, and the ease of use, we expect to see it gain wide useage.
+
+In preparing the manuscript, we have been careful to adhere to the editorial guidelines.  In particular, we have kept the manuscript to manageable length by placing many of the more technical details on optimization and parameterization of the models into appendices, together with the less central simulation and case study results.
+
+We look forward to hearing the editors' opinion of our work.
+
+Sincerely yours,
+
+David L Miller and Len Thomas
+
