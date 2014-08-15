@@ -75,7 +75,7 @@ As mentioned in Appendix S1, maximization is performed on the $\log$-likelihood.
 
 Starting from the $\log$-likelihood:
 \begin{equation}
-l(\mathbf{\theta}, \mathbf{\phi}; \mathbf{x},\mathbf{Z}) = \sum_{i=1}^n \Big( \log \sum_{j=1}^J \phi_j g_j(x_i,\mathbf{Z}; \mathbf{\theta}_j) - \log \sum_{j=1}^J \phi_j \mu_{ij}\Big)
+l(\boldsymbol{\theta}, \boldsymbol{\phi}; \mathbf{x},\mathbf{Z}) = \sum_{i=1}^n \Big( \log \sum_{j=1}^J \phi_j g_j(x_i,\mathbf{Z}; \boldsymbol{\theta}_j) - \log \sum_{j=1}^J \phi_j \mu_{ij}\Big)
 \label{lt-lik}
 \end{equation}
 we derive the derivatives with respect to the optimisation parameters.
@@ -84,15 +84,15 @@ we derive the derivatives with respect to the optimisation parameters.
 
 For the intercept terms (also considering in the non-covariate case, these are just the parameters), the parameters have no effect outside of their mixture (ie. $\beta_{0j*}$ only has an influence on mixture component $j*$), so we can write:
 \begin{equation*}
-\frac{\partial l(\mathbf{\theta},\mathbf{\phi}; \mathbf{x},\mathbf{Z})}{\partial \beta_{0j*}} = \sum_{i=1}^n \frac{1}{g(x_i,\mathbf{Z}; \mathbf{\theta},\mathbf{\phi})} \phi_{j*} \frac{\partial}{\partial \beta_{0j*}} g_{j*}(x_i,\mathbf{Z}; \mathbf{\theta}_{j*})  - \frac{\phi_{j*}}{\mu_i}  \frac{\partial}{\partial \beta_{0j*}} \mu_{ij*}.
+\frac{\partial l(\boldsymbol{\theta},\boldsymbol{\phi}; \mathbf{x},\mathbf{Z})}{\partial \beta_{0j*}} = \sum_{i=1}^n \frac{1}{g(x_i,\mathbf{Z}; \boldsymbol{\theta},\boldsymbol{\phi})} \phi_{j*} \frac{\partial}{\partial \beta_{0j*}} g_{j*}(x_i,\mathbf{Z}; \boldsymbol{\theta}_{j*})  - \frac{\phi_{j*}}{\mu_i}  \frac{\partial}{\partial \beta_{0j*}} \mu_{ij*}.
 \end{equation*}
-Now, to first find $\frac{\partial}{\partial \beta_{0j*}} g_{j*}(x_i,\mathbf{Z}; \mathbf{\theta}_{j*})$:
+Now, to first find $\frac{\partial}{\partial \beta_{0j*}} g_{j*}(x_i,\mathbf{Z}; \boldsymbol{\theta}_{j*})$:
 \begin{equation*}
-\frac{\partial g_{j*}(x_i,\mathbf{Z}; \mathbf{\theta}_{j*})}{\partial \beta_{0j*}} = \frac{\partial}{\partial \beta_{0j*}} \exp\Big( -\frac{x_i^2}{2\sigma_{j*}^2} \Big),
+\frac{\partial g_{j*}(x_i,\mathbf{Z}; \boldsymbol{\theta}_{j*})}{\partial \beta_{0j*}} = \frac{\partial}{\partial \beta_{0j*}} \exp\Big( -\frac{x_i^2}{2\sigma_{j*}^2} \Big),
 \end{equation*}
 applying the chain rule and remembering that $\sigma_{j*}$ is a (trivial) function of the $\beta_{0j}$s:
 \begin{equation*}
-\frac{\partial g_{j*}(x_i,\mathbf{Z}; \mathbf{\theta}_{j*})}{\partial \beta_{0j*}} = \Big( \frac{x_i}{\sigma_{j*}}\Big)^2 \exp \Big(-\frac{x_i^2}{2 \sigma_{j*}^2}\Big)
+\frac{\partial g_{j*}(x_i,\mathbf{Z}; \boldsymbol{\theta}_{j*})}{\partial \beta_{0j*}} = \Big( \frac{x_i}{\sigma_{j*}}\Big)^2 \exp \Big(-\frac{x_i^2}{2 \sigma_{j*}^2}\Big)
 \end{equation*}
 
 Expressing $\mu_{ij*}$ in terms of the error function, $\text{Erf}$:
@@ -123,7 +123,7 @@ Substituting into (\ref{app-mu-erf}):
 \end{equation*}
 Finally, the derivative is:
 \begin{equation*}
-\frac{\partial l(\mathbf{\theta}, \mathbf{\phi}; \mathbf{x},\mathbf{Z})}{\partial \beta_{0j*}} = \sum_{i=1}^n \Big( \frac{x_i}{\sigma_{j*}}\Big)^2 \phi_{j*} \frac{g_{j*}(x_i,\mathbf{Z}; \mathbf{\theta}_{j*})}{g(x_i,\mathbf{Z}; \mathbf{\theta},\mathbf{\phi})}  - \frac{\phi_{j*}}{\mu_i} (\mu_{ij*} - w g_{j*}(w,\mathbf{Z}; \mathbf{\theta}_{j*})).
+\frac{\partial l(\boldsymbol{\theta}, \boldsymbol{\phi}; \mathbf{x},\mathbf{Z})}{\partial \beta_{0j*}} = \sum_{i=1}^n \Big( \frac{x_i}{\sigma_{j*}}\Big)^2 \phi_{j*} \frac{g_{j*}(x_i,\mathbf{Z}; \boldsymbol{\theta}_{j*})}{g(x_i,\mathbf{Z}; \boldsymbol{\theta},\boldsymbol{\phi})}  - \frac{\phi_{j*}}{\mu_i} (\mu_{ij*} - w g_{j*}(w,\mathbf{Z}; \boldsymbol{\theta}_{j*})).
 \end{equation*}
 
 
@@ -131,7 +131,7 @@ Finally, the derivative is:
 
 Derivatives with respect to the common covariate parameters are found in a similar way to above. The expressions are slightly more complicated since the $\beta_k$s effect all of the mixture components.
 \begin{equation*}
-\frac{\partial l(\mathbf{\theta},\mathbf{\phi}; \mathbf{x},\mathbf{Z})}{\partial \beta_{k*}} = \sum_{i=1}^n \Big( \frac{1}{g(x_i,\mathbf{Z}; \mathbf{\theta},\mathbf{\phi})} \sum_{j=1}^J \phi_j \frac{\partial}{\partial \beta_{k*}} g_j(x_i,\mathbf{Z}; \mathbf{\theta}_j) - \frac{1}{\mu_i} \sum_{j=1}^J \phi_j \frac{\partial}{\partial \beta_{k*}}\mu_{ij}\Big)
+\frac{\partial l(\boldsymbol{\theta},\boldsymbol{\phi}; \mathbf{x},\mathbf{Z})}{\partial \beta_{k*}} = \sum_{i=1}^n \Big( \frac{1}{g(x_i,\mathbf{Z}; \boldsymbol{\theta},\boldsymbol{\phi})} \sum_{j=1}^J \phi_j \frac{\partial}{\partial \beta_{k*}} g_j(x_i,\mathbf{Z}; \boldsymbol{\theta}_j) - \frac{1}{\mu_i} \sum_{j=1}^J \phi_j \frac{\partial}{\partial \beta_{k*}}\mu_{ij}\Big)
 \end{equation*}
 Every $\sigma_{j}$ is a function of the $\beta_{k}$s, so:
 \begin{align*}
@@ -139,29 +139,29 @@ Every $\sigma_{j}$ is a function of the $\beta_{k}$s, so:
 &= z_{ik*}\sigma_{j}.
 \end{align*}
 Hence:
-\begin{equation*}
- \frac{\partial}{\partial \beta_{k*}} \exp\Big( -\frac{x_i^2}{2\sigma_{j}^2} \Big) = z_{k*} \Big( \frac{x_i}{\sigma_{j}}\Big)^2 \exp \Big(-\frac{x_i^2}{2 \sigma_{j}^2}\Big) = z_{k*} \Big( \frac{x_i}{\sigma_{j}}\Big)^2 g_j(x_i,\mathbf{Z}; \mathbf{\theta}_j).
+\begin{equation}
+ \frac{\partial}{\partial \beta_{k*}} \exp\Big( -\frac{x_i^2}{2\sigma_{j}^2} \Big) = z_{k*} \Big( \frac{x_i}{\sigma_{j}}\Big)^2 \exp \Big(-\frac{x_i^2}{2 \sigma_{j}^2}\Big) = z_{k*} \Big( \frac{x_i}{\sigma_{j}}\Big)^2 g_j(x_i,\mathbf{Z}; \boldsymbol{\theta}_j).
  \label{detfct-deriv-k}
-\end{equation*}
+\end{equation}
 And so for the $\mu_{ij}$s:
 \begin{equation*}
 \frac{\partial \mu_{ij}}{\partial \beta_{k*}} = z_{ik*} \Big( \mu_{ij} - w \exp\Big( -\frac{w^2}{2\sigma_{j}^2} \Big) \Big)
 \end{equation*}
 The derivative is then:
 \begin{equation*}
-\frac{\partial l(\mathbf{\theta},\mathbf{\phi}; \mathbf{x},\mathbf{Z})}{\partial \beta_{k*}} = \sum_{i=1}^n \Big( \frac{1}{g(x_i,\mathbf{Z}; \mathbf{\theta},\mathbf{\phi})} \sum_{j=1}^J \phi_j  z_{k*} \Big( \frac{x_i}{\sigma_{j}}\Big)^2 g_j(x_i,\mathbf{Z}; \mathbf{\theta}_j) - \frac{1}{\mu_i} \sum_{j=1}^J \phi_j z_{ik*} ( \mu_{ij} - w g_j(x_i,\mathbf{Z}; \mathbf{\theta}_j) )\Big)
+\frac{\partial l(\boldsymbol{\theta},\boldsymbol{\phi}; \mathbf{x},\mathbf{Z})}{\partial \beta_{k*}} = \sum_{i=1}^n \Big( \frac{1}{g(x_i,\mathbf{Z}; \boldsymbol{\theta},\boldsymbol{\phi})} \sum_{j=1}^J \phi_j  z_{k*} \Big( \frac{x_i}{\sigma_{j}}\Big)^2 g_j(x_i,\mathbf{Z}; \boldsymbol{\theta}_j) - \frac{1}{\mu_i} \sum_{j=1}^J \phi_j z_{ik*} ( \mu_{ij} - w g_j(x_i,\mathbf{Z}; \boldsymbol{\theta}_j) )\Big)
 \end{equation*}
 
 \subsubsection*{With respect to $\alpha_{j*}$}
 
 First note that we can write the likelihood (\ref{lt-lik}) as:
 \begin{align*}
-l(\mathbf{\theta},\mathbf{\phi}; \mathbf{x},\mathbf{Z}) = \sum_{i=1}^n\Big( &\log \Big( \sum_{j=1}^{J-1} \phi_j g_j(x_i,\mathbf{Z}; \mathbf{\theta}_j) + (1-\sum_{j=1}^{J-1} \phi_j) g_J(x_i,\mathbf{Z}; \mathbf{\theta}_J)\Big) \\
+l(\boldsymbol{\theta},\boldsymbol{\phi}; \mathbf{x},\mathbf{Z}) = \sum_{i=1}^n\Big( &\log \Big( \sum_{j=1}^{J-1} \phi_j g_j(x_i,\mathbf{Z}; \boldsymbol{\theta}_j) + (1-\sum_{j=1}^{J-1} \phi_j) g_J(x_i,\mathbf{Z}; \boldsymbol{\theta}_J)\Big) \\
 &-  \log \Big(\sum_{j=1}^{J-1} \phi_j \mu_{ij} + (1-\sum_{j=1}^{J-1} \phi_j) \mu_{ij} \Big) \Big)
 \end{align*}
 The derivatives with respect to the $\alpha_{j*}$ of this expression are then:
 \begin{align}
-\frac{\partial l(\mathbf{\theta},\mathbf{\phi}; \mathbf{x},\mathbf{Z})}{\partial \alpha_{j*}} = &\Big( \sum_{i=1}^n \frac{1}{g(x_i,\mathbf{Z}; \mathbf{\theta},\mathbf{\phi})} \Big( \sum_{j=1}^{J-1} g_j(x_i,\mathbf{Z}; \mathbf{\theta}_j) \frac{\partial \phi_j}{\partial \alpha_{j*}}  -g_J(x_i,\mathbf{Z}; \mathbf{\theta}_J) \sum_{j=1}^{J-1}  \frac{\partial \phi_j}{\partial \alpha_{j*}}\Big) \notag \\
+\frac{\partial l(\boldsymbol{\theta},\boldsymbol{\phi}; \mathbf{x},\mathbf{Z})}{\partial \alpha_{j*}} = &\Big( \sum_{i=1}^n \frac{1}{g(x_i,\mathbf{Z}; \boldsymbol{\theta},\boldsymbol{\phi})} \Big( \sum_{j=1}^{J-1} g_j(x_i,\mathbf{Z}; \boldsymbol{\theta}_j) \frac{\partial \phi_j}{\partial \alpha_{j*}}  -g_J(x_i,\mathbf{Z}; \boldsymbol{\theta}_J) \sum_{j=1}^{J-1}  \frac{\partial \phi_j}{\partial \alpha_{j*}}\Big) \notag \\
 &- \frac{1}{\mu_i} \Big(\sum_{j=1}^{J-1} \mu_{ij} \frac{\partial \phi_j}{\partial \alpha_{j*}} - \mu_{iJ} \sum_{j=1}^{J-1}   \frac{\partial \phi_j}{\partial \alpha_{j*}} \Big)\Big) \label{app-lik-alphad}
 \end{align}
 Finding the derivatives is then simply a matter of finding the derivatives of $\phi_{j}$ with respect to $\alpha_{j*}$ and substituting them back into (\ref{app-lik-alphad}).
@@ -188,7 +188,7 @@ So
 \end{equation*}
 Substituting these back into (\ref{app-lik-alphad}) and re-arranging gives:
 \begin{align*}
-\frac{\partial l(\mathbf{\theta},\mathbf{\phi}; \mathbf{x},\mathbf{Z})}{\partial \alpha_{j*}} = \sum_{i=1}^n & \Big( \frac{1}{g(x_i,\mathbf{Z}; \mathbf{\theta},\mathbf{\phi})} \sum_{j=1}^{J-1} (A_j - A_{j-1}) (g_j(x,\mathbf{Z}; \mathbf{\theta}_j) - g_J(x,\mathbf{Z}; \mathbf{\theta}_J))\\
+\frac{\partial l(\boldsymbol{\theta},\boldsymbol{\phi}; \mathbf{x},\mathbf{Z})}{\partial \alpha_{j*}} = \sum_{i=1}^n & \Big( \frac{1}{g(x_i,\mathbf{Z}; \boldsymbol{\theta},\boldsymbol{\phi})} \sum_{j=1}^{J-1} (A_j - A_{j-1}) (g_j(x,\mathbf{Z}; \boldsymbol{\theta}_j) - g_J(x,\mathbf{Z}; \boldsymbol{\theta}_J))\\
 &- \frac{1}{\mu_i} \sum_{j=1}^{J-1}(A_j - A_{j-1})(\mu_{ij} - \mu_{iJ}) \Big)
 \end{align*}
 
@@ -196,7 +196,7 @@ Substituting these back into (\ref{app-lik-alphad}) and re-arranging gives:
 
 We now provide the corresponding quantities for point transects, starting from the $\log$-likelihood:
 \begin{equation}
-l(\mathbf{\theta}, \mathbf{\phi}; \mathbf{r},\mathbf{Z}) = n \log 2 \pi + \sum_{i=1}^n \Big( \log r_i + \log \sum_{j=1}^J \phi_j g_j(r_i,\mathbf{Z}; \mathbf{\theta}_j) - \log \sum_{j=1}^J \phi_j \nu_{ij}\Big).
+l(\boldsymbol{\theta}, \boldsymbol{\phi}; \mathbf{r},\mathbf{Z}) = n \log 2 \pi + \sum_{i=1}^n \Big( \log r_i + \log \sum_{j=1}^J \phi_j g_j(r_i,\mathbf{Z}; \boldsymbol{\theta}_j) - \log \sum_{j=1}^J \phi_j \nu_{ij}\Big).
 \label{pt-lik}
 \end{equation}
 
@@ -205,8 +205,8 @@ l(\mathbf{\theta}, \mathbf{\phi}; \mathbf{r},\mathbf{Z}) = n \log 2 \pi + \sum_{
 
 From (\ref{pt-lik}), one can see that we obtain:
 \begin{align*}
-\frac{\partial l(\mathbf{\theta}, \mathbf{\phi}; \mathbf{r},\mathbf{Z})}{\partial \beta_{0j*}}  &= \sum_{i=1}^n \Big( \frac{\partial}{\partial \beta_{0j*}} \log \sum_{j=1}^J \phi_j g_j(r_i,\mathbf{Z}; \mathbf{\theta}_j) - \frac{\partial}{\partial \beta_{0j*}}\log \sum_{j=1}^J \phi_j \nu_{ij}\Big)\\
-&= \sum_{i=1}^n \Big( \frac{ \phi_{j*} \frac{\partial}{\partial \beta_{0j*}}  g_{j*} (r_i,\mathbf{Z}; \mathbf{\theta}_j)}{g(r_i,\mathbf{Z}; \mathbf{\theta}, \mathbf{\phi})} - \frac{ \phi_{j*}\frac{\partial}{\partial \beta_{0j*}}  \nu_{ij*} }{ \sum_{j=1}^J \phi_j \nu_{ij}}\Big)
+\frac{\partial l(\boldsymbol{\theta}, \boldsymbol{\phi}; \mathbf{r},\mathbf{Z})}{\partial \beta_{0j*}}  &= \sum_{i=1}^n \Big( \frac{\partial}{\partial \beta_{0j*}} \log \sum_{j=1}^J \phi_j g_j(r_i,\mathbf{Z}; \boldsymbol{\theta}_j) - \frac{\partial}{\partial \beta_{0j*}}\log \sum_{j=1}^J \phi_j \nu_{ij}\Big)\\
+&= \sum_{i=1}^n \Big( \frac{ \phi_{j*} \frac{\partial}{\partial \beta_{0j*}}  g_{j*} (r_i,\mathbf{Z}; \boldsymbol{\theta}_j)}{g(r_i,\mathbf{Z}; \boldsymbol{\theta}, \boldsymbol{\phi})} - \frac{ \phi_{j*}\frac{\partial}{\partial \beta_{0j*}}  \nu_{ij*} }{ \sum_{j=1}^J \phi_j \nu_{ij}}\Big)
 \end{align*}
 the first part of which (the derivatives of the detection function) are as in the line transect case. The derivatives of $\nu_{ij}$ are simpler in the point transect case, since there is an easy analytic expression for $\nu_{ij}$ when $g_j$ is half-normal :
 \begin{equation*}
@@ -218,15 +218,15 @@ then simply applying the product rule yields:
 \end{equation*}
 Substituting this into the above expression:
 \begin{equation*}
-\frac{\partial l(\mathbf{\theta}, \mathbf{\phi}; \mathbf{r},\mathbf{Z})}{\partial \beta_{0j*}}  = \sum_{i=1}^n \Big( \frac{ \phi_{j*} (r_i/\sigma_{j*})^2 g_{j*}(r_i,\mathbf{Z}; \mathbf{\theta}_{j*})}{g(r_i,\mathbf{Z}; \mathbf{\theta}, \mathbf{\phi})} - \frac{ \phi_{j*} 2 (\nu_{j*} + \pi w g_{j*}(w)) }{ \sum_{j=1}^J \phi_j \nu_{ij}}\Big)
+\frac{\partial l(\boldsymbol{\theta}, \boldsymbol{\phi}; \mathbf{r},\mathbf{Z})}{\partial \beta_{0j*}}  = \sum_{i=1}^n \Big( \frac{ \phi_{j*} (r_i/\sigma_{j*})^2 g_{j*}(r_i,\mathbf{Z}; \boldsymbol{\theta}_{j*})}{g(r_i,\mathbf{Z}; \boldsymbol{\theta}, \boldsymbol{\phi})} - \frac{ \phi_{j*} 2 (\nu_{j*} + \pi w g_{j*}(w)) }{ \sum_{j=1}^J \phi_j \nu_{ij}}\Big)
 \end{equation*}
 
 \subsubsection*{With respect to $\beta_{k*}$}
 
 Again working from (\ref{pt-lik}), we obtain:
 \begin{align*}
-\frac{\partial l(\mathbf{\theta}, \mathbf{\phi}; \mathbf{r},\mathbf{Z})}{\partial \beta_{k*}}  &= \sum_{i=1}^n \Big( \frac{\partial}{\partial \beta_{k*}} \log \sum_{j=1}^J \phi_j g_j(r_i,\mathbf{Z}; \mathbf{\theta}_j) - \frac{\partial}{\partial \beta_{k*}}\log \sum_{j=1}^J \phi_j \nu_{ij}\Big)\\
-&= \sum_{i=1}^n \Big( \frac{ \sum_{j=1}^J \phi_{j} \frac{\partial}{\partial \beta_{k*}}  g_{j} (r_i,\mathbf{Z}; \mathbf{\theta}_j)}{g(r_i,\mathbf{Z}; \mathbf{\theta}, \mathbf{\phi})} - \frac{ \sum_{j=1}^J \phi_{j}\frac{\partial}{\partial \beta_{k*}}  \nu_{ij} }{ \sum_{j=1}^J \phi_j \nu_{ij}}\Big)
+\frac{\partial l(\boldsymbol{\theta}, \boldsymbol{\phi}; \mathbf{r},\mathbf{Z})}{\partial \beta_{k*}}  &= \sum_{i=1}^n \Big( \frac{\partial}{\partial \beta_{k*}} \log \sum_{j=1}^J \phi_j g_j(r_i,\mathbf{Z}; \boldsymbol{\theta}_j) - \frac{\partial}{\partial \beta_{k*}}\log \sum_{j=1}^J \phi_j \nu_{ij}\Big)\\
+&= \sum_{i=1}^n \Big( \frac{ \sum_{j=1}^J \phi_{j} \frac{\partial}{\partial \beta_{k*}}  g_{j} (r_i,\mathbf{Z}; \boldsymbol{\theta}_j)}{g(r_i,\mathbf{Z}; \boldsymbol{\theta}, \boldsymbol{\phi})} - \frac{ \sum_{j=1}^J \phi_{j}\frac{\partial}{\partial \beta_{k*}}  \nu_{ij} }{ \sum_{j=1}^J \phi_j \nu_{ij}}\Big)
 \end{align*}
 The derivatives of $g_j$ are as in (\ref{detfct-deriv-k}). For $\nu_{ij}$:
 \begin{equation*}
@@ -234,7 +234,7 @@ The derivatives of $g_j$ are as in (\ref{detfct-deriv-k}). For $\nu_{ij}$:
 \end{equation*}
 Putting that together:
 \begin{equation*}
-\frac{\partial l(\mathbf{\theta}, \mathbf{\phi}; \mathbf{r},\mathbf{Z})}{\partial \beta_{k*}}  = \sum_{i=1}^n \Big( \frac{ \sum_{j=1}^J \phi_{j} z_{k*} \Big( \frac{x_i}{\sigma_{j}}\Big)^2 g_j(x_i,\mathbf{Z}; \mathbf{\theta}_j)}{g(r_i,\mathbf{Z}; \mathbf{\theta}, \mathbf{\phi})} - \frac{ \sum_{j=1}^J \phi_{j}2z_{ik*}(\nu_{ij} - \pi w^2 g_j(w)) }{ \sum_{j=1}^J \phi_j \nu_{ij}}\Big).
+\frac{\partial l(\boldsymbol{\theta}, \boldsymbol{\phi}; \mathbf{r},\mathbf{Z})}{\partial \beta_{k*}}  = \sum_{i=1}^n \Big( \frac{ \sum_{j=1}^J \phi_{j} z_{k*} \Big( \frac{x_i}{\sigma_{j}}\Big)^2 g_j(x_i,\mathbf{Z}; \boldsymbol{\theta}_j)}{g(r_i,\mathbf{Z}; \boldsymbol{\theta}, \boldsymbol{\phi})} - \frac{ \sum_{j=1}^J \phi_{j}2z_{ik*}(\nu_{ij} - \pi w^2 g_j(w)) }{ \sum_{j=1}^J \phi_j \nu_{ij}}\Big).
 \end{equation*}
 
 
