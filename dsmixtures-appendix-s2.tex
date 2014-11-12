@@ -68,7 +68,9 @@ Len Thomas$^{1}$
 $\ast$ E-mail: dave@ninepointeightone.net
 \end{flushleft}
 
-The formulation used for the exponential power series (EPS) detection function in simulation E1 was:
+In performing the simulations reported in the main article we employed the exponential power series (EPS) and hazard-rate functions as detection function models ("E" scenarios) in order to test the performance of the half-normal mixture models when the candidate model and the model that data was simulated from were not the same. This appendix describes the functional forms of these two functions and lists all parameters values that were used in the simulations (Table 1).
+
+The formulation used for the EPS detection function in simulation E1 was:
 \begin{equation*}
 g(y,\mathbf{z}; \lambda, b_1) =  \exp(-(y/\lambda)^{-b_1})),
 \end{equation*}
@@ -86,7 +88,7 @@ where $b_j$ is the shape parameter associated with the $j^\text{th}$ mixture com
 
 \begin{table}[htbp]
 \centering
-\caption{Parameters of the detection functions used in the simulations in Section 3 and the true average detection probability ($P_a$) for each model. Note that for covariate models, $\beta_1$ corresponds to the intercept of the first mixture component, $\beta_2$ to the intercept of the second mixture component and $\beta_3$ to the coefficient for the (common) covariate effect. Numbering is as in Figures 2 and 3 in the main article.}
+\caption{Parameters of the detection functions used in the simulations in Section 3 and the true average detection probability ($P_a$) for each model. For line and point transect models $\beta_1, \beta_2$ and $\pi_1$ are the scale parameters (on the log scale) and mixture proportion. For 3-point simulations, $\beta_3$ is the scale parameter for the third mixture component (again on the log scale) and $\pi_2$ is the second mixture proportion. For covariate models, $\beta_1$ corresponds to the intercept of the first mixture component, $\beta_2$ to the intercept of the second mixture component and $\beta_3$ to the coefficient for the (common) covariate effect. The second (or in the 3-point cases third) mixture proportions can be calculated by summing the values in the table and subtracting the sum from 1. For EPS models, $\beta_1$ is the scale parameter (on the log scale) and $b_1$ is the shape parameter. For hazard-rate models $\beta_1$ and $\beta_2$ are scale parameters (on the log scale) and $b_1$ and $b_2$ is the shape parameters. Numbering is as in Figures 2 and 3 in the main article.}
 \begin{tabular}{c c c c c c c c c c}\\
 Model & Scenario & $\beta_1$ & $\beta_2$ & $\beta_3$ & $\pi_1$ & $\pi_2$ & $b_1$ & $b_2$ & $P_a$ \\
 \hline
