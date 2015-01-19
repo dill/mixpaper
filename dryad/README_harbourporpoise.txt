@@ -17,8 +17,8 @@ Data format
 
 Comma separated value file with one row for each of the 68 observations, each with the following 7 columns:
 
-distance  : Exact perpendicular distances to observed ant nests in metres.
-size      : Number of animals observed.
+distance  : Exact perpendicular distances to observed harbour porpoise groups in metres.
+size      : Number of animals observed (i.e. group/cluster size).
 object    : Unique observation identifier.
 observer  : Factor with 13 levels giving observer ID.
 detected  : Column of 1s indicated that the individual was observed (needed for analysis software).
