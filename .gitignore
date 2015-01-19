@@ -4,3 +4,4 @@
 *.synctex.gz
 *.aux
 .DS_Store
+.dropbox
