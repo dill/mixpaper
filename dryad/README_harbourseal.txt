@@ -1,5 +1,5 @@
 Harbour seal line transect data
-===================================
+===============================
 
 Data used in paper "Mixture models for distance sampling detection functions" by David L. Miller and Len Thomas. Taken from Williams and Thomas (2007) and were provided by Rob Williams.
 
