@@ -9,7 +9,7 @@ Data are line transect observations of 68 harbour porpoise clusters (Phocoena ph
 Survey details
 ==============
 
-Survey design and protocol are detailed in Williams et al 2007. Multi-species small boat surveys were conducted along the coastline of British Columbia, Canada during the summers of 2004 and 2005.
+Survey design and protocol are detailed in Thomas et al 2007. Multi-species small boat surveys were conducted along the coastline of British Columbia, Canada during the summers of 2004 and 2005.
 
 
 Data format
