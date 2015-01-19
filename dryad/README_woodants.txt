@@ -21,7 +21,7 @@ Comma separated value file with one row for each of the 144 observations, each w
 
 habitat   : 4 level stand type: "stand initiation", "stem exclusion", "understorey re-initiation" and "old-growth".
 transect  : ID of the transect where the observation was made.
-distance  : Exact distances to observed ant nests in metres.
+distance  : Exact perpendicular distances to observed ant nests in metres.
 nest.size : Size of nest, calculated as half-width multiplied by height.
 species   : Factor with 2 levels ("aqu" and "lug") giving the ant species.
 object    : Unique observation identifier.
