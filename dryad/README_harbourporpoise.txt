@@ -15,7 +15,7 @@ Survey design and protocol are detailed in Thomas et al 2007. Multi-species smal
 Data format
 ===========
 
-Comma separated value file with one row for each of the 68 observations, each with the following 7 columns:
+Comma separated value file with one row for each of the 68 observations, each with the following 5 columns:
 
 distance  : Exact perpendicular distances to observed harbour porpoise groups in metres.
 size      : Number of animals observed (i.e. group/cluster size).

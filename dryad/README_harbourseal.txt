@@ -16,7 +16,7 @@ Note that the data analysed in Williams and Thomas (2007) included harbour seals
 Data format
 ===========
 
-Comma separated value file with one row for each of the 232 observations, each with the following 7 columns:
+Comma separated value file with one row for each of the 232 observations, each with the following 3 columns:
 
 distance  : Exact perpendicular distances to observed harbour seals in metres.
 object    : Unique observation identifier.
