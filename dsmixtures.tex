@@ -63,7 +63,7 @@
 David L. Miller$^{1,\ast}$,
 Len Thomas$^{1}$
 \\
-\bf{1} School of Mathematics and Statistics, and Centre for Research into Ecological and Environmental Modelling, University of St Andrews, St Andrews KY16 9LZ, Scotland
+\bf{1} Centre for Research into Ecological and Environmental Modelling, and School of Mathematics and Statistics, University of St Andrews, St Andrews, Scotland
 \\
 $\ast$ E-mail: dave@ninepointeightone.net
 \end{flushleft}
@@ -76,7 +76,7 @@ We present a new class of models for the detection function in distance sampling
 
 \section*{Introduction}
 
-Distance sampling \cite{Buckland:2001vm,Buckland:2004ts} is a suite of methods for estimating the size or density of biological populations.  There are two main variants: line and point transects. In both, an observer visits a randomly-located set of transect lines or points and records the distance, $y$, from the transect to each object of interest (i.e., animals or plants of the target species) that is detected within some truncation distance $w$ (after which no observation is recorded; truncation may chosen after the survey has taken place , see Buckland et al \cite{Buckland:2001vm} for further discussion).  Not all objects within $w$ are assumed to be detected; instead the observed distances are used to estimate the parameter vector, $\boldsymbol{\theta}$, of a detection function model, $g(y;\boldsymbol{\theta})$, which describes how the probability of detection declines with increasing distance.  An assumption of the conventional method is that $g(0;\boldsymbol{\theta})=1$. Given an estimate of $\boldsymbol{\theta}$, it is straightforward to estimate population size or density (see below).
+Distance sampling \cite{Buckland:2001vm,Buckland:2004ts} is a suite of methods for estimating the size or density of biological populations.  There are two main variants: line and point transects. In both, an observer visits a randomly-located set of transect lines or points and records the distance, $y$, from the transect to each object of interest (i.e., animals or plants of the target species) that is detected within some truncation distance $w$ (after which no observation is recorded; truncation may be chosen after the survey has taken place , see Buckland et al \cite{Buckland:2001vm} for further discussion).  Not all objects within $w$ are assumed to be detected; instead the observed distances are used to estimate the parameter vector, $\boldsymbol{\theta}$, of a detection function model, $g(y;\boldsymbol{\theta})$, which describes how the probability of detection declines with increasing distance.  An assumption of the conventional method is that $g(0;\boldsymbol{\theta})=1$. Given an estimate of $\boldsymbol{\theta}$, it is straightforward to estimate population size or density (see below).
 
 A key part of distance sampling, therefore, is specification of the detection function model. Buckland et al. (Chapter 2) \cite{Buckland:2001vm} provide a set of criteria for judging the utility of candidate model classes. Detection function models should be:
 \begin{enumerate}
@@ -99,7 +99,16 @@ The resulting detection functions are capable of being flat at zero distance and
 
 A constrained optimisation solution presents a number of problems. First, constrained maximization is a more complex optimization problem than unconstrained maximization; this means that in practice optimization algorithms may fail to find the constrained maximum.  Second, constrained maximum likelihood estimates do not have the same appealing properties as their unconstrained relatives -- for example the usual estimator of the standard error of the parameters (square root of the inverse of the information matrix) can be biased.  Third, constraints can only be applied at a finite number of points ($M=10$ is used in Distance and $M=20$ in mrds by default), which can lead to the constraint points missing non-monotonic parts of the function. Though increasing the number of points is an option, this incurs additional computational cost. An example of constrained maximisation failing is shown in the left panel of Figure \ref{fig1}. Finally, it is not clear how to implement the constraints in the case where there are additional covariates, particularly continuous covariates. One computationally expensive option would be to apply the constraints at every observed covariate combination (at present both Distance and mrds use unconstrained optimization when additional covariates are in the model). The central and right panels of Figure \ref{fig1} from Pike et al. \cite{Pike:2003ug} show an example of covariate models fitted using unconstrained optimisation: a strongly non-monotonic function has been fitted for some covariate values. Detection probability estimates outside the range $[0,1]$ are sometimes encountered during maximization when models include covariates. Given the above issues, it seems appealing to use a formulation that guarantees monotonicity from the outset.
 
-Mixture models have been applied in the capture-recapture literature \cite{Pledger:2000tc, Dorazio:2003uf, Pledger:2005wy, Morgan:2008wy}. The main utility of mixture models in capture-recapture is in better accounting for between-individual heterogeneity, which can cause severe bias if unmodelled \cite{Link:2003wo}. Unmodelled heterogeneity is not generally considered an issue in distance sampling, provided that detection at zero distance is certain, heterogeneity is not extreme and a flexible detection function model is used \cite[Section 11.12]{Buckland:2004ts}. Mixture models come in two variations: finite (consisting of discrete components) and continuous (infinitely many components, amounting to an integral with a weight function); we consider only finite mixtures here (see Discussion for further elaboration). Finite mixture models offer the potential for flexible modelling since the individual parts of the mixture model (the \textit{mixture components}) can be combined to obtain flexible detection functions, and provided each component is monotonic non-increasing, the resulting combination will also be monotonic non-increasing. In addition, mixture models are potentially well suited to deal with highly heterogeneous detection probabilities, where some part of the population is only observable at close distances while others are readily detected almost regardless of distance (for example bird species where males are more vocal than females). Such a situation results in a ``spiked'' detection function with a long flat tail -- Figure \ref{fig1} shows relatively mild examples. In a mixture model, different parts of the sample could be represented by different components, providing a good fit to spiked data and an appealing conceptual explanation for the underlying data.
+\begin{figure}[!ht]
+\centering
+%\includegraphics[width=\textwidth]{Figure1.eps}
+\caption{
+{\bf Two examples of detection functions that are not monotone, fitted using conventional key function plus adjustment methods in the software Distance.} The left panel shows data from humpback whale: a half-normal detection function with cosine adjustments was selected by AIC \cite{Williams:2007tc} but even with constraints in place the detection function is non-monotonic, with a small secondary peak at approx. 1500m. The second and third panels show data and models fitted to long-finned pilot whale where a half-normal detection function was selected with cosine adjustments and Beaufort sea state as a covariate \cite{Pike:2003ug}. Due to the inclusion of covariates, no monotonicity constraints could be employed.  The middle panel shows the detection function averaged over the covariate values and the right panel the marginal detection function for 25th, 50th and 75th quantiles of the Beaufort sea state covariate; non-monotonicity occurs at approx. 2500m.
+}
+\label{fig1}
+\end{figure}
+
+Mixture models have been applied in the capture-recapture literature \cite{Pledger:2000tc, Dorazio:2003uf, Pledger:2005wy, Morgan:2008wy}. The main utility of mixture models in capture-recapture is in better accounting for between-individual heterogeneity, which can cause severe bias if unmodelled \cite{Link:2003wo}. Unmodelled heterogeneity is not generally considered an issue in distance sampling, provided that detection at zero distance is certain, heterogeneity is not extreme and a flexible detection function model is used (\cite{Buckland:2004ts}, Section 11.12). Mixture models come in two variations: finite (consisting of discrete components) and continuous (infinitely many components, amounting to an integral with a weight function); we consider only finite mixtures here (see Discussion for further elaboration). Finite mixture models offer the potential for flexible modelling since the individual parts of the mixture model (the \textit{mixture components}) can be combined to obtain flexible detection functions, and provided each component is monotonic non-increasing, the resulting combination will also be monotonic non-increasing. In addition, mixture models are potentially well suited to deal with highly heterogeneous detection probabilities, where some part of the population is only observable at close distances while others are readily detected almost regardless of distance (for example bird species where males are more vocal than females). Such a situation results in a ``spiked'' detection function with a long flat tail -- Figure \ref{fig1} shows relatively mild examples. In a mixture model, different parts of the sample could be represented by different components, providing a good fit to spiked data and an appealing conceptual explanation for the underlying data.
 
 Here we introduce a new class of distance sampling detection function models, based on mixtures of simple parametric key functions. In the next section, we describe the models. We then illustrate their use and explore their performance. First we investigate performance in terms of the accuracy of estimation of the average probability of detection when data are simulated from a variety of situations. We then go on to investigate survey data from a number of studies that are potentially problematic. We compare results from mixture models with those obtained from the current standard K+A approach, and by using a combined approach where both the mixtures and K+A models are fitted and a final model selected using AIC. An R package, mmds \cite{mmds} (Mixture Model Distance Sampling), implementing the methods is available from CRAN.
 
@@ -152,9 +161,9 @@ where $\nu_i$, the \textit{effective area of detection} (for covariate combinati
 \nu_i = 2\pi \sum_{j=1}^J \phi_j \int_0^w  y g_j(y,\mathbf{z}_i; \boldsymbol{\theta}_j) \text{d}y.
 \end{equation}
 
-For both line and point transects, parameters are estimated using maximum likelihood. Practicalities associated with this maximization, along with analytic derivatives of the likelihood are described in Appendix S1 and Text S1.  The best number of mixture components to use for inference can be determined using standard model selection techniques, such as Akaike's Information Criterion (AIC), and goodness-of-fit of fitted models can be assessed just as for K+A models using, for example quantile-quantile plots and Kolmogorov-Smironov tests (see Buckland et al. \cite{Buckland:2004ts}, Section 11.11).
+For both line and point transects, parameters are estimated using maximum likelihood. Practicalities associated with this maximization, along with analytic derivatives of the likelihood are described in S1 Appendix and S1 Text.  The best number of mixture components to use for inference can be determined using standard model selection techniques, such as Akaike's Information Criterion (AIC), and goodness-of-fit of fitted models can be assessed just as for K+A models using, for example quantile-quantile plots and Kolmogorov-Smironov tests (see Buckland et al. \cite{Buckland:2004ts}, Section 11.11).
 
-In this article, we assume the distance data are in the form of ``exact'' object-transect distances; alternatively, distances can be grouped into intervals, with pre-defined cutpoints (e.g., 0-10m, 10-20m, etc.), so that the data are the distance interval of each observation.  In this case, a multinomial likelihood is obtained (see, e.g. Buckland et al. \cite{Buckland:2001vm}, Section 3.3.2).  Also, in some cases (e.g., some aerial surveys), objects below a defined distance are not counted -- so-called ``left truncation'' \cite[Section 4.3.2]{Buckland:2001vm}.  The likelihood is readily amended to account for this, by changing the lower limit of integration in equation \eqref{e:esw} or \eqref{e:ead}.
+In this article, we assume the distance data are in the form of ``exact'' object-transect distances; alternatively, distances can be grouped into intervals, with pre-defined cutpoints (e.g., 0-10m, 10-20m, etc.), so that the data are the distance interval of each observation.  In this case, a multinomial likelihood is obtained (see, e.g. Buckland et al. \cite{Buckland:2001vm}, Section 3.3.2).  Also, in some cases (e.g., some aerial surveys), objects below a defined distance are not counted -- so-called ``left truncation'' (\cite{Buckland:2001vm} Section 4.3.2).  The likelihood is readily amended to account for this, by changing the lower limit of integration in equation \eqref{e:esw} or \eqref{e:ead}.
 
 \subsection*{Estimating population size}
 
@@ -176,7 +185,7 @@ A standard summary statistic is the average detection probability for an animal 
 \begin{equation*}
 \hat{P_a} = n/\hat{N}.
 \end{equation*}
-Estimators for the variances of $\hat{N}$ and $\hat{P_a}$ are given in Text S2.
+Estimators for the variances of $\hat{N}$ and $\hat{P_a}$ are given in S2 Text.
 
 \subsection*{Examples}
 
@@ -186,7 +195,16 @@ Buckland et al. \cite{Buckland:2001vm} show that accurate results are readily ob
 
 Each simulation involved generating 200 replicate datasets from a specified detection function model (assuming the entire study area was included within the surveyed transects, i.e., $A=a$ in equation (\ref{e:popsize}), and a truncation distance of $w=1$), fitting each dataset with a range of mixture and key series plus series adjustment (K+A) models, and in each case recording estimated parameter values and abundance from the model with the lowest AIC in each of: mixture models, K+A models, and both combined.  Mixture models with 1-, 2-, and 3-point half-normal components were fitted to the data along with two K+A models: half-normal plus cosine adjustments and hazard rate plus simple polynomial adjustments, both with monotonicity constraints implemented as described above and with a maximum of 3 adjustments. Mixture models and K+A models were fitted using the R packages mmds (version 1.1) and Distance \cite{Distance} (a simplified interface to mrds; version 0.6.1) respectively, both written by the authors.
 
-Fourteen different simulation scenarios were investigated, in five groups, as described below and illustrated in Figure \ref{sim-detfcts}, one line per group. True parameter values and summary statistics are given in Appendix S2.  For each scenario, a simulation was performed at each of five sample sizes (number of observations, $n$): 30 (low), 60 (recommended minimum for line transects \cite{Buckland:2001vm}), 120 (adequate), 480 (large) and 960 (very large).  We anticipated performance would depend upon sample size, because: the methods are likelihood-based and hence only asymptotically unbiased even if the correct model is fitted; the use of AIC to select model complexity meant that more flexible (and hence accurate) models could be expected to be selected given larger sample sizes. Mixture models are ``parameter hungry'' compared with K+A models, in the sense that each additional mixture component requires 2 extra parameters, while each additional adjustment term requires only one and hence, given the use of AIC for model selection, the relative performance of the two approaches may change at different sample sizes. 
+Fourteen different simulation scenarios were investigated, in five groups, as described below and illustrated in Figure \ref{sim-detfcts}, one line per group. True parameter values and summary statistics are given in S2 Appendix.  For each scenario, a simulation was performed at each of five sample sizes (number of observations, $n$): 30 (low), 60 (recommended minimum for line transects \cite{Buckland:2001vm}), 120 (adequate), 480 (large) and 960 (very large).  We anticipated performance would depend upon sample size, because: the methods are likelihood-based and hence only asymptotically unbiased even if the correct model is fitted; the use of AIC to select model complexity meant that more flexible (and hence accurate) models could be expected to be selected given larger sample sizes. Mixture models are ``parameter hungry'' compared with K+A models, in the sense that each additional mixture component requires 2 extra parameters, while each additional adjustment term requires only one and hence, given the use of AIC for model selection, the relative performance of the two approaches may change at different sample sizes. 
+
+\begin{figure}[!ht]
+\centering
+%\includegraphics[width=\textwidth]{Figure2.eps}
+\caption{
+{\bf Plots of the models used in the simulation.} Group A (top row): detection functions for four line transect senarios with no covariates (solid lines) and their constituent mixture components (dashed lines). Group B (second row): pdfs for four point transect simulations with no covariates (solid lines), with associated component pdfs (dashed lines), rescaled so the area under each curve is one; the detection functions are as in the top row. Group C (third row): two 3-point mixture scenarios for non-covariate line transect data, again with their constituent mixture components (dashed lines). Group D (fourth row): two covariate model scenarios, the first two panels are for a binary covariate scenario, the second two for a continuous covariate scenario; first panels in each pair show the detection function averaged over the covariates (along with the mixture components, similarly averaged) and the second panels show marginal detection functions with the levels (or quartiles) of the detection function.  Group E (fifth row): exponential power series model and a 2-point mixture of hazard-rate function (see S2 Appendix for formulation) for two line transect scenarios.
+}
+\label{sim-detfcts}
+\end{figure}
 
 \textit{Group A. Line transect with 2-point half-normal mixture detection functions.} Four scenarios were tested, representing a range of potentially challenging detection functions.  Scenarios A1 and A2 both have mixture components with quite different scale parameters, but in A1 the majority of data come from the less detectable component while in A2 it comes from the more detectable component.  A3 tests the behaviour of the models when the scale parameter of one of the mixture components is very large relative to the truncation distance. One component of A4 is a large spike (i.e., a sharp decline in detectability at small distances) in comparison to the other component leading to high heterogeneity in detection probability, which is similar to some of the data we analyse in the case studies, below.
 
@@ -196,7 +214,7 @@ Fourteen different simulation scenarios were investigated, in five groups, as de
 
 \textit{Group D. Line transect with 2-point half-normal detection functions, and additional covariates.}  We used covariate models to test two aspects of model robustness. In the first, we assumed the covariate values were observed, and included covariate models in the candidate set, along with distance-only models. Our prediction was that (at large sample sizes at least) covariate models would be selected and estimation of $P_a$ unbiased.  In the second, we assumed the covariate values were not observed, and hence covariate models were not in the candidate set.  Our expectation was that (at larger sample sizes) more complex mixture distributions would be selected to compensate for the additional unobserved complexity, and that estimation of $P_a$ would not be greatly affected.  Two scenarios were tested.  D1 had a binary factor covariate, with half the observations having one covariate value and half the other.  D2 had a continuous covariate, whose fixed values were generated from a standard normal distribution function.  Detection functions are shown in the fourth row of Figure \ref{sim-detfcts}, along with the marginal detection functions for the levels/quartiles of the covariates. Note that, for the unobserved covariate models, D1 is equivalent to a 4-point mixture, while D2 is equivalent to a 2-point continuous mixture; neither of these models were in the candidate model set.  In the case of the K+A models, and in line with common practice, if covariates were included in the models then adjustment terms were not.
 
-\textit{Group E. Line transect with other detection functions.} The above models all use the same functional form for $g_j$ in generation and fitting.  Here we tested the model robustness using two alternative data generating functions, not in the candidate model set (see Appendix S2 for formulation).  E1 used an exponential power series function (a generalization of the half-normal function with an additional shape parameter); E2 used a mixture of two hazard-rate functions, giving a shape that may be difficult to fit with half-normal models.
+\textit{Group E. Line transect with other detection functions.} The above models all use the same functional form for $g_j$ in generation and fitting.  Here we tested the model robustness using two alternative data generating functions, not in the candidate model set (see S2 Appendix for formulation).  E1 used an exponential power series function (a generalization of the half-normal function with an additional shape parameter); E2 used a mixture of two hazard-rate functions, giving a shape that may be difficult to fit with half-normal models.
 
 \textbf{Case studies.} The first two case studies return to the datasets depicted in Figure \ref{fig1}. The left panel of Figure \ref{fig1} show clear non-monotonicity, which we wish to address with our mixture detection functions. This first case study also includes two other species, illustrating how the new approach can fit survey data as well as, or better than, the K+A approach when there are not issues of monotonicity. In the second case study covariates cause the non-monotonicity (seen in the right panel of Figure \ref{fig1}), which we can also address within our mixture model framework.  The third case study demonstrates modelling of spiked line transect data (of wood ants), for which the mixtures may yield more flexible models than K+A methods. Finally, the fourth example is a large point transect dataset (of Hawaiian amakihi), which include covariates.
 
@@ -204,7 +222,7 @@ Fourteen different simulation scenarios were investigated, in five groups, as de
 
 \textbf{Case study: Long-finned pilot whales.} Pike et al. \cite{Pike:2003ug} analyzed observations of 84 pods of long-finned pilot whales (\textit{Globicephala melas}), sighted as part of a line transect survey, the North Atlantic Sightings Survey NASS-2001. The Beaufort sea state was recorded as a covariate during the survey and enters the authors' model as either a continuous variable, or a factor with 2 levels (0-1, $2+$), 3 levels (0-1, 2, $3+$), or 5 levels (0, 1, 2, 3, 4, with one value of 3.5 coded as 4).
   
-\textbf{Case study: Wood ants.} Borkin et al. \cite{Borkin:2012vj} analyse data on two species of wood ant (\textit{Formica aquilonia} and \textit{Formica lugubris}) collected during a line transect survey of the Abernethy Forest, Scotland, in 2003. The number of nests sighted was 150, with the farthest being 72.04m from the transect, although 45\% of the nest sightings lay within 4m of the line. As part of their analysis, several different truncation distances were used. Larger truncation distances led to a large variance in the encounter rate estimates and hence in overall abundance estimates \cite{Borkin:2012vj}. This is due to the spike caused by the large number of detections close to the line (see Figure S4). As well as distances, three covariates were recorded: habitat type (a four level factor), the size of each nest (a continuous variable, calculated as half-width multiplied by height) and species (a two level factor).  
+\textbf{Case study: Wood ants.} Borkin et al. \cite{Borkin:2012vj} analyse data on two species of wood ant (\textit{Formica aquilonia} and \textit{Formica lugubris}) collected during a line transect survey of the Abernethy Forest, Scotland, in 2003. The number of nests sighted was 150, with the farthest being 72.04m from the transect, although 45\% of the nest sightings lay within 4m of the line. As part of their analysis, several different truncation distances were used. Larger truncation distances led to a large variance in the encounter rate estimates and hence in overall abundance estimates \cite{Borkin:2012vj}. This is due to the spike caused by the large number of detections close to the line (see S4 Figure). As well as distances, three covariates were recorded: habitat type (a four level factor), the size of each nest (a continuous variable, calculated as half-width multiplied by height) and species (a two level factor).  
     
 \textbf{Case study: Amakihi.} Marques et al. \cite{Marques:2007vm} analyse point transect data on a Hawaiian songbird, the Amakihi (\textit{Hemignathus virens}). The data consist of 1243 observations (after truncation at 82.5m), collected at 41 points between 1992 and 1995, together with three covariates in addition to distance: the observer (a three level factor), minutes after sunrise (continuous) and hours after sunrise (a six level factor).
 
@@ -213,85 +231,33 @@ Fourteen different simulation scenarios were investigated, in five groups, as de
 
 \subsection*{Simulation results}
 
-Figure \ref{sim-boxplots} summarizes the estimates of $P_a$ obtained if the candidate model set contains only mixture models (including 1-point mixtures); the numbers below each boxplot are the proportion of times the model selected by AIC was the model which generated the data. Figure S1 shows the distribution of estimates when only K+A models are used, giving a baseline to compare the mixture model results against (Figure S2). Results using the recommended modelling strategy of both mixture and K+A models is shown in Figure S2, and the number of times each model is chosen using the combined modelling strategy is shown in Figure S3.
+Figure \ref{sim-boxplots} summarizes the estimates of $P_a$ obtained if the candidate model set contains only mixture models (including 1-point mixtures); the numbers below each boxplot are the proportion of times the model selected by AIC was the model which generated the data. S1 Figure shows the distribution of estimates when only K+A models are used, giving a baseline to compare the mixture model results against (S2 Figure). Results using the recommended modelling strategy of both mixture and K+A models is shown in S2 Figure, and the number of times each model is chosen using the combined modelling strategy is shown in S3 Figure.
 
-For Group A, the mixture approach produced unbiased results for scenarios A1 and A3 at all but the lowest sample size; even for the $n=30$ scenarios the bias was small, despite the correct 2-point mixture model being selected only 46-60\% of the time (Figure \ref{sim-boxplots} -- the half normal model was selected the remainder of the time).  The K+A approach also performed well (Figure S1). Unsurprisingly, therefore, the combined approach performed well (Figure S2); what was a little surprising was that the correct model was only selected 60-76\% of the time at the highest sample sizes for scenario A1, with the hazard-rate K+A model selected the remainder (Figure S3). Scenarios A2 and A4 showed positive bias at smaller sample sizes under the mixture approach; bias reduced substantially by 480 observations, where a large proportion of the selected models were 2-point mixtures. Unlike scenarios A1 and A3, the detection functions in scenarios A2 and A4 were evidently not well approximated by a half-normal, and hence at lower sample sizes where the two point mixture tended not to be selected, the results were biased. The K+A approach did not fare well with these scenarios, showing strong positive bias even at the largest sample sizes. In combination, the mixture models were chosen over K+A models at larger sample sizes, and so the combined modelling approach produced much better results than K+A alone.  
+\begin{figure}[!ht]
+\centering
+%\includegraphics[width=\textwidth]{Figure3.eps}
+\caption{
+{\bf Simulation results: boxplots of the estimated average detection probabilities, $P_a$, for the best mixture model (by AIC score).} Layout is as in Figure \ref{sim-detfcts}. Grey lines indicate the true value of the average detection probability. Numbers underneath each boxplot give the proportion of AIC best models that were of the same form as the model that the data was simulated from (e.g., Scenario D1 the proportion of AIC best models that were 2-point mixtures that included the covariate in the model).
+}
+\label{sim-boxplots}
+\end{figure}
 
-As expected, results were worse for the point transect scenarios of Group B. Estimates from the mixture approach were biased at low sample sizes for B1, when the two-point model was rarely selected, but were unbiased given 120 observations and greater. Estimates for B3 were unbiased.  For B2 and B4, results were positively biased at small sample sizes, just as with A2 and A4, but unlike the line transect scenarios the bias did not disappear even at the largest sample size. This is unsurprising given the very small number of detections coming from the less detectable mixture component (see Figure \ref{sim-detfcts} -- the marginal pdf is almost identical to that of the easier to detect mixture component). Bias was generally worse with the K+A approach (Figure S1), and the combined approach (Figure S2) produced marginally better results than K+A alone; for scenarios B1 and B3 the combined results were much better than K+A alone. 
+For Group A, the mixture approach produced unbiased results for scenarios A1 and A3 at all but the lowest sample size; even for the $n=30$ scenarios the bias was small, despite the correct 2-point mixture model being selected only 46-60\% of the time (Figure \ref{sim-boxplots} -- the half normal model was selected the remainder of the time).  The K+A approach also performed well (S1 Figure). Unsurprisingly, therefore, the combined approach performed well (S2 Figure); what was a little surprising was that the correct model was only selected 60-76\% of the time at the highest sample sizes for scenario A1, with the hazard-rate K+A model selected the remainder (S3 Figure). Scenarios A2 and A4 showed positive bias at smaller sample sizes under the mixture approach; bias reduced substantially by 480 observations, where a large proportion of the selected models were 2-point mixtures. Unlike scenarios A1 and A3, the detection functions in scenarios A2 and A4 were evidently not well approximated by a half-normal, and hence at lower sample sizes where the two point mixture tended not to be selected, the results were biased. The K+A approach did not fare well with these scenarios, showing strong positive bias even at the largest sample sizes. In combination, the mixture models were chosen over K+A models at larger sample sizes, and so the combined modelling approach produced much better results than K+A alone.  
 
-Group C were the 3-point mixture scenarios.  For C1, results were similar to A2 -- unsurprising, given the similarity in detection functions.  A 3-point mixture model was almost never chosen by AIC (Figure \ref{sim-boxplots}).  For C2, estimates were surprisingly good, even when the 3-point mixture was not the selected model, at lower sample sizes.  Evidently, the function is well approximated by a 2-point mixture, although at larger sample sizes ($n=480$ and above), the 3-point model is preferred by AIC. In both cases, the K+A results were worse (Figure S1), although they were not far from unbiased for C2.  In the combined results, the mixture models were chosen most (52-68\%) of the time for model C1, while for C2 the mixture models were chosen less often (15-60\% of the time); despite this, the results were just as good as those using mixtures alone (Figure S2).
+As expected, results were worse for the point transect scenarios of Group B. Estimates from the mixture approach were biased at low sample sizes for B1, when the two-point model was rarely selected, but were unbiased given 120 observations and greater. Estimates for B3 were unbiased.  For B2 and B4, results were positively biased at small sample sizes, just as with A2 and A4, but unlike the line transect scenarios the bias did not disappear even at the largest sample size. This is unsurprising given the very small number of detections coming from the less detectable mixture component (see Figure \ref{sim-detfcts} -- the marginal pdf is almost identical to that of the easier to detect mixture component). Bias was generally worse with the K+A approach (S1 Figure), and the combined approach (S2 Figure) produced marginally better results than K+A alone; for scenarios B1 and B3 the combined results were much better than K+A alone. 
 
-We first address the results of the Group D simulations when covariates were available for inclusion in candidate models. Results for D1 were positively biased at lower sample sizes, but less so as the sample size increased, and almost unbiased by 120 observations, where the correct model was selected most of the time (Figure \ref{sim-boxplots}).  Results for D2 were close to unbiased at all sample sizes. Estimates from the K+A models were positively biased at almost all sample sizes for D1, and almost unbiased for D2 (Figure S1).
+Group C were the 3-point mixture scenarios.  For C1, results were similar to A2 -- unsurprising, given the similarity in detection functions.  A 3-point mixture model was almost never chosen by AIC (Figure \ref{sim-boxplots}).  For C2, estimates were surprisingly good, even when the 3-point mixture was not the selected model, at lower sample sizes.  Evidently, the function is well approximated by a 2-point mixture, although at larger sample sizes ($n=480$ and above), the 3-point model is preferred by AIC. In both cases, the K+A results were worse (S1 Figure), although they were not far from unbiased for C2.  In the combined results, the mixture models were chosen most (52-68\%) of the time for model C1, while for C2 the mixture models were chosen less often (15-60\% of the time); despite this, the results were just as good as those using mixtures alone (S2 Figure).
 
-When covariate information is not available for fitting the model, the mixture model detection functions still performed well, showing that when covariates are not available mixture components can compensate, though not through using additional components (see Figure S3, 3-point mixtures are never AIC-best models).  For the K+A models without covariates, performance was also similar to that from the covariate models, indicating that the flexibility provided by the series adjustment can compensate for lack of covariate information in that framework.  However, results were still slightly biased even at large sample sizes (Figure S1).  As might be expected, bias was less when both approaches were combined (Figure S2).
+We first address the results of the Group D simulations when covariates were available for inclusion in candidate models. Results for D1 were positively biased at lower sample sizes, but less so as the sample size increased, and almost unbiased by 120 observations, where the correct model was selected most of the time (Figure \ref{sim-boxplots}).  Results for D2 were close to unbiased at all sample sizes. Estimates from the K+A models were positively biased at almost all sample sizes for D1, and almost unbiased for D2 (S1 Figure).
 
-The Group E results were encouraging.  Although the mixture formulation was biased even at large sample sizes, the bias was always small (Figure \ref{sim-boxplots}), and generally no worse than that under the K+A formulation, which also showed a small bias (Figure S1). We had anticipated good performance of the mixture models for scenario E1, since the detection function shape is not far from half-normal; however it was not obvious that performance would be good for E2, where the marginal shape cannot be approximated well by a mixture of half-normal functions.  The combined strategy was no worse than either formulation alone in terms of bias.  
+When covariate information is not available for fitting the model, the mixture model detection functions still performed well, showing that when covariates are not available mixture components can compensate, though not through using additional components (see S3 Figure, 3-point mixtures are never AIC-best models).  For the K+A models without covariates, performance was also similar to that from the covariate models, indicating that the flexibility provided by the series adjustment can compensate for lack of covariate information in that framework.  However, results were still slightly biased even at large sample sizes (S1 Figure).  As might be expected, bias was less when both approaches were combined (S2 Figure).
+
+The Group E results were encouraging.  Although the mixture formulation was biased even at large sample sizes, the bias was always small (Figure \ref{sim-boxplots}), and generally no worse than that under the K+A formulation, which also showed a small bias (S1 Figure). We had anticipated good performance of the mixture models for scenario E1, since the detection function shape is not far from half-normal; however it was not obvious that performance would be good for E2, where the marginal shape cannot be approximated well by a mixture of half-normal functions.  The combined strategy was no worse than either formulation alone in terms of bias.  
 
 
 \subsection*{Case studies results}
 
 \textbf{British Columbia marine mammals.} Results are summarised in Table \ref{williams-pike-table} and detection functions for the AIC-best models are shown in Figure \ref{williams-detfcts}. In each case mixture models were two component models. For harbour seal, the mixture model had a lower AIC than for the K+A model reported in Williams and Thomas \cite{Williams:2007tc}. The mixture model $\hat{P}_a$ is approximately 20\% lower, implying that the previous estimate of $\hat{N}$ may have been an underestimate (as $P_a$ decreases, $1/P_a$ increases in the Horvitz-Thompson estimator giving a larger estimate of abundance). For harbour porpoise, the mixture model AIC is almost 1.5 points higher than the K+A model, which was a hazard-rate with no adjustments. Hence, the model likelihoods are very similar, but the penalty due to the 2-point mixture having an additional parameter prevents it from being selected.  The $\hat{P}_a$ from the two models are very close. Lastly, for humpback whales, the mixture model AIC is almost 3 points higher than the K+A model -- however, one advantage of the mixture model is that the fitted function is monotone (Figure \ref{williams-detfcts}) while the K+A function is not (Figure \ref{fig1}). Again, the estimated $\hat{P}_a$s are very similar.
-
-\textbf{Long-finned pilot whales.} A mixture model detection function was fitted with each covariate, as well as a model with no covariates. The best model by AIC score (Table \ref{williams-pike-table}) was a 2-point mixture with Beaufort sea state included as a continuous covariate. Figure \ref{danpike-detfct} shows the average detection function (in the sense that a detection function was evaluated over the range $(0,w)$ for each covariate combination and was then averaged point-wise) and the marginal detection function with the quartiles of Beaufort sea state. None of the non-monotonic behaviour seen in Figure \ref{fig1} can occur when a mixture is used.
-
-\textbf{Wood ants.} All combinations of main effects were fitted (Table \ref{williams-pike-table}), and the best model by AIC was a 2-point mixture with nest size and habitat as covariates (Figure S4). This model had an AIC that was considerably (6 points) lower than the AIC-best K+A model, a hazard-rate with the same covariates.  $\hat{P}_a$ is about 10\% lower when estimated using the mixture model.
-
-\textbf{Amakihi.} The AIC-best mixture model was a two point mixture with observer and minutes after sunrise as covariates (Figure S5), closely followed by the model with only observer as a covariate (Table \ref{williams-pike-table}). In this case a hazard-rate with observer and minutes after sunrise as covariates performed better than mixtures in AIC terms, although by less than 1 AIC point. The difference in $\hat{P}_a$ between these two models is about $15\%$.  It is encouraging that there is such a small difference in AIC, and that covariate mixture models were selected over mixture models without covariates, despite the large number of parameters that such models entail.
-
-
-\section*{Discussion}
-
-We have investigated and demonstrated the utility of detection functions constructed from mixtures of half-normal functions in both line and point transect distance sampling. We also show that covariates can be readily included in such models. Further, these mixture detection functions can be simply ``dropped into'' other extensions of conventional distance sampling such as: methods for dealing with incomplete detection at zero distance \cite{Laake:2004tz, Laake:2011vm} (for these models, there is an additional mark-recapture component to the likelihood, where mixture models could also be used, as in \cite{Pledger:2000tc, Dorazio:2003uf, Pledger:2005wy, Morgan:2008wy}), spatial models for distance sampling data \cite{Hedley:2004et, Miller:2013us} or models for surveys where distances were measured with error \cite{Borchers:2010bq}.  Though we were necessarily limited to only a few example data sets on specific taxa, we note that there is no limitation to the species or survey setup that mixture model detection functions can be used with.
-
-We have shown that the mixture models perform well on both simulated and survey data where traditional methods produce suboptimal results. In many cases the proposed model outperformed K+A models in AIC terms, which is surprising given that the mixture models in question often had more parameters. In particular mixture model detection functions appear useful when dealing with line transect data that has a spike in detection probability at small distances, though we note that it is better to avoid collecting such data in the first place, where possible \cite[, p. 42]{Buckland:2001vm} (spikes are commonly caused by observers spending too much effort near the trackline/point and not looking further afield).  Also, other non-detection-related factors can cause a spike, such as rounding of measurements or responsive animal movement, and if present in the data these should be dealt with using other analysis strategies or field methods \cite{Buckland:2001vm}.  For line transect surveys, unbiased estimation of $P_a$ was possible even for very spiked detection functions, so long as the sample size of observations was large (Scenarios A2 and A4).  By contrast, estimates remained badly biased at all sample sizes for the equivalent point transect scenarios (B2 and B4). For such surveys, where such a small proportion of the data comes from the closer distances, then perhaps the only effective solution is to constrain the fit, for example using a Bayesian approach with strong priors on the detection function parameters.
-
-We note that in our case studies, a larger coefficient of variation in the average detectability was reported with mixtures than with half-normal K+A models but mixtures seemed to have lower CVs (again, of $\hat{P_a}$) than hazard-rate K+A models (in the line transect case, ignoring non-monotonic K+A models; see Table \ref{williams-pike-table}). This can be explained by considering the flexibility of the detection function. A half-normal detection function is relatively inflexible so uncertainty is low (since there is only one parameter and it only affects the scale of the function). However, for a hazard-rate model the shoulder can vary from very small (spiked) to very large (depending on the shape parameter), so the uncertainty in this more flexible model is larger. Mixtures of half-normals lie somewhere in between these two options (only the scales change which are weighted, we are then summing smaller variances). 
-
-Simulations show that small sample sizes do not support the use of mixture models with a high number of components, even when the data were generated from such a model. We avoid poorly fitting models of this sort by using both K+A and mixture detection functions and selecting the best between them (comparing Fig. \ref{sim-boxplots} with Figure S1). This integrated approach is builds upon current model selection procedures for a detection function analysis -- currently selection is made between different K+A formulations and number of adjustment terms using AIC; mixture models simply add another alternative detection function where rather than adjustment terms, mixture components are selected. So existing key-only models are special cases of the mixture detection functions.
-
-In simulation we observed that 3-point mixture did not act as good surrogates for missing covariate information; 2-point mixtures were generally chosen by AIC (though these 2-point models performed well at higher sample sizes). In our case studies, 2-point mixtures consistently provided the best fit. Only examination of further data will show whether 3-point and higher mixtures can be supported, however we note that when the K+A series formulation is used, detection functions with 5 or more parameters are rarely selected by AIC (a 3-point mixture with no covariates requires 5 parameters). These results echo those in capture-recapture literature \cite{Pledger:2000tc}, where often only 2 component mixtures were selected.
-
-We have compared the new mixture approach for modelling detection functions with the most widely used alternative, K+A. However, other approaches exist, for example nonparametric and semiparametric kernel estimators (see Eidous \cite{Eidous:2011} and references therein). So far as we are aware, all current alternatives fail some of the criteria given in the introduction -- for example, the kernel functions can be non-monotonic. Giammarino \& Quatto \cite{Giammarino:2014eg} have proposed a ``mixture model'' detection function -- their model takes a rather different form to the mixtures we describe here (simply $\exp\left( -x^2/(2\sigma^2)) - x/\tau\right)$), though their results indicate there is little difference between their model and K+A approaches.
-
-The mixture component used here was a half-normal, but other component functions may prove useful.  In particular, a mixture of hazard-rate functions with different shape and/or scale parameters for each component may be better at fitting detection functions with a wide shoulder, a steep drop-off and then a second plateau in detectability (see E2 in Figure \ref{sim-detfcts}, which was generated from a mixture of two hazard-rate functions).  Further, a mixture of a half-normal (or hazard-rate) and a uniform kernel may prove useful -- this would have only two (or three) parameters, and hence may be more competitive (in AIC terms) with K+A models.
-
-Another potentially useful extension is continuous mixtures of the form
-\begin{equation*}
-g(x) = \int_\mathbb{R} \varphi(\kappa) g_\kappa(x,\mathbf{Z}; \theta, \kappa) \text{d}\kappa
-\end{equation*}
-where $\varphi(\kappa)$ is a weighting function that controls the mixing of $g_\kappa$. Provided that an appropriate function can be chosen for $\varphi$, more flexible models could be used whilst keeping the number of parameters low. In addition, a combination of both finite and continuous mixtures could be used, echoing the work in capture-recapture \cite{Morgan:2008wy}. Such models require more complex optimisation procedures in order to estimate their parameters in a maximum likelihood context, though are well suited to a Bayesian setting.
-
-Mixture model detection functions based on half-normal components are available as an R package, mmds, which is available on CRAN. These models will be added to the next version of the Distance for Windows software and the R package Distance.
-
-\section*{Supporting Information}
-
-\textbf{Appendix S1 Optimization details} (PDF)
-
-\textbf{Appendix S2 Simulation parameters} (PDF)
-
-\textbf{Text S1 Derivatives of the likelihood} (PDF)
-
-\textbf{Text S2 Variance estimation for mixture model detection functions} (PDF)
-
-\textbf{Figure S1 Simulation results: boxplots of the estimated average detection probabilities, $P_a$, for the best K+A model (by AIC score). Grey lines indicate the true value of the average detection probability.} (PDF)
-
-\textbf{Figure S2 Simulation results: boxplots of the estimated average detection probabilities, $P_a$, for the best model (by AIC score) for both mixture and K+A models. In each case the best overall model was selected, reflecting the modelling approach undertaken in practice. Grey lines indicate the true value of the average detection probability. Numbers underneath each boxplot give the proportion of AIC best models that were of the same form as the model that the data was simulated from (e.g., in scenario D1, the proportion of AIC best models that were 2-point mixtures that included the covariate in the model). Numbers above each model give the proportion of times that the AIC best model was a 2- or 3-point mixture model.} (PDF)
-
-\textbf{Figure S3 Simulation results: stacked bar charts showing the number of models selected by AIC that fall into the given model classes. Layout is as in Figure S2. ``hn'' is a half-normal detection function (i.e. 1-point mixture) and ``hr'' is a hazard-rate detection function (no adjustments). K+A indicates a key function plus adjustment term model where ``cos'' is cosine and ``poly'' are simple polynomial adjustments. MMDS is a mixture model with 2 or 3 components (``2-pt'' or ``3-pt'', respectively). ``(cov)'' indicates that covariates were included in the model.} (PDF)
-
-\textbf{Figure S4 Plot of the detection functions for the AIC best model for the ants data set (2-point mixture with nest size and habitat as covariates). The first panel shows the average detection function (dashed lines are the two mixture components of the detection function, averaged over covariate values). The second and third panels show the quartiles of nest size and the levels of habitat type respectively.}
-
-\textbf{Figure S5 Plots of the (AIC) best mixture model for the Amakihi data: a 2-point mixture with observer and minutes after sunrise as covariates. Top row: detection function averaged over covariates (dashed lines are each mixture component averaged over covariates), marginal detection function showing the levels of observer (averaged over the values of minutes after sunrise) and marginal detection function for minutes after sunrise ranging between 0 and 300 minutes (averaged over the levels of observer), as in Marques et al (2007) \cite{Marques:2007vm}. Bottom row: pdf of distances averaged over the covariate values.}
-
-
-\section*{Acknowledgements}
-
-DLM acknowledges the UK Engineering and Physical Sciences Research Council for financial support during his PhD, and Simon Wood for useful discussions.  Both authors thank David Borchers, who suggested the parametrisation for the mixture proportions (Appendix S1) and Tiago Marques for helpful comments on an earlier draft. The authors also wish to thank Raincoast Conservation Foundation and Rob Williams for allowing the use of perpendicular sightings distance data previously reported in \cite{Williams:2007tc}; Daniel Pike, G\'{i}sli Vikingsson and Bjarni Mikkelsen at the Marine Research Institute, Iceland for the long-finned pilot whales data; Kerry Borkin for the wood ant data and Steven Fancy for the use of the Amakihi data.
-
-%\section*{References}
-\bibliography{dsmixtures}
-
-\section*{Tables}
 
 \begin{table}[!ht]
 \caption{
@@ -367,39 +333,6 @@ Amakihi  & Hr obs + mas & 0.00 &  0.319 & 5.11 & 0.08\\ % mrds
 \label{williams-pike-table}
 \end{table}
 
-
-
-
-\section*{Figure Legends}
-
-\begin{figure}[!ht]
-\centering
-%\includegraphics[width=\textwidth]{Figure1.eps}
-\caption{
-{\bf Two examples of detection functions that are not monotone, fitted using conventional key function plus adjustment methods in the software Distance.} The left panel shows data from humpback whale: a half-normal detection function with cosine adjustments was selected by AIC \cite{Williams:2007tc} but even with constraints in place the detection function is non-monotonic, with a small secondary peak at approx. 1500m. The second and third panels show data and models fitted to long-finned pilot whale where a half-normal detection function was selected with cosine adjustments and Beaufort sea state as a covariate \cite{Pike:2003ug}. Due to the inclusion of covariates, no monotonicity constraints could be employed.  The middle panel shows the detection function averaged over the covariate values and the right panel the marginal detection function for 25th, 50th and 75th quantiles of the Beaufort sea state covariate; non-monotonicity occurs at approx. 2500m.
-}
-\label{fig1}
-\end{figure}
-
-
-\begin{figure}[!ht]
-\centering
-%\includegraphics[width=\textwidth]{Figure2.eps}
-\caption{
-{\bf Plots of the models used in the simulation.} Group A (top row): detection functions for four line transect senarios with no covariates (solid lines) and their constituent mixture components (dashed lines). Group B (second row): pdfs for four point transect simulations with no covariates (solid lines), with associated component pdfs (dashed lines), rescaled so the area under each curve is one; the detection functions are as in the top row. Group C (third row): two 3-point mixture scenarios for non-covariate line transect data, again with their constituent mixture components (dashed lines). Group D (fourth row): two covariate model scenarios, the first two panels are for a binary covariate scenario, the second two for a continuous covariate scenario; first panels in each pair show the detection function averaged over the covariates (along with the mixture components, similarly averaged) and the second panels show marginal detection functions with the levels (or quartiles) of the detection function.  Group E (fifth row): exponential power series model and a 2-point mixture of hazard-rate function (see Appendix S2 for formulation) for two line transect scenarios.
-}
-\label{sim-detfcts}
-\end{figure}
-
-\begin{figure}[!ht]
-\centering
-%\includegraphics[width=\textwidth]{Figure3.eps}
-\caption{
-{\bf Simulation results: boxplots of the estimated average detection probabilities, $P_a$, for the best mixture model (by AIC score).} Layout is as in Figure \ref{sim-detfcts}. Grey lines indicate the true value of the average detection probability. Numbers underneath each boxplot give the proportion of AIC best models that were of the same form as the model that the data was simulated from (e.g., Scenario D1 the proportion of AIC best models that were 2-point mixtures that included the covariate in the model).
-}
-\label{sim-boxplots}
-\end{figure}
-
 \begin{figure}[!ht]
 \centering
 %\includegraphics[width=\textwidth]{Figure4.eps}
@@ -408,6 +341,8 @@ Amakihi  & Hr obs + mas & 0.00 &  0.319 & 5.11 & 0.08\\ % mrds
 }
 \label{williams-detfcts}
 \end{figure}
+
+\textbf{Long-finned pilot whales.} A mixture model detection function was fitted with each covariate, as well as a model with no covariates. The best model by AIC score (Table \ref{williams-pike-table}) was a 2-point mixture with Beaufort sea state included as a continuous covariate. Figure \ref{danpike-detfct} shows the average detection function (in the sense that a detection function was evaluated over the range $(0,w)$ for each covariate combination and was then averaged point-wise) and the marginal detection function with the quartiles of Beaufort sea state. None of the non-monotonic behaviour seen in Figure \ref{fig1} can occur when a mixture is used.
 
 \begin{figure}[!ht]
 \centering
@@ -419,7 +354,255 @@ Amakihi  & Hr obs + mas & 0.00 &  0.319 & 5.11 & 0.08\\ % mrds
 \end{figure}
 
 
+\textbf{Wood ants.} All combinations of main effects were fitted (Table \ref{williams-pike-table}), and the best model by AIC was a 2-point mixture with nest size and habitat as covariates (S4 Figure). This model had an AIC that was considerably (6 points) lower than the AIC-best K+A model, a hazard-rate with the same covariates.  $\hat{P}_a$ is about 10\% lower when estimated using the mixture model.
 
+\textbf{Amakihi.} The AIC-best mixture model was a two point mixture with observer and minutes after sunrise as covariates (Figure S5), closely followed by the model with only observer as a covariate (Table \ref{williams-pike-table}). In this case a hazard-rate with observer and minutes after sunrise as covariates performed better than mixtures in AIC terms, although by less than 1 AIC point. The difference in $\hat{P}_a$ between these two models is about $15\%$.  It is encouraging that there is such a small difference in AIC, and that covariate mixture models were selected over mixture models without covariates, despite the large number of parameters that such models entail.
+
+
+\section*{Discussion}
+
+We have investigated and demonstrated the utility of detection functions constructed from mixtures of half-normal functions in both line and point transect distance sampling. We also show that covariates can be readily included in such models. Further, these mixture detection functions can be simply ``dropped into'' other extensions of conventional distance sampling such as: methods for dealing with incomplete detection at zero distance \cite{Laake:2004tz, Laake:2011vm} (for these models, there is an additional mark-recapture component to the likelihood, where mixture models could also be used, as in \cite{Pledger:2000tc, Dorazio:2003uf, Pledger:2005wy, Morgan:2008wy}), spatial models for distance sampling data \cite{Hedley:2004et, Miller:2013us} or models for surveys where distances were measured with error \cite{Borchers:2010bq}.  Though we were necessarily limited to only a few example data sets on specific taxa, we note that there is no limitation to the species or survey setup that mixture model detection functions can be used with.
+
+We have shown that the mixture models perform well on both simulated and survey data where traditional methods produce suboptimal results. In many cases the proposed model outperformed K+A models in AIC terms, which is surprising given that the mixture models in question often had more parameters. In particular mixture model detection functions appear useful when dealing with line transect data that has a spike in detection probability at small distances, though we note that it is better to avoid collecting such data in the first place, where possible (\cite{Buckland:2001vm}, p. 42) (spikes are commonly caused by observers spending too much effort near the trackline/point and not looking further afield).  Also, other non-detection-related factors can cause a spike, such as rounding of measurements or responsive animal movement, and if present in the data these should be dealt with using other analysis strategies or field methods \cite{Buckland:2001vm}.  For line transect surveys, unbiased estimation of $P_a$ was possible even for very spiked detection functions, so long as the sample size of observations was large (Scenarios A2 and A4).  By contrast, estimates remained badly biased at all sample sizes for the equivalent point transect scenarios (B2 and B4). For such surveys, where such a small proportion of the data comes from the closer distances, then perhaps the only effective solution is to constrain the fit, for example using a Bayesian approach with strong priors on the detection function parameters.
+
+We note that in our case studies, a larger coefficient of variation in the average detectability was reported with mixtures than with half-normal K+A models but mixtures seemed to have lower CVs (again, of $\hat{P_a}$) than hazard-rate K+A models (in the line transect case, ignoring non-monotonic K+A models; see Table \ref{williams-pike-table}). This can be explained by considering the flexibility of the detection function. A half-normal detection function is relatively inflexible so uncertainty is low (since there is only one parameter and it only affects the scale of the function). However, for a hazard-rate model the shoulder can vary from very small (spiked) to very large (depending on the shape parameter), so the uncertainty in this more flexible model is larger. Mixtures of half-normals lie somewhere in between these two options (only the scales change which are weighted, we are then summing smaller variances). 
+
+Simulations show that small sample sizes do not support the use of mixture models with a high number of components, even when the data were generated from such a model. We avoid poorly fitting models of this sort by using both K+A and mixture detection functions and selecting the best between them (comparing Fig. \ref{sim-boxplots} with S1 Figure). This integrated approach is builds upon current model selection procedures for a detection function analysis -- currently selection is made between different K+A formulations and number of adjustment terms using AIC; mixture models simply add another alternative detection function where rather than adjustment terms, mixture components are selected. So existing key-only models are special cases of the mixture detection functions.
+
+In simulation we observed that 3-point mixture did not act as good surrogates for missing covariate information; 2-point mixtures were generally chosen by AIC (though these 2-point models performed well at higher sample sizes). In our case studies, 2-point mixtures consistently provided the best fit. Only examination of further data will show whether 3-point and higher mixtures can be supported, however we note that when the K+A series formulation is used, detection functions with 5 or more parameters are rarely selected by AIC (a 3-point mixture with no covariates requires 5 parameters). These results echo those in capture-recapture literature \cite{Pledger:2000tc}, where often only 2 component mixtures were selected.
+
+We have compared the new mixture approach for modelling detection functions with the most widely used alternative, K+A. However, other approaches exist, for example nonparametric and semiparametric kernel estimators (see Eidous \cite{Eidous:2011} and references therein). So far as we are aware, all current alternatives fail some of the criteria given in the introduction -- for example, the kernel functions can be non-monotonic. Giammarino \& Quatto \cite{Giammarino:2014eg} have proposed a ``mixture model'' detection function -- their model takes a rather different form to the mixtures we describe here (simply $\exp\left( -x^2/(2\sigma^2)) - x/\tau\right)$), though their results indicate there is little difference between their model and K+A approaches.
+
+The mixture component used here was a half-normal, but other component functions may prove useful.  In particular, a mixture of hazard-rate functions with different shape and/or scale parameters for each component may be better at fitting detection functions with a wide shoulder, a steep drop-off and then a second plateau in detectability (see E2 in Figure \ref{sim-detfcts}, which was generated from a mixture of two hazard-rate functions).  Further, a mixture of a half-normal (or hazard-rate) and a uniform kernel may prove useful -- this would have only two (or three) parameters, and hence may be more competitive (in AIC terms) with K+A models.
+
+Another potentially useful extension is continuous mixtures of the form
+\begin{equation*}
+g(x) = \int_\mathbb{R} \varphi(\kappa) g_\kappa(x,\mathbf{Z}; \theta, \kappa) \text{d}\kappa
+\end{equation*}
+where $\varphi(\kappa)$ is a weighting function that controls the mixing of $g_\kappa$. Provided that an appropriate function can be chosen for $\varphi$, more flexible models could be used whilst keeping the number of parameters low. In addition, a combination of both finite and continuous mixtures could be used, echoing the work in capture-recapture \cite{Morgan:2008wy}. Such models require more complex optimisation procedures in order to estimate their parameters in a maximum likelihood context, though are well suited to a Bayesian setting.
+
+Mixture model detection functions based on half-normal components are available as an R package, mmds, which is available on CRAN. These models will be added to the next version of the Distance for Windows software and the R package Distance.
+
+\section*{Supporting Information Legends}
+
+\textbf{S1 Appendix Optimization details} (PDF)
+
+\textbf{S2 Appendix Simulation parameters} (PDF)
+
+\textbf{S1 Text Derivatives of the likelihood} (PDF)
+
+\textbf{S2 Text Variance estimation for mixture model detection functions} (PDF)
+
+\textbf{S1 Figure Simulation results: boxplots of the estimated average detection probabilities, $P_a$, for the best K+A model (by AIC score). Grey lines indicate the true value of the average detection probability.} (PDF)
+
+\textbf{S2 Figure Simulation results: boxplots of the estimated average detection probabilities, $P_a$, for the best model (by AIC score) for both mixture and K+A models. In each case the best overall model was selected, reflecting the modelling approach undertaken in practice. Grey lines indicate the true value of the average detection probability. Numbers underneath each boxplot give the proportion of AIC best models that were of the same form as the model that the data was simulated from (e.g., in scenario D1, the proportion of AIC best models that were 2-point mixtures that included the covariate in the model). Numbers above each model give the proportion of times that the AIC best model was a 2- or 3-point mixture model.} (PDF)
+
+\textbf{S3 Figure Simulation results: stacked bar charts showing the number of models selected by AIC that fall into the given model classes. Layout is as in S2 Figure. ``hn'' is a half-normal detection function (i.e. 1-point mixture) and ``hr'' is a hazard-rate detection function (no adjustments). K+A indicates a key function plus adjustment term model where ``cos'' is cosine and ``poly'' are simple polynomial adjustments. MMDS is a mixture model with 2 or 3 components (``2-pt'' or ``3-pt'', respectively). ``(cov)'' indicates that covariates were included in the model.} (PDF)
+
+\textbf{S4 Figure Plot of the detection functions for the AIC best model for the ants data set (2-point mixture with nest size and habitat as covariates). The first panel shows the average detection function (dashed lines are the two mixture components of the detection function, averaged over covariate values). The second and third panels show the quartiles of nest size and the levels of habitat type respectively.}
+
+\textbf{S5 Figure Plots of the (AIC) best mixture model for the Amakihi data: a 2-point mixture with observer and minutes after sunrise as covariates. Top row: detection function averaged over covariates (dashed lines are each mixture component averaged over covariates), marginal detection function showing the levels of observer (averaged over the values of minutes after sunrise) and marginal detection function for minutes after sunrise ranging between 0 and 300 minutes (averaged over the levels of observer), as in Marques et al (2007) \cite{Marques:2007vm}. Bottom row: pdf of distances averaged over the covariate values.}
+
+
+\section*{Acknowledgements}
+
+DLM acknowledges the UK Engineering and Physical Sciences Research Council for financial support during his PhD, and Simon Wood for useful discussions.  Both authors thank David Borchers, who suggested the parametrisation for the mixture proportions (S1 Appendix) and Tiago Marques for helpful comments on an earlier draft. The authors also wish to thank Raincoast Conservation Foundation and Rob Williams for allowing the use of perpendicular sightings distance data previously reported in \cite{Williams:2007tc}; Daniel Pike, G\'{i}sli Vikingsson and Bjarni Mikkelsen at the Marine Research Institute, Iceland for the long-finned pilot whales data; Kerry Borkin for the wood ant data and Steven Fancy for the use of the Amakihi data.
+
+%\section*{References}
+%\bibliography{dsmixtures}
+
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\bibAnnoteFile}[1]{%
+  \IfFileExists{#1}{\begin{quotation}\noindent\textsc{Key:} #1\\
+  \textsc{Annotation:}\ \input{#1}\end{quotation}}{}}
+\providecommand{\bibAnnote}[2]{%
+  \begin{quotation}\noindent\textsc{Key:} #1\\
+  \textsc{Annotation:}\ #2\end{quotation}}
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem{Buckland:2001vm}
+Buckland ST, Anderson DR, Burnham KP, Laake JL, Borchers DL, et~al. (2001)
+  {Introduction to Distance Sampling}.
+\newblock Oxford University Press.
+\bibAnnoteFile{Buckland:2001vm}
+
+\bibitem{Buckland:2004ts}
+Buckland ST, Anderson DR, Burnham KP, Laake JL, Borchers DL, et~al. (2004)
+  {Advanced Distance Sampling}.
+\newblock Oxford University Press.
+\bibAnnoteFile{Buckland:2004ts}
+
+\bibitem{Buckland:1992wy}
+Buckland ST (1992) {Fitting density functions with polynomials}.
+\newblock Journal of the Royal Statistical Society Series C: Applied Statistics
+  41: 63--76.
+\bibAnnoteFile{Buckland:1992wy}
+
+\bibitem{Thomas:2010cf}
+Thomas L, Buckland ST, Rexstad EA, Laake JL, Strindberg S, et~al. (2010)
+  {Distance software: design and analysis of distance sampling surveys for
+  estimating population size}.
+\newblock Journal of Applied Ecology 47: 5--14.
+\bibAnnoteFile{Thomas:2010cf}
+
+\bibitem{Team:2013wf}
+{R Core Team} (2013) {R: A Language and Environment for Statistical Computing}.
+\newblock Vienna, Austria.
+\newblock \urlprefix\url{http://www.R-project.org/}.
+\bibAnnoteFile{Team:2013wf}
+
+\bibitem{mrds}
+Laake JL, Borchers DL, Thomas L, Miller DL, Bishop JR (2014) mrds:
+  Mark-Recapture Distance Sampling (mrds).
+\newblock \urlprefix\url{http://CRAN.R-project.org/package=mrds}.
+\newblock R package version 2.1.6.
+\bibAnnoteFile{mrds}
+
+\bibitem{Marques:2003vb}
+Marques F, Buckland ST (2003) {Incorporating covariates into standard line
+  transect analyses}.
+\newblock Biometrics 59: 924--935.
+\bibAnnoteFile{Marques:2003vb}
+
+\bibitem{Schittkowski:1986wj}
+Schittkowski K (1986) {NLPQL: A Fortran subroutine for solving constrained
+  nonlinear programming problems}.
+\newblock Annals of Operations Research 5: 485--500.
+\bibAnnoteFile{Schittkowski:1986wj}
+
+\bibitem{Ye:1987wt}
+Ye Y (1987) {Interior Algorithms for Linear, Quadratic, and Linearly
+  Constrained Convex Programming}.
+\newblock Ph.D. thesis, Stanford University.
+\bibAnnoteFile{Ye:1987wt}
+
+\bibitem{Pike:2003ug}
+Pike DG, Gunnlaugsson T, Vikingsson AG, Desportes G, Mikkelson B (2003) {An
+  estimate of the abundance of long-finned pilot whales globicephala melas from
+  the NASS-2001 shipboard survey}.
+\newblock Technical Report SC/11/AE/10.
+\bibAnnoteFile{Pike:2003ug}
+
+\bibitem{Pledger:2000tc}
+Pledger S (2000) {Unified maximum likelihood estimates for closed
+  capture-recapture models using mixtures}.
+\newblock Biometrics 56: 434--442.
+\bibAnnoteFile{Pledger:2000tc}
+
+\bibitem{Dorazio:2003uf}
+Dorazio RM, Royle JA (2003) {Mixture models for estimating the size of a
+  closed population when capture rates vary among individuals}.
+\newblock Biometrics 59: 351--364.
+\bibAnnoteFile{Dorazio:2003uf}
+
+\bibitem{Pledger:2005wy}
+Pledger S (2005) {The performance of mixture models in heterogeneous closed
+  population capture-recapture}.
+\newblock Biometrics 61: 868--873.
+\bibAnnoteFile{Pledger:2005wy}
+
+\bibitem{Morgan:2008wy}
+Morgan BJT, Ridout MS (2008) {A new mixture model for capture heterogeneity}.
+\newblock Journal of the Royal Statistical Society Series C: Applied Statistics
+  57: 433--446.
+\bibAnnoteFile{Morgan:2008wy}
+
+\bibitem{Link:2003wo}
+Link W (2003) {Nonidentifiability of population size from capture-recapture
+  data with heterogeneous detection probabilities}.
+\newblock Biometrics 59: 1123--1130.
+\bibAnnoteFile{Link:2003wo}
+
+\bibitem{mmds}
+Miller DL (2011) mmds: Mixture Model Distance Sampling (mmds).
+\newblock \urlprefix\url{http://CRAN.R-project.org/package=mmds}.
+\newblock R package version 1.1.
+\bibAnnoteFile{mmds}
+
+\bibitem{Marques:2007vm}
+Marques TA, Thomas L, Fancy S, Buckland ST (2007) {Improving estimates of bird
+  density using multiple-covariate distance sampling}.
+\newblock The Auk 124: 1229--1243.
+\bibAnnoteFile{Marques:2007vm}
+
+\bibitem{Otto:1990kk}
+Otto MC, Pollock KH (1990) {Size Bias in Line Transect Sampling: A Field Test}.
+\newblock Biometrics 46: 239--245.
+\bibAnnoteFile{Otto:1990kk}
+
+\bibitem{Distance}
+Miller DL (2014) Distance: A simple way to fit detection functions to distance
+  sampling data and calculate abundance/density for biological populations.
+\newblock \urlprefix\url{http://CRAN.R-project.org/package=Distance}.
+\newblock R package version 0.6.1.
+\bibAnnoteFile{Distance}
+
+\bibitem{Williams:2007tc}
+Williams R, Thomas L (2007) {Distribution and abundance of marine mammals in
+  the coastal waters of British Columbia, Canada}.
+\newblock Journal of Cetacean Research and Management 9: 15.
+\bibAnnoteFile{Williams:2007tc}
+
+\bibitem{Borkin:2012vj}
+Borkin KM, Summers RW, Thomas L (2012) {Surveying abundance and stand type
+  associations of \emph{Formica aquilonia} and \emph{F. lugubris}
+  (\emph{Hymenoptera: Formicidae}) nest mounds over an extensive area: Trialing
+  a novel method}.
+\newblock European Journal of Entomology 109: 47--53.
+\bibAnnoteFile{Borkin:2012vj}
+
+\bibitem{Laake:2004tz}
+Laake JL, Borchers DL (2004) {Methods for incomplete detection at zero
+  distance}.
+\newblock In: Buckland ST, anderson DR, Burnham KP, Laake JL, Borchers DL,
+  et~al., editors, Advanced Distance Sampling, Oxford University Press. pp.
+  48--70.
+\bibAnnoteFile{Laake:2004tz}
+
+\bibitem{Laake:2011vm}
+Laake JL, Collier BA, Morrison ML, Wilkins RN (2011) {Point-based
+  mark-recapture distance sampling}.
+\newblock Journal of Agricultural, Biological, and Environmental Statistics 16:
+  389--408.
+\bibAnnoteFile{Laake:2011vm}
+
+\bibitem{Hedley:2004et}
+Hedley SL, Buckland ST (2004) {Spatial models for line transect sampling}.
+\newblock Journal of Agricultural, Biological, and Environmental Statistics 9:
+  181--199.
+\bibAnnoteFile{Hedley:2004et}
+
+\bibitem{Miller:2013us}
+Miller DL, Burt ML, Rexstad EA, Thomas, L (2013) {Spatial models for distance sampling
+  data: recent developments and future directions}.
+\newblock Methods in Ecology and Evolution 4: 1001--1010.
+\bibAnnoteFile{Miller:2013us}
+
+\bibitem{Borchers:2010bq}
+Borchers D, Marques T, Gunnlaugsson T, Jupp P (2010) {Estimating Distance
+  Sampling Detection Functions When Distances Are Measured With~Errors}.
+\newblock Biometrics 15: 346--361.
+\bibAnnoteFile{Borchers:2010bq}
+
+\bibitem{Eidous:2011}
+Eidous O, Shakhatreh MK (2011) {Asymptotic Unbiased Kernel Estimator for Line
+  Transect Sampling}.
+\newblock Communications in Statistics - Theory and Methods 40: 4353-4363.
+\bibAnnoteFile{Eidous:2011}
+
+\bibitem{Giammarino:2014eg}
+Giammarino M, Quatto P (2014) {On estimating Hooded crow density from line
+  transect data through exponential mixture models}.
+\newblock Environmental and Ecological Statistics .
+\bibAnnoteFile{Giammarino:2014eg}
+
+\end{thebibliography}
 
 
 
